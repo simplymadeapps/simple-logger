@@ -9,16 +9,16 @@
 /* Begin PBXBuildFile section */
 		BA9EBAC31F27D5FE002DFF44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */; };
 		BA9EBAC71F27E1FC002DFF44 /* SimpleLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */; };
+		BA9EBAD11F27E4D8002DFF44 /* SimpleLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */; };
 		BAE372E71F27D37A00300F7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372E61F27D37A00300F7E /* main.m */; };
 		BAE372EA1F27D37A00300F7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372E91F27D37A00300F7E /* AppDelegate.m */; };
 		BAE372ED1F27D37A00300F7E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372EC1F27D37A00300F7E /* ViewController.m */; };
 		BAE372F01F27D37A00300F7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAE372EE1F27D37A00300F7E /* Main.storyboard */; };
 		BAE372F51F27D37A00300F7E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAE372F31F27D37A00300F7E /* LaunchScreen.storyboard */; };
-		BAE373001F27D37A00300F7E /* SimpleLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372FF1F27D37A00300F7E /* SimpleLoggerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BAE372FC1F27D37A00300F7E /* PBXContainerItemProxy */ = {
+		BA9EBAD31F27E4D8002DFF44 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BAE372DA1F27D37A00300F7E /* Project object */;
 			proxyType = 1;
@@ -31,6 +31,9 @@
 		BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		BA9EBAC51F27E1FC002DFF44 /* SimpleLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleLogger.h; path = ../SimpleLogger/SimpleLogger.h; sourceTree = "<group>"; };
 		BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimpleLogger.m; path = ../SimpleLogger/SimpleLogger.m; sourceTree = "<group>"; };
+		BA9EBACE1F27E4D8002DFF44 /* SimpleLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleLoggerTests.m; sourceTree = "<group>"; };
+		BA9EBAD21F27E4D8002DFF44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BAE372E21F27D37A00300F7E /* SimpleLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAE372E61F27D37A00300F7E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		BAE372E81F27D37A00300F7E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -40,20 +43,17 @@
 		BAE372EF1F27D37A00300F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BAE372F41F27D37A00300F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BAE372F61F27D37A00300F7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
-		BAE372FB1F27D37A00300F7E /* SimpleLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BAE372FF1F27D37A00300F7E /* SimpleLoggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleLoggerTests.m; sourceTree = "<group>"; };
-		BAE373011F27D37A00300F7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BAE372DF1F27D37A00300F7E /* Frameworks */ = {
+		BA9EBACB1F27E4D8002DFF44 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BAE372F81F27D37A00300F7E /* Frameworks */ = {
+		BAE372DF1F27D37A00300F7E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,12 +72,21 @@
 			name = SimpleLogger;
 			sourceTree = "<group>";
 		};
+		BA9EBACF1F27E4D8002DFF44 /* SimpleLoggerTests */ = {
+			isa = PBXGroup;
+			children = (
+				BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */,
+				BA9EBAD21F27E4D8002DFF44 /* Info.plist */,
+			);
+			path = SimpleLoggerTests;
+			sourceTree = "<group>";
+		};
 		BAE372D91F27D37A00300F7E = {
 			isa = PBXGroup;
 			children = (
 				BA9EBAC41F27E1DE002DFF44 /* SimpleLogger */,
 				BAE372E41F27D37A00300F7E /* SimpleLoggerExample */,
-				BAE372FE1F27D37A00300F7E /* SimpleLoggerTests */,
+				BA9EBACF1F27E4D8002DFF44 /* SimpleLoggerTests */,
 				BAE372E31F27D37A00300F7E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,7 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				BAE372E21F27D37A00300F7E /* SimpleLogger.app */,
-				BAE372FB1F27D37A00300F7E /* SimpleLoggerTests.xctest */,
+				BA9EBACE1F27E4D8002DFF44 /* SimpleLoggerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -116,18 +125,27 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		BAE372FE1F27D37A00300F7E /* SimpleLoggerTests */ = {
-			isa = PBXGroup;
-			children = (
-				BAE372FF1F27D37A00300F7E /* SimpleLoggerTests.m */,
-				BAE373011F27D37A00300F7E /* Info.plist */,
-			);
-			path = SimpleLoggerTests;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		BA9EBACD1F27E4D8002DFF44 /* SimpleLoggerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA9EBAD51F27E4D8002DFF44 /* Build configuration list for PBXNativeTarget "SimpleLoggerTests" */;
+			buildPhases = (
+				BA9EBACA1F27E4D8002DFF44 /* Sources */,
+				BA9EBACB1F27E4D8002DFF44 /* Frameworks */,
+				BA9EBACC1F27E4D8002DFF44 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA9EBAD41F27E4D8002DFF44 /* PBXTargetDependency */,
+			);
+			name = SimpleLoggerTests;
+			productName = SimpleLoggerTests;
+			productReference = BA9EBACE1F27E4D8002DFF44 /* SimpleLoggerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		BAE372E11F27D37A00300F7E /* SimpleLogger */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAE373041F27D37A00300F7E /* Build configuration list for PBXNativeTarget "SimpleLogger" */;
@@ -145,24 +163,6 @@
 			productReference = BAE372E21F27D37A00300F7E /* SimpleLogger.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BAE372FA1F27D37A00300F7E /* SimpleLoggerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BAE373071F27D37A00300F7E /* Build configuration list for PBXNativeTarget "SimpleLoggerTests" */;
-			buildPhases = (
-				BAE372F71F27D37A00300F7E /* Sources */,
-				BAE372F81F27D37A00300F7E /* Frameworks */,
-				BAE372F91F27D37A00300F7E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BAE372FD1F27D37A00300F7E /* PBXTargetDependency */,
-			);
-			name = SimpleLoggerTests;
-			productName = SimpleLoggerTests;
-			productReference = BAE372FB1F27D37A00300F7E /* SimpleLoggerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -172,16 +172,16 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Simply Made Apps Inc.";
 				TargetAttributes = {
-					BAE372E11F27D37A00300F7E = {
-						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = R536BS52FG;
-						ProvisioningStyle = Automatic;
-					};
-					BAE372FA1F27D37A00300F7E = {
+					BA9EBACD1F27E4D8002DFF44 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = R536BS52FG;
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAE372E11F27D37A00300F7E;
+					};
+					BAE372E11F27D37A00300F7E = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = R536BS52FG;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -199,12 +199,19 @@
 			projectRoot = "";
 			targets = (
 				BAE372E11F27D37A00300F7E /* SimpleLogger */,
-				BAE372FA1F27D37A00300F7E /* SimpleLoggerTests */,
+				BA9EBACD1F27E4D8002DFF44 /* SimpleLoggerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BA9EBACC1F27E4D8002DFF44 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BAE372E01F27D37A00300F7E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -215,16 +222,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BAE372F91F27D37A00300F7E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BA9EBACA1F27E4D8002DFF44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9EBAD11F27E4D8002DFF44 /* SimpleLoggerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BAE372DE1F27D37A00300F7E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -236,21 +244,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BAE372F71F27D37A00300F7E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BAE373001F27D37A00300F7E /* SimpleLoggerTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BAE372FD1F27D37A00300F7E /* PBXTargetDependency */ = {
+		BA9EBAD41F27E4D8002DFF44 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BAE372E11F27D37A00300F7E /* SimpleLogger */;
-			targetProxy = BAE372FC1F27D37A00300F7E /* PBXContainerItemProxy */;
+			targetProxy = BA9EBAD31F27E4D8002DFF44 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -274,6 +274,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		BA9EBAD61F27E4D8002DFF44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = R536BS52FG;
+				INFOPLIST_FILE = SimpleLoggerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLoggerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleLogger.app/SimpleLogger";
+			};
+			name = Debug;
+		};
+		BA9EBAD71F27E4D8002DFF44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = R536BS52FG;
+				INFOPLIST_FILE = SimpleLoggerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLoggerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleLogger.app/SimpleLogger";
+			};
+			name = Release;
+		};
 		BAE373021F27D37A00300F7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -372,6 +398,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = R536BS52FG;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLogger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -384,41 +411,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = R536BS52FG;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLogger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
-		BAE373081F27D37A00300F7E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = R536BS52FG;
-				INFOPLIST_FILE = SimpleLoggerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLoggerTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleLogger.app/SimpleLogger";
-			};
-			name = Debug;
-		};
-		BAE373091F27D37A00300F7E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = R536BS52FG;
-				INFOPLIST_FILE = SimpleLoggerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLoggerTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleLogger.app/SimpleLogger";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BA9EBAD51F27E4D8002DFF44 /* Build configuration list for PBXNativeTarget "SimpleLoggerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA9EBAD61F27E4D8002DFF44 /* Debug */,
+				BA9EBAD71F27E4D8002DFF44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BAE372DD1F27D37A00300F7E /* Build configuration list for PBXProject "SimpleLogger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -433,15 +444,6 @@
 			buildConfigurations = (
 				BAE373051F27D37A00300F7E /* Debug */,
 				BAE373061F27D37A00300F7E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BAE373071F27D37A00300F7E /* Build configuration list for PBXNativeTarget "SimpleLoggerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BAE373081F27D37A00300F7E /* Debug */,
-				BAE373091F27D37A00300F7E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

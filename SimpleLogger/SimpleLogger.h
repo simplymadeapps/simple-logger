@@ -10,4 +10,6 @@
 
 @interface SimpleLogger : NSObject
 
++ (instancetype)sharedLogger;
+
 @end
