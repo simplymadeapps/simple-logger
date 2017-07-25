@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BA9EBAC31F27D5FE002DFF44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */; };
+		BA9EBAC71F27E1FC002DFF44 /* SimpleLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */; };
 		BAE372E71F27D37A00300F7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372E61F27D37A00300F7E /* main.m */; };
 		BAE372EA1F27D37A00300F7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372E91F27D37A00300F7E /* AppDelegate.m */; };
 		BAE372ED1F27D37A00300F7E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372EC1F27D37A00300F7E /* ViewController.m */; };
@@ -28,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		BA9EBAC51F27E1FC002DFF44 /* SimpleLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleLogger.h; path = ../SimpleLogger/SimpleLogger.h; sourceTree = "<group>"; };
+		BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimpleLogger.m; path = ../SimpleLogger/SimpleLogger.m; sourceTree = "<group>"; };
 		BAE372E21F27D37A00300F7E /* SimpleLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAE372E61F27D37A00300F7E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		BAE372E81F27D37A00300F7E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -60,9 +63,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BA9EBAC41F27E1DE002DFF44 /* SimpleLogger */ = {
+			isa = PBXGroup;
+			children = (
+				BA9EBAC51F27E1FC002DFF44 /* SimpleLogger.h */,
+				BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */,
+			);
+			name = SimpleLogger;
+			sourceTree = "<group>";
+		};
 		BAE372D91F27D37A00300F7E = {
 			isa = PBXGroup;
 			children = (
+				BA9EBAC41F27E1DE002DFF44 /* SimpleLogger */,
 				BAE372E41F27D37A00300F7E /* SimpleLoggerExample */,
 				BAE372FE1F27D37A00300F7E /* SimpleLoggerTests */,
 				BAE372E31F27D37A00300F7E /* Products */,
@@ -219,6 +232,7 @@
 				BAE372ED1F27D37A00300F7E /* ViewController.m in Sources */,
 				BAE372EA1F27D37A00300F7E /* AppDelegate.m in Sources */,
 				BAE372E71F27D37A00300F7E /* main.m in Sources */,
+				BA9EBAC71F27E1FC002DFF44 /* SimpleLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
