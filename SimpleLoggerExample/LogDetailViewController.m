@@ -1,0 +1,31 @@
+//
+//  LogDetailViewController.m
+//  SimpleLogger
+//
+//  Created by Bill Burgess on 8/4/17.
+//  Copyright © 2017 Simply Made Apps Inc. All rights reserved.
+//
+
+#import "LogDetailViewController.h"
+
+@interface LogDetailViewController ()
+
+@end
+
+@implementation LogDetailViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+	
+	self.automaticallyAdjustsScrollViewInsets = NO;
+	
+	NSError *error;
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	NSString *filePath = [docDirectory stringByAppendingPathComponent:self.filename];
+	NSString *contents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+	self.logDetailTextView.text = contents;
+}
+
+@end
