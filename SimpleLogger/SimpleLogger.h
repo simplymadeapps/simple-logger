@@ -47,4 +47,7 @@ Logs event to daily file with current system date time
 */
 + (void)logEvent:(NSString * _Nonnull)event;
 
+/// Removes all saved log files matching file extension
++ (void)removeAllLogFiles;
+
 @end

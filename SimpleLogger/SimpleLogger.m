@@ -7,6 +7,7 @@
 //
 
 #import "SimpleLogger.h"
+#import "NSDate+SMA.h"
 
 @implementation SimpleLogger
 
@@ -46,6 +47,29 @@
 	NSDate *date = [NSDate date];
 	NSString *eventString = [logger eventString:event forDate:date];
 	[logger writeLogEntry:eventString toFilename:[logger filenameForDate:date]];
+	
+	[logger truncateFilesBeyondRetentionForDate:date];
+}
+
++ (void)removeAllLogFiles {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	[logger removeAllLogFiles];
+}
+
+#pragma mark - Instance Methods
+- (void)removeAllLogFiles {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	NSFileManager *manager = [NSFileManager defaultManager];
+	NSArray *contents = [manager contentsOfDirectoryAtPath:docDirectory error:nil];
+	
+	for (NSString *file in contents) {
+		if ([[file pathExtension] isEqualToString:self.filenameExtension]) {
+			NSError *error;
+			NSString *path = [docDirectory stringByAppendingPathComponent:file];
+			[manager removeItemAtPath:path error:&error];
+		}
+	}
 }
 
 - (NSString *)eventString:(NSString *)string forDate:(NSDate *)date {
@@ -72,8 +96,33 @@
 	}
 }
 
-// get all files
-// https://stackoverflow.com/questions/8376511/list-saved-files-in-ios-documents-directory-in-a-uitableview
+- (void)truncateFilesBeyondRetentionForDate:(NSDate *)date {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	
+	NSError *error;
+	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	NSDate *retainDate = [self lastRetentionDateForDate:date];
+	
+	for (NSString *file in content) {
+		NSLog(@"filename: %@", file);
+		NSDate *fileDate = [self.logFormatter dateFromString:file];
+		NSLog(@"date from File: %@", fileDate);
+		if ([[file pathExtension] isEqualToString:self.filenameExtension]) { // only truncate matching file types
+			if (![fileDate isBetweenDate:retainDate andDate:date]) {
+				// file is outside our retention period, delete file
+				NSError *error;
+				NSString *path = [docDirectory stringByAppendingPathComponent:file];
+				[[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+			}
+		}
+	}
+}
+
+- (NSDate *)lastRetentionDateForDate:(NSDate *)date {
+	return [date dateBySubtractingDays:self.retentionDays];
+}
 
 #pragma mark - Helpers
 - (NSString *)filenameForDate:(NSDate *)date {
