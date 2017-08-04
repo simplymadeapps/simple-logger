@@ -58,7 +58,7 @@
 	UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *log = [UIAlertAction actionWithTitle:@"Add Log" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		UITextField *logTextField = alert.textFields.firstObject;
-		[SimpleLogger logEvent:logTextField.text withParameters:nil];
+		[SimpleLogger logEvent:logTextField.text];
 		[self reloadTableData];
 	}];
 	[alert addAction:cancel];

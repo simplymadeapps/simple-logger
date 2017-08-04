@@ -23,6 +23,8 @@
 - (id)init {
 	if (self = [super init]) {
 		self.retentionDays = kLoggerRetentionDaysDefault;
+		self.logFormatter = [[NSDateFormatter alloc] init];
+		self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
 		self.filenameFormatter = [[NSDateFormatter alloc] init];
 		self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 		self.filenameExtension = kLoggerFilenameExtension;
@@ -38,14 +40,17 @@
 	logger.awsSecret = secret;
 }
 
-+ (void)logEvent:(NSString *)event withParameters:(NSDictionary *)parameters {
++ (void)logEvent:(NSString *)event {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
-	// TODO: Build log entry
-	
-	
-	
-	[logger writeLogEntry:event toFilename:[logger filenameForDate:[NSDate date]]];
+	NSDate *date = [NSDate date];
+	NSString *eventString = [logger eventString:event forDate:date];
+	[logger writeLogEntry:eventString toFilename:[logger filenameForDate:date]];
+}
+
+- (NSString *)eventString:(NSString *)string forDate:(NSDate *)date {
+	NSString *dateString = [self.logFormatter stringFromDate:date];
+	return [NSString stringWithFormat:@"[%@] %@", dateString, string];
 }
 
 #pragma mark - Private

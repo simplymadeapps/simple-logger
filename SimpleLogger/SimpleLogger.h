@@ -44,8 +44,7 @@ Initialize shared logger with Amazon region, bucket, and credentials
 /**
 Logs event to daily file with current system date time
 @param event Event string to be logged
-@param parameters Dictionary of values to be displayed with the event
 */
-+ (void)logEvent:(NSString * _Nonnull)event withParameters:(NSDictionary * _Nullable)parameters;
++ (void)logEvent:(NSString * _Nonnull)event;
 
 @end
