@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SimpleLoggerDefaults.h"
+#import "NSDate+SMA.h"
 
 @interface SimpleLogger : NSObject
 
@@ -46,6 +47,11 @@ Logs event to daily file with current system date time
 @param event Event string to be logged
 */
 + (void)logEvent:(NSString * _Nonnull)event;
+/**
+File output for specified date
+@param date Date for log output
+*/
++ (NSString * _Nullable)logOutputForFileDate:(NSDate * _Nonnull)date;
 
 /// Removes all saved log files matching file extension
 + (void)removeAllLogFiles;

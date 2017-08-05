@@ -51,6 +51,18 @@
 	[logger truncateFilesBeyondRetentionForDate:date];
 }
 
++ (NSString *)logOutputForFileDate:(NSDate *)date {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	NSError *error;
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	NSString *filePath = [docDirectory stringByAppendingPathComponent:[logger filenameForDate:date]];
+	NSString *contents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+	
+	return contents;
+}
+
 + (void)removeAllLogFiles {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	[logger removeAllLogFiles];
@@ -107,8 +119,9 @@
 	
 	for (NSString *file in content) {
 		NSLog(@"filename: %@", file);
-		NSDate *fileDate = [self.logFormatter dateFromString:file];
+		NSDate *fileDate = [self.filenameFormatter dateFromString:[file stringByDeletingPathExtension]];
 		NSLog(@"date from File: %@", fileDate);
+#warning fix timestamps before comparing dates
 		if ([[file pathExtension] isEqualToString:self.filenameExtension]) { // only truncate matching file types
 			if (![fileDate isBetweenDate:retainDate andDate:date]) {
 				// file is outside our retention period, delete file
@@ -121,7 +134,7 @@
 }
 
 - (NSDate *)lastRetentionDateForDate:(NSDate *)date {
-	return [date dateBySubtractingDays:self.retentionDays];
+	return [date dateBySubtractingDays:self.retentionDays - 1]; // drop one to preserve current day
 }
 
 #pragma mark - Helpers
