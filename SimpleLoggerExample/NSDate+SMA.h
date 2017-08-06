@@ -12,8 +12,12 @@
 - (NSDate *)dateByAddingDays:(NSInteger)days;
 - (NSDate *)dateBySubtractingDays:(NSInteger)days;
 
+- (NSDate *)minTime;
+- (NSDate *)maxTime;
+
 - (BOOL)isLaterThanDate:(NSDate *)date;
 - (BOOL)isEarlierThanDate:(NSDate *)date;
 - (BOOL)isBetweenDate:(NSDate *)beginDate andDate:(NSDate *)endDate;
+
 
 @end

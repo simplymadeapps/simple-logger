@@ -121,9 +121,8 @@
 		NSLog(@"filename: %@", file);
 		NSDate *fileDate = [self.filenameFormatter dateFromString:[file stringByDeletingPathExtension]];
 		NSLog(@"date from File: %@", fileDate);
-#warning fix timestamps before comparing dates
 		if ([[file pathExtension] isEqualToString:self.filenameExtension]) { // only truncate matching file types
-			if (![fileDate isBetweenDate:retainDate andDate:date]) {
+			if (![fileDate isBetweenDate:[retainDate minTime] andDate:[date maxTime]]) {
 				// file is outside our retention period, delete file
 				NSError *error;
 				NSString *path = [docDirectory stringByAppendingPathComponent:file];

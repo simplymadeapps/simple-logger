@@ -49,6 +49,38 @@
 	XCTAssertEqualObjects(value, @"01-08-1979");
 }
 
+- (void)testMinTimeSetsCorrectly {
+	NSDate *date = [self.dateFormatter dateFromString:@"01-09-1979"];
+	
+	NSDate *newDate = [date minTime];
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSDateComponents *components = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay| NSCalendarUnitYear | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:newDate];
+	
+	XCTAssertNotNil(newDate);
+	XCTAssertEqual(components.hour, 0);
+	XCTAssertEqual(components.minute, 0);
+	XCTAssertEqual(components.second, 0);
+	XCTAssertEqual(components.month, 1);
+	XCTAssertEqual(components.day, 9);
+	XCTAssertEqual(components.year, 1979);
+}
+
+- (void)testMaxTimeSetsCorrectly {
+	NSDate *date = [self.dateFormatter dateFromString:@"01-09-1979"];
+	
+	NSDate *newDate = [date maxTime];
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSDateComponents *components = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay| NSCalendarUnitYear | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:newDate];
+	
+	XCTAssertNotNil(newDate);
+	XCTAssertEqual(components.hour, 23);
+	XCTAssertEqual(components.minute, 59);
+	XCTAssertEqual(components.second, 59);
+	XCTAssertEqual(components.month, 1);
+	XCTAssertEqual(components.day, 9);
+	XCTAssertEqual(components.year, 1979);
+}
+
 - (void)testIsLaterThanDateReturnsTrue {
 	NSDate *date = [self.dateFormatter dateFromString:@"01-09-1979"];
 	
