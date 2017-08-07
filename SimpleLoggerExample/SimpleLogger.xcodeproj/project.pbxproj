@@ -10,6 +10,8 @@
 		BA9D37DE1F34C9FF0048C3D5 /* LogDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */; };
 		BA9D37E11F34FADD0048C3D5 /* NSDate+SMA.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */; };
 		BA9D37E31F34FFE30048C3D5 /* NSDate+SMATests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */; };
+		BA9D37E51F389F150048C3D5 /* ViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */; };
+		BA9D37E91F38A8220048C3D5 /* SLTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E81F38A8220048C3D5 /* SLTestCase.m */; };
 		BA9EBAC31F27D5FE002DFF44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */; };
 		BA9EBAC71F27E1FC002DFF44 /* SimpleLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */; };
 		BA9EBAD11F27E4D8002DFF44 /* SimpleLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */; };
@@ -18,6 +20,8 @@
 		BAE372ED1F27D37A00300F7E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE372EC1F27D37A00300F7E /* ViewController.m */; };
 		BAE372F01F27D37A00300F7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAE372EE1F27D37A00300F7E /* Main.storyboard */; };
 		BAE372F51F27D37A00300F7E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAE372F31F27D37A00300F7E /* LaunchScreen.storyboard */; };
+		C1C79C7B67F8E1AF963D4A3D /* Pods_SimpleLoggerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A552223A147773A8FEE443C5 /* Pods_SimpleLoggerTests.framework */; };
+		DE7E3CBA2FB3801D35A5DAAC /* Pods_SimpleLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A7DECCEBB9C9FBBBC122EB /* Pods_SimpleLogger.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,11 +35,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		24C4C3CBDC309AF0C998B846 /* Pods-SimpleLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLogger.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLogger/Pods-SimpleLogger.release.xcconfig"; sourceTree = "<group>"; };
+		33A7DECCEBB9C9FBBBC122EB /* Pods_SimpleLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		54778A4063E1C459CC62063F /* Pods-SimpleLoggerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLoggerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests.release.xcconfig"; sourceTree = "<group>"; };
+		A552223A147773A8FEE443C5 /* Pods_SimpleLoggerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleLoggerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D37DC1F34C9FF0048C3D5 /* LogDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogDetailViewController.m; sourceTree = SOURCE_ROOT; };
 		BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+SMA.h"; sourceTree = "<group>"; };
 		BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SMA.m"; sourceTree = "<group>"; };
 		BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SMATests.m"; sourceTree = "<group>"; };
+		BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewControllerTests.m; sourceTree = "<group>"; };
+		BA9D37E81F38A8220048C3D5 /* SLTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTestCase.m; sourceTree = "<group>"; };
+		BA9D37EA1F38A8930048C3D5 /* SLTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLTestCase.h; sourceTree = "<group>"; };
 		BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		BA9EBAC51F27E1FC002DFF44 /* SimpleLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleLogger.h; path = ../SimpleLogger/SimpleLogger.h; sourceTree = "<group>"; };
 		BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimpleLogger.m; path = ../SimpleLogger/SimpleLogger.m; sourceTree = "<group>"; };
@@ -52,6 +63,8 @@
 		BAE372EF1F27D37A00300F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BAE372F41F27D37A00300F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BAE372F61F27D37A00300F7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		DA34DA1D7D67830C5C84213F /* Pods-SimpleLoggerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLoggerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F07570F939643B80FC6FD689 /* Pods-SimpleLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLogger.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLogger/Pods-SimpleLogger.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1C79C7B67F8E1AF963D4A3D /* Pods_SimpleLoggerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,12 +80,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE7E3CBA2FB3801D35A5DAAC /* Pods_SimpleLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D30061F209B3614901273B5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				33A7DECCEBB9C9FBBBC122EB /* Pods_SimpleLogger.framework */,
+				A552223A147773A8FEE443C5 /* Pods_SimpleLoggerTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A7379D355D9137C92CF47E23 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F07570F939643B80FC6FD689 /* Pods-SimpleLogger.debug.xcconfig */,
+				24C4C3CBDC309AF0C998B846 /* Pods-SimpleLogger.release.xcconfig */,
+				DA34DA1D7D67830C5C84213F /* Pods-SimpleLoggerTests.debug.xcconfig */,
+				54778A4063E1C459CC62063F /* Pods-SimpleLoggerTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		BA9EBAC41F27E1DE002DFF44 /* SimpleLogger */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,9 +122,12 @@
 		BA9EBACF1F27E4D8002DFF44 /* SimpleLoggerTests */ = {
 			isa = PBXGroup;
 			children = (
+				BA9EBAD21F27E4D8002DFF44 /* Info.plist */,
+				BA9D37EA1F38A8930048C3D5 /* SLTestCase.h */,
+				BA9D37E81F38A8220048C3D5 /* SLTestCase.m */,
 				BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */,
 				BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */,
-				BA9EBAD21F27E4D8002DFF44 /* Info.plist */,
+				BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */,
 			);
 			path = SimpleLoggerTests;
 			sourceTree = "<group>";
@@ -101,6 +139,8 @@
 				BAE372E41F27D37A00300F7E /* SimpleLoggerExample */,
 				BA9EBACF1F27E4D8002DFF44 /* SimpleLoggerTests */,
 				BAE372E31F27D37A00300F7E /* Products */,
+				A7379D355D9137C92CF47E23 /* Pods */,
+				4D30061F209B3614901273B5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,9 +187,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BA9EBAD51F27E4D8002DFF44 /* Build configuration list for PBXNativeTarget "SimpleLoggerTests" */;
 			buildPhases = (
+				D7710EBF6E51879B108BE1B8 /* [CP] Check Pods Manifest.lock */,
 				BA9EBACA1F27E4D8002DFF44 /* Sources */,
 				BA9EBACB1F27E4D8002DFF44 /* Frameworks */,
 				BA9EBACC1F27E4D8002DFF44 /* Resources */,
+				2344FBEBEEA3D904F2709BD2 /* [CP] Embed Pods Frameworks */,
+				AFC0E8B8C7567153C33AB92E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -165,9 +208,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAE373041F27D37A00300F7E /* Build configuration list for PBXNativeTarget "SimpleLogger" */;
 			buildPhases = (
+				07A5625E21FF40ADF4339D7E /* [CP] Check Pods Manifest.lock */,
 				BAE372DE1F27D37A00300F7E /* Sources */,
 				BAE372DF1F27D37A00300F7E /* Frameworks */,
 				BAE372E01F27D37A00300F7E /* Resources */,
+				D631A20DCFF31B925CCBF5C5 /* [CP] Embed Pods Frameworks */,
+				9064EA01E51DAADDA2B1FBD6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -239,12 +285,107 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		07A5625E21FF40ADF4339D7E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		2344FBEBEEA3D904F2709BD2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9064EA01E51DAADDA2B1FBD6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLogger/Pods-SimpleLogger-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AFC0E8B8C7567153C33AB92E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D631A20DCFF31B925CCBF5C5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLogger/Pods-SimpleLogger-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D7710EBF6E51879B108BE1B8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BA9EBACA1F27E4D8002DFF44 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA9D37E51F389F150048C3D5 /* ViewControllerTests.m in Sources */,
 				BA9D37E31F34FFE30048C3D5 /* NSDate+SMATests.m in Sources */,
+				BA9D37E91F38A8220048C3D5 /* SLTestCase.m in Sources */,
 				BA9EBAD11F27E4D8002DFF44 /* SimpleLoggerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,6 +435,7 @@
 /* Begin XCBuildConfiguration section */
 		BA9EBAD61F27E4D8002DFF44 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA34DA1D7D67830C5C84213F /* Pods-SimpleLoggerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = R536BS52FG;
@@ -307,6 +449,7 @@
 		};
 		BA9EBAD71F27E4D8002DFF44 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54778A4063E1C459CC62063F /* Pods-SimpleLoggerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = R536BS52FG;
@@ -412,6 +555,7 @@
 		};
 		BAE373051F27D37A00300F7E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F07570F939643B80FC6FD689 /* Pods-SimpleLogger.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = R536BS52FG;
@@ -425,6 +569,7 @@
 		};
 		BAE373061F27D37A00300F7E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 24C4C3CBDC309AF0C998B846 /* Pods-SimpleLogger.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = R536BS52FG;

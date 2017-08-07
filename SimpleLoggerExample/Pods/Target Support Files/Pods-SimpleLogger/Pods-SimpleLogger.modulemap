@@ -1,0 +1,6 @@
+framework module Pods_SimpleLogger {
+  umbrella header "Pods-SimpleLogger-umbrella.h"
+
+  export *
+  module * { export * }
+}

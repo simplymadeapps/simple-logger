@@ -30,8 +30,10 @@
 
 - (NSArray *)savedLogFiles {
 	NSMutableArray *matches = [[NSMutableArray alloc] init];
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
 	NSFileManager *manager = [NSFileManager defaultManager];
-	NSArray *contents = [manager contentsOfDirectoryAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] error:nil];
+	NSArray *contents = [manager contentsOfDirectoryAtPath:docDirectory error:nil];
 	
 	for (NSString *item in contents) {
 		if ([[item pathExtension] isEqualToString:@"log"]) {

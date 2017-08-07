@@ -1,0 +1,23 @@
+PODS:
+  - AWSCore (2.5.9)
+  - AWSS3 (2.5.9):
+    - AWSCore (= 2.5.9)
+  - KIF (3.5.2):
+    - KIF/Core (= 3.5.2)
+  - KIF/Core (3.5.2)
+  - OCMock (3.4)
+
+DEPENDENCIES:
+  - AWSS3
+  - KIF
+  - OCMock
+
+SPEC CHECKSUMS:
+  AWSCore: c71840dd51f271dc0af8de8fd6f352767ebde8b4
+  AWSS3: c36b91edb50ccd676be4a92836bb72f0c2ac312b
+  KIF: f2a6025bb3f11692df675054a134d43a9ec2d7db
+  OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
+
+PODFILE CHECKSUM: 6d2c7593f49f333b6a2e791eae3c7c5ebddf9ec4
+
+COCOAPODS: 1.2.1
