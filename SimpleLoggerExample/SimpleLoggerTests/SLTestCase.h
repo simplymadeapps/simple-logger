@@ -25,6 +25,8 @@
 // private
 - (void)truncateFilesBeyondRetentionForDate:(NSDate *)date;
 - (NSDate *)lastRetentionDateForDate:(NSDate *)date;
+- (NSString *)bucketFileLocationForFilename:(NSString *)filename;
+- (NSString *)fullFilePathForFilename:(NSString *)filename;
 // helpers
 - (NSString *)filenameForDate:(NSDate *)date;
 @end

@@ -28,6 +28,7 @@
 		self.filenameFormatter = [[NSDateFormatter alloc] init];
 		self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 		self.filenameExtension = kLoggerFilenameExtension;
+		self.folderLocation = kLoggerFilenameFolderLocation;
 	}
 	return self;
 }
@@ -66,40 +67,40 @@
 	
 	logger.uploadInProgress = YES;
 	logger.uploadError = nil;
-	logger.completionBlock = completionHandler;
 	logger.currentUploadCount = 0;
 	
 	NSArray *files = [logger logFiles];
 	logger.uploadTotal = files.count;
 	
-	for (NSString *file in [logger logFiles]) {
-		[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
-			logger.currentUploadCount = logger.currentUploadCount += 1;
-
-			if (task.error) {
-				NSLog(@"upload error: %@", task.error.localizedDescription);
-				logger.uploadError = task.error;
-			} else {
-				NSLog(@"upload success : Remove after testing");
-				//self->tempImage = nil;
-				//NSString *tempImageURLString = [NSString stringWithFormat:@"%@%@", kAmazonBucketEndpoint, fileName];
-				//self->editUser.imageURLString = tempImageURLString;
-				//[self updateUserAPIWithHUD:YES withMessage:NSLocalizedString(@"Updating", @"Updating")];
-			}
-			
-			if (logger.currentUploadCount == logger.uploadTotal) {
-				// final upload complete
-				logger.uploadInProgress = NO;
-			}
-		}];
-	}
-
-	if (completionHandler) {
-		BOOL uploadSuccess = YES;
-		if (logger.uploadError) {
-			uploadSuccess = NO;
+	NSArray *logFiles = [logger logFiles];
+	if (logFiles && logFiles.count > 0) {
+		for (NSString *file in [logger logFiles]) {
+			[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
+				logger.currentUploadCount = logger.currentUploadCount += 1;
+				
+				if (task.error) {
+					NSLog(@"upload error: %@", task.error.localizedDescription);
+					logger.uploadError = task.error;
+				}
+				
+				if (logger.currentUploadCount == logger.uploadTotal) {
+					// final upload complete
+					logger.uploadInProgress = NO;
+					
+					if (completionHandler) {
+						BOOL uploadSuccess = YES;
+						if (logger.uploadError) {
+							uploadSuccess = NO;
+						}
+						completionHandler(uploadSuccess, logger.uploadError);
+					}
+				}
+			}];
 		}
-		completionHandler(uploadSuccess, logger.uploadError);
+	} else {
+		if (completionHandler) {
+			completionHandler(NO, logger.uploadError);
+		}
 	}
 }
 
@@ -121,14 +122,14 @@
 }
 
 #pragma mark - Instance Methods
-- (void)uploadFilePathToAmazon:(NSString *)filepath withBlock:(SLAmazonTaskUploadCompletionHandler)block {
+- (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block {
 	AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-	uploadRequest.body = [NSURL fileURLWithPath:filepath];
+	uploadRequest.body = [NSURL fileURLWithPath:[self fullFilePathForFilename:filename]];
 	uploadRequest.contentType = @"text/plain";
-	uploadRequest.key = self.awsAccessToken;
+	uploadRequest.key = [self bucketFileLocationForFilename:filename];
 	uploadRequest.bucket = self.awsBucket;
-	//uploadRequest.ACL = AWSS3BucketCannedACLPublicRead;
-	uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
+	uploadRequest.ACL = AWSS3BucketCannedACLPublicRead;
+	//uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
 	
 	/*
 	uploadRequest.uploadProgress =^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend){
@@ -235,6 +236,16 @@
 	AWSStaticCredentialsProvider *provider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:self.awsAccessToken secretKey:self.awsSecret];
 	AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:provider];
 	AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
+}
+
+- (NSString *)bucketFileLocationForFilename:(NSString *)filename {
+	return [NSString stringWithFormat:@"%@/%@", self.folderLocation, filename];
+}
+
+- (NSString *)fullFilePathForFilename:(NSString *)filename {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	return [docDirectory stringByAppendingPathComponent:filename];
 }
 
 #pragma mark - Helpers

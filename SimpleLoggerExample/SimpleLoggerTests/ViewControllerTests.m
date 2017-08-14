@@ -67,11 +67,6 @@
 }
 
 - (void)testLogDetailViewUploadIsCalled {
-	//AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
-	//[[transferManager upload:uploadRequest] continueWithExecutor:[AWSExecutor mainThreadExecutor] withBlock:^id _Nullable(AWSTask * _Nonnull task) {
-		//block(task);
-		//return nil;
-	//}];
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
 	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];

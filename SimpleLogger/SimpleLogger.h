@@ -16,8 +16,6 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 
 @interface SimpleLogger : NSObject
 
-/// retained completion handler for uploads
-@property (nonatomic, strong, nullable) SLUploadCompletionHandler completionBlock;
 /// Number of days worth of logs to keep
 @property (nonatomic, assign) NSInteger retentionDays;
 /// Log statement date formatter
@@ -26,6 +24,8 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 @property (nonatomic, strong, nonnull) NSDateFormatter *filenameFormatter;
 /// Filename extension
 @property (nonatomic, strong, nonnull) NSString *filenameExtension;
+/// Filename folder assignment location
+@property (nonatomic, strong, nonnull) NSString *folderLocation;
 
 /// Amazon S3 region
 @property (nonatomic, assign) AWSRegionType awsRegion;

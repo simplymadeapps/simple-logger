@@ -9,3 +9,4 @@
 #define kLoggerRetentionDaysDefault 7
 #define kLoggerFilenameDateFormat @"yyyy-MM-dd"
 #define kLoggerFilenameExtension @"log"
+#define kLoggerFilenameFolderLocation @"SimpleLogger"

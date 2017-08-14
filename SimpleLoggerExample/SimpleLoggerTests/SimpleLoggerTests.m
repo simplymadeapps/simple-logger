@@ -147,47 +147,21 @@
 	[self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void)testUploadFilesWithCompletionSuccess {
-	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
-
-	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
-	
-	id mock = OCMPartialMock(transferManager);
-	[[[mock stub] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(AWSContinuationBlock block) {
-		AWSTask *task = [[AWSTask alloc] init];
-		block(task);
-		return YES;
-	}]];
-	
-	[self saveDummyFiles:1];
-	
+- (void)testUploadFilesWithNoFiles {
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
 	
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
-		XCTAssertTrue(success);
+		XCTAssertFalse(success);
 		XCTAssertNil(error);
 		
 		[expect fulfill];
 	}];
 	
 	[self waitForExpectationsWithTimeout:1 handler:nil];
-	
-	[mock stopMocking];
-	mock = nil;
 }
 
 - (void)testUploadFilesWithCompletionError {
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
-	
-	//AWSTask *task = [[AWSTask alloc] init];
-	//id taskMock = OCMPartialMock(task);
-	//[[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
-	
-	//id mock = OCMPartialMock(transferManager);
-	//[[[mock stub] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(AWSContinuationBlock block) {
-	//	block(task);
-	//	return YES;
-	//}]];
 	
 	[self saveDummyFiles:1];
 	
@@ -199,14 +173,6 @@
 		
 		[expect fulfill];
 	}];
-	
-	//[mock verify];
-	//[mock stopMocking];
-	//mock = nil;
-	
-	//[taskMock verify];
-	//[taskMock stopMocking];
-	//taskMock = nil;
 	
 	[self waitForExpectationsWithTimeout:1 handler:nil];
 }
@@ -245,12 +211,22 @@
 	XCTAssertEqual(content.count, 6); // doesn't make file for current day, so dropping 2
 }
 
-- (void)testUploadFilepathToAmazonWithTaskNil {
+- (void)testAmazonBucketKeySetsCorrectly {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	logger.folderLocation = kLoggerFilenameFolderLocation;
 	
+	NSString *filePath = [logger bucketFileLocationForFilename:@"test.log"];
+	
+	XCTAssertNotNil(filePath);
+	XCTAssertEqualObjects(filePath, @"SimpleLogger/test.log");
 }
 
-- (void)testUploadFilepathToAmazonWithTask {
+- (void)testFullFilePathReturnsCorrectly {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
+	NSString *filePath = [logger fullFilePathForFilename:@"test.log"];
+	
+	XCTAssertNotNil(filePath);
 }
 
 #pragma mark - Helpers

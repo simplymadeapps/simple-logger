@@ -99,6 +99,7 @@
 	logger.uploadTotal = 0;
 	logger.currentUploadCount = 0;
 	logger.uploadError = nil;
+	logger.folderLocation = kLoggerFilenameFolderLocation;
 }
 
 @end
