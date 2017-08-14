@@ -19,9 +19,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 	
-	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"simpleinout-staging" accessToken:@"AKIAJONJU2KMX5L2GKPQ" secret:@"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"];
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test-bucket" accessToken:@"test-token" secret:@"test-secret"];
 	
-	[[SimpleLogger sharedLogger] setFolderLocation:@"app-logs/211/simpleinout-ios"];
+	[[SimpleLogger sharedLogger] setFolderLocation:@"mytestfolder/userlogs"];
 	
 	return YES;
 }
