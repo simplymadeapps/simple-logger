@@ -10,7 +10,7 @@
 
 ### Cocoapods
 
-[CocoaPods](http://cocoapods.org) is the recommended way to add MBProgressHUD to your project.
+[CocoaPods](http://cocoapods.org) is the recommended way to add `SimpleLogger` to your project.
 
 1. Add a pod entry for SimpleLogger to your Podfile `pod 'SimpleLogger', '~-> 1.0.0'`
 2. Install the pod(s) by running `pod install`.
