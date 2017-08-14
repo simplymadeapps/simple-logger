@@ -43,17 +43,16 @@
 }
 
 - (void)testAmazonInitStoresValuesCorrectly {
-	[SimpleLogger initWithAWSRegion:@"test_region" bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	XCTAssertNotNil(logger);
-	XCTAssertNotNil(logger.awsRegion);
 	XCTAssertNotNil(logger.awsBucket);
 	XCTAssertNotNil(logger.awsAccessToken);
 	XCTAssertNotNil(logger.awsSecret);
 	
-	XCTAssertEqualObjects(logger.awsRegion, @"test_region");
+	XCTAssertEqual(logger.awsRegion, AWSRegionUSEast1);
 	XCTAssertEqualObjects(logger.awsBucket, @"test_bucket");
 	XCTAssertEqualObjects(logger.awsAccessToken, @"test_token");
 	XCTAssertEqualObjects(logger.awsSecret, @"test_secret");
@@ -132,6 +131,86 @@
 	XCTAssertEqual(content.count, 2);
 }
 
+- (void)testUploadFilesWithCompletionWhileInProgress {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	logger.uploadInProgress = YES;
+	logger.currentUploadCount = 1;
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload In Progress"];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		XCTAssertFalse(success);
+		XCTAssertNil(error);
+		XCTAssertEqual(logger.currentUploadCount, 1);
+		[expect fulfill];
+	}];
+	
+	[self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testUploadFilesWithCompletionSuccess {
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+
+	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
+	
+	id mock = OCMPartialMock(transferManager);
+	[[[mock stub] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(AWSContinuationBlock block) {
+		AWSTask *task = [[AWSTask alloc] init];
+		block(task);
+		return YES;
+	}]];
+	
+	[self saveDummyFiles:1];
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
+	
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		XCTAssertTrue(success);
+		XCTAssertNil(error);
+		
+		[expect fulfill];
+	}];
+	
+	[self waitForExpectationsWithTimeout:1 handler:nil];
+	
+	[mock stopMocking];
+	mock = nil;
+}
+
+- (void)testUploadFilesWithCompletionError {
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+	
+	//AWSTask *task = [[AWSTask alloc] init];
+	//id taskMock = OCMPartialMock(task);
+	//[[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
+	
+	//id mock = OCMPartialMock(transferManager);
+	//[[[mock stub] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(AWSContinuationBlock block) {
+	//	block(task);
+	//	return YES;
+	//}]];
+	
+	[self saveDummyFiles:1];
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
+	
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		XCTAssertFalse(success);
+		XCTAssertNotNil(error);
+		
+		[expect fulfill];
+	}];
+	
+	//[mock verify];
+	//[mock stopMocking];
+	//mock = nil;
+	
+	//[taskMock verify];
+	//[taskMock stopMocking];
+	//taskMock = nil;
+	
+	[self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
 #pragma mark - Private Methods
 - (void)testLastRetentionDateReturnsCorrectly {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
@@ -164,6 +243,14 @@
 	content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
 	
 	XCTAssertEqual(content.count, 6); // doesn't make file for current day, so dropping 2
+}
+
+- (void)testUploadFilepathToAmazonWithTaskNil {
+	
+}
+
+- (void)testUploadFilepathToAmazonWithTask {
+	
 }
 
 #pragma mark - Helpers

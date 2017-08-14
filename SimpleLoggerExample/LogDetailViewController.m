@@ -7,6 +7,7 @@
 //
 
 #import "LogDetailViewController.h"
+#import "SimpleLogger.h"
 
 @interface LogDetailViewController ()
 
@@ -26,6 +27,13 @@
 	NSString *filePath = [docDirectory stringByAppendingPathComponent:self.filename];
 	NSString *contents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
 	self.logDetailTextView.text = contents;
+	
+	UIBarButtonItem *upload = [[UIBarButtonItem alloc] initWithTitle:@"Upload" style:UIBarButtonItemStylePlain target:self action:@selector(uploadFirstFileInStack:)];
+	self.navigationItem.rightBarButtonItem = upload;
+}
+
+- (void)uploadFirstFileInStack:(id)sender {
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
 }
 
 @end

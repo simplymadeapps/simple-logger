@@ -14,6 +14,7 @@
 	[super setUp];
 	// Put setup code here. This method is called before the invocation of each test method in the class.
 	[SimpleLogger removeAllLogFiles];
+	[self resetLoggerUploadInfo];
 	
 	UIApplication.sharedApplication.keyWindow.layer.speed = 100; // ludicrous speed
 }
@@ -89,6 +90,15 @@
 			[manager removeItemAtPath:path error:&error];
 		}
 	}
+}
+
+- (void)resetLoggerUploadInfo {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	logger.uploadInProgress = NO;
+	logger.uploadTotal = 0;
+	logger.currentUploadCount = 0;
+	logger.uploadError = nil;
 }
 
 @end
