@@ -41,8 +41,8 @@
 		A552223A147773A8FEE443C5 /* Pods_SimpleLoggerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleLoggerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D37DC1F34C9FF0048C3D5 /* LogDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogDetailViewController.m; sourceTree = SOURCE_ROOT; };
-		BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+SMA.h"; sourceTree = "<group>"; };
-		BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SMA.m"; sourceTree = "<group>"; };
+		BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+SMA.h"; path = "../SimpleLogger/NSDate+SMA.h"; sourceTree = "<group>"; };
+		BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+SMA.m"; path = "../SimpleLogger/NSDate+SMA.m"; sourceTree = "<group>"; };
 		BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SMATests.m"; sourceTree = "<group>"; };
 		BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewControllerTests.m; sourceTree = "<group>"; };
 		BA9D37E81F38A8220048C3D5 /* SLTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTestCase.m; sourceTree = "<group>"; };
