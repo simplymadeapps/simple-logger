@@ -65,6 +65,35 @@ You must initialize `SimpleLogger` with the correct Amazon AWS S3 credentials an
 [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"my-bucket-name" accessToken:@"MYAMAZONACCESSTOKEN" secret:@"MYAMAZONSECRET"];
 ```
 
+iOS 9 users need to support App Transport Security (ATS). To prevent uploads from failing, add the following keys to your `Info.plist`.
+
+```objective-c
+<key>NSAppTransportSecurity</key>
+    <dict>
+            <key>NSExceptionDomains</key>
+            <dict>
+            <key>amazonaws.com</key>
+            <dict>
+                    <key>NSThirdPartyExceptionMinimumTLSVersion</key>
+                    <string>TLSv1.0</string>
+                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                    <false/>
+                    <key>NSIncludesSubdomains</key>
+                    <true/>
+            </dict>
+            <key>amazonaws.com.cn</key>
+            <dict>
+                    <key>NSThirdPartyExceptionMinimumTLSVersion</key>
+                    <string>TLSv1.0</string>
+                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                    <false/>
+                    <key>NSIncludesSubdomains</key>
+                    <true/>
+            </dict>
+            </dict>
+    </dict>
+```
+
 ## License
 
 This code is distributed under the terms and conditions of the [MIT license](LICENSE).
