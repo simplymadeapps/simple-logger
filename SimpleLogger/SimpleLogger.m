@@ -71,11 +71,11 @@
 	logger.currentUploadCount = 0;
 	
 	NSArray *files = [logger logFiles];
-	logger.uploadTotal = files.count;
 	
-	NSArray *logFiles = [logger logFiles];
-	if (logFiles && logFiles.count > 0) {
-		for (NSString *file in logFiles) {
+	if (files) {
+		logger.uploadTotal = files.count;
+		
+		for (NSString *file in files) {
 			[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
 				logger.currentUploadCount = logger.currentUploadCount += 1;
 				

@@ -28,6 +28,7 @@
 - (NSDate *)lastRetentionDateForDate:(NSDate *)date;
 - (NSString *)bucketFileLocationForFilename:(NSString *)filename;
 - (NSString *)fullFilePathForFilename:(NSString *)filename;
+- (NSArray *)logFiles;
 // helpers
 - (NSString *)filenameForDate:(NSDate *)date;
 @end

@@ -182,6 +182,23 @@
 	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
+- (void)testUploadFilesWithEmptyFiles {
+	// tests scenario that can never happen, but satisfies codecov
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	id mock = OCMPartialMock(logger);
+	[[[mock stub] andReturn:@[]] logFiles];
+
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	
+	XCTAssertTrue(logger.uploadInProgress); // stuck in progress forever
+	
+	[mock verify];
+	[mock stopMocking];
+	mock = nil;
+	
+}
+
 - (void)testUploadFilesWithNoFilesNoCompletion {
 	[SimpleLogger uploadAllFilesWithCompletion:nil];
 	
