@@ -180,6 +180,7 @@
 }
 
 - (void)testUploadFilesWithCompletionWhileInProgressNoHandler {
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	logger.uploadInProgress = YES;
 	logger.currentUploadCount = 1;
@@ -191,7 +192,7 @@
 	XCTAssertTrue(logger.currentUploadCount == 1);
 }
 
-- (void)testUploadFilesWithNoFiles {
+- (void)testUploadFilesWithNoFilesAndCompletion {
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
 	
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
@@ -204,6 +205,14 @@
 	}];
 	
 	[self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)testUploadFilesWithNoFilesNoCompletion {
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+	
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	
+	XCTAssertFalse([[SimpleLogger sharedLogger] uploadInProgress]);
 }
 
 - (void)testUploadFilesWithEmptyFiles {
@@ -222,12 +231,6 @@
 	[mock stopMocking];
 	mock = nil;
 	
-}
-
-- (void)testUploadFilesWithNoFilesNoCompletion {
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
-	
-	XCTAssertFalse([[SimpleLogger sharedLogger] uploadInProgress]);
 }
 
 - (void)testUploadFilesWithCompletionSuccess {

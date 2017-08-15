@@ -140,7 +140,7 @@
 	uploadRequest.key = [self bucketFileLocationForFilename:filename];
 	uploadRequest.bucket = self.awsBucket;
 	//uploadRequest.ACL = AWSS3BucketCannedACLPublicRead;
-	uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
+	//uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
 	
 	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
 	[[transferManager upload:uploadRequest] continueWithExecutor:[AWSExecutor mainThreadExecutor] withBlock:^id _Nullable(AWSTask * _Nonnull task) {
