@@ -75,7 +75,7 @@
 	
 	NSArray *logFiles = [logger logFiles];
 	if (logFiles && logFiles.count > 0) {
-		for (NSString *file in [logger logFiles]) {
+		for (NSString *file in logFiles) {
 			[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
 				logger.currentUploadCount = logger.currentUploadCount += 1;
 				
@@ -99,6 +99,7 @@
 			}];
 		}
 	} else {
+		logger.uploadInProgress = NO;
 		if (completionHandler) {
 			completionHandler(NO, logger.uploadError);
 		}
@@ -215,9 +216,8 @@
 	NSDate *retainDate = [self lastRetentionDateForDate:date];
 	
 	for (NSString *file in content) {
-		NSLog(@"filename: %@", file);
 		NSDate *fileDate = [self.filenameFormatter dateFromString:[file stringByDeletingPathExtension]];
-		NSLog(@"date from File: %@", fileDate);
+
 		if ([[file pathExtension] isEqualToString:self.filenameExtension]) { // only truncate matching file types
 			if (![fileDate isBetweenDate:[retainDate minTime] andDate:[date maxTime]]) {
 				// file is outside our retention period, delete file

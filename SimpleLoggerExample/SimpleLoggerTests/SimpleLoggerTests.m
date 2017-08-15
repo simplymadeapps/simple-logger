@@ -8,6 +8,16 @@
 
 #import "SLTestCase.h"
 
+@interface SLAWSTask : AWSTask
+@property (nonatomic, strong, readwrite) NSError *myerror;
+@end
+
+@implementation SLAWSTask
+- (NSError *)getError {
+	return self.myerror;
+}
+@end
+
 @interface SimpleLoggerTests : SLTestCase
 
 @end
@@ -144,7 +154,7 @@
 		[expect fulfill];
 	}];
 	
-	[self waitForExpectationsWithTimeout:1 handler:nil];
+	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 - (void)testUploadFilesWithCompletionWhileInProgressNoHandler {
@@ -169,7 +179,63 @@
 		[expect fulfill];
 	}];
 	
-	[self waitForExpectationsWithTimeout:1 handler:nil];
+	[self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)testUploadFilesWithNoFilesNoCompletion {
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	
+	XCTAssertFalse([[SimpleLogger sharedLogger] uploadInProgress]);
+}
+
+- (void)testUploadFilesWithCompletionSuccess {
+	[self saveDummyFiles:2];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	id mock = OCMPartialMock(logger);
+	[[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
+		SLAWSTask *task = [[SLAWSTask alloc] init];
+		handler(task);
+		return YES;
+	}]];
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
+	
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		XCTAssertTrue(success);
+		XCTAssertNil(error);
+		
+		[expect fulfill];
+	}];
+	
+	[self waitForExpectationsWithTimeout:5 handler:nil];
+	
+	[mock verify];
+	[mock stopMocking];
+	mock = nil;
+}
+
+- (void)testUploadFilesWithCompletionSuccessNoBlock {
+	[self saveDummyFiles:2];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	id mock = OCMPartialMock(logger);
+	[[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
+		SLAWSTask *task = [[SLAWSTask alloc] init];
+		task.myerror = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
+		handler(task);
+		return YES;
+	}]];
+	
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	
+	XCTAssertFalse(logger.uploadInProgress);
+	
+	[mock verify];
+	[mock stopMocking];
+	mock = nil;
 }
 
 - (void)testUploadFilesWithCompletionError {
@@ -221,6 +287,52 @@
 	content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
 	
 	XCTAssertEqual(content.count, 6); // doesn't make file for current day, so dropping 2
+}
+
+- (void)testFileTruncationWhenFilesNil {
+	[self saveRegularFiles:1];
+	
+	NSFileManager *fm = [NSFileManager defaultManager];
+	id mock = OCMPartialMock(fm);
+	[[[mock stub] andReturn:nil] contentsOfDirectoryAtPath:[OCMArg any] error:[OCMArg anyObjectRef]];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	[logger truncateFilesBeyondRetentionForDate:[self testDate]];
+	
+	[mock verify];
+	[mock stopMocking];
+	mock = nil;
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	
+	NSError *error;
+	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	XCTAssertEqual(content.count, 1);
+}
+
+- (void)testFileTruncationWhenDifferentExtension {
+	[self saveDummyFiles:8];
+	[self saveRegularFiles:2];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	
+	NSError *error;
+	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	// should have 10 files saved
+	XCTAssertEqual(content.count, 10);
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	[logger truncateFilesBeyondRetentionForDate:[self testDate]];
+	
+	content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	XCTAssertEqual(content.count, 8);
 }
 
 - (void)testAmazonBucketKeySetsCorrectly {
