@@ -174,7 +174,7 @@
 		[expect fulfill];
 	}];
 	
-	[self waitForExpectationsWithTimeout:1 handler:nil];
+	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 #pragma mark - Private Methods
