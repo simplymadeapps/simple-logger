@@ -21,15 +21,16 @@
 }
 
 - (id)init {
-	if (self = [super init]) {
-		self.retentionDays = kLoggerRetentionDaysDefault;
-		self.logFormatter = [[NSDateFormatter alloc] init];
-		self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-		self.filenameFormatter = [[NSDateFormatter alloc] init];
-		self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
-		self.filenameExtension = kLoggerFilenameExtension;
-		self.folderLocation = kLoggerFilenameFolderLocation;
-	}
+	self = [super init];
+	
+	self.retentionDays = kLoggerRetentionDaysDefault;
+	self.logFormatter = [[NSDateFormatter alloc] init];
+	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+	self.filenameFormatter = [[NSDateFormatter alloc] init];
+	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
+	self.filenameExtension = kLoggerFilenameExtension;
+	self.folderLocation = kLoggerFilenameFolderLocation;
+	
 	return self;
 }
 

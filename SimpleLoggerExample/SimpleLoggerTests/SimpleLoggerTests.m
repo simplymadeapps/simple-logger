@@ -147,6 +147,18 @@
 	[self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)testUploadFilesWithCompletionWhileInProgressNoHandler {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	logger.uploadInProgress = YES;
+	logger.currentUploadCount = 1;
+	
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	
+	[tester waitForAnimationsToFinish];
+	
+	XCTAssertTrue(logger.currentUploadCount == 1);
+}
+
 - (void)testUploadFilesWithNoFiles {
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
 	
