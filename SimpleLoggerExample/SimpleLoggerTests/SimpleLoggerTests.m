@@ -141,7 +141,29 @@
 	XCTAssertEqual(content.count, 2);
 }
 
+- (void)testUploadFilesFailsWithoutAWSCredentialsWithCompletion {
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload Errors"];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		XCTAssertFalse(success);
+		XCTAssertNotNil(error);
+
+		[expect fulfill];
+	}];
+	
+	[self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)testUploadFilesFailsWithoutASWCredentialsNoCompletion {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	logger.uploadInProgress = YES;
+	
+	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	
+	XCTAssertFalse(logger.uploadInProgress);
+}
+
 - (void)testUploadFilesWithCompletionWhileInProgress {
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	logger.uploadInProgress = YES;
 	logger.currentUploadCount = 1;
@@ -172,6 +194,8 @@
 - (void)testUploadFilesWithNoFiles {
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
 	
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+	
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
 		XCTAssertFalse(success);
 		XCTAssertNil(error);
@@ -184,6 +208,7 @@
 
 - (void)testUploadFilesWithEmptyFiles {
 	// tests scenario that can never happen, but satisfies codecov
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	id mock = OCMPartialMock(logger);
@@ -208,6 +233,7 @@
 - (void)testUploadFilesWithCompletionSuccess {
 	[self saveDummyFiles:2];
 	
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	id mock = OCMPartialMock(logger);
@@ -236,6 +262,7 @@
 - (void)testUploadFilesWithCompletionSuccessNoBlock {
 	[self saveDummyFiles:2];
 	
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	id mock = OCMPartialMock(logger);
@@ -370,6 +397,26 @@
 	XCTAssertNotNil(filePath);
 }
 
+- (void)testFileDateFormatChangeDeletesFiles {
+	[self saveDummyFiles:8];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	logger.retentionDays = 5;
+	logger.filenameFormatter.dateFormat = @"MM-dd-yyyy";
+	
+	[SimpleLogger logEvent:@"Log event with new filename"];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	
+	NSError *error;
+	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	XCTAssertEqual(content.count, 1);
+	
+	[SimpleLogger removeAllLogFiles];
+}
+
 #pragma mark - Helpers
 - (void)testFilenameForDateReturnsCorrectly {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
@@ -378,6 +425,28 @@
 	
 	XCTAssertNotNil(filename);
 	XCTAssertEqualObjects(filename, @"2017-07-15.log");
+}
+
+- (void)testCredentialsOkReturnsYES {
+	[SimpleLogger initWithAWSRegion:AWSRegionEUWest1 bucket:@"bucket" accessToken:@"token" secret:@"secret"];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	XCTAssertTrue([logger amazonCredentialsSetCorrectly]);
+}
+
+- (void)testCredentialsOkReturnsFalse {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	XCTAssertFalse([logger amazonCredentialsSetCorrectly]);
+}
+
+- (void)testCredentialsOkReturnsFalseWithPartials {
+	[SimpleLogger initWithAWSRegion:0 bucket:@"" accessToken:@"" secret:@"secret"];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	XCTAssertFalse([logger amazonCredentialsSetCorrectly]);
 }
 
 @end

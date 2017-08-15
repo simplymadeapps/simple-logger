@@ -95,11 +95,17 @@
 - (void)resetLoggerUploadInfo {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
+	logger.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
+	logger.retentionDays = kLoggerRetentionDaysDefault;
 	logger.uploadInProgress = NO;
 	logger.uploadTotal = 0;
 	logger.currentUploadCount = 0;
 	logger.uploadError = nil;
 	logger.folderLocation = kLoggerFilenameFolderLocation;
+	logger.awsRegion = 0;
+	logger.awsBucket = nil;
+	logger.awsAccessToken = nil;
+	logger.awsSecret = nil;
 }
 
 @end

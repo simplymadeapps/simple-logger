@@ -58,6 +58,15 @@
 + (void)uploadAllFilesWithCompletion:(SLUploadCompletionHandler)completionHandler {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
+	if (![logger amazonCredentialsSetCorrectly]) {
+		// prevent upload if credentials not set
+		logger.uploadInProgress = NO; // reset upload in progress
+		if (completionHandler) {
+			completionHandler(NO, [NSError errorWithDomain:@"com.simplymadeapps.ios.simplelogger.aws.credentials.missing" code:999 userInfo:nil]);
+		}
+		return;
+	}
+	
 	if (logger.uploadInProgress) {
 		// prevent multiple uploads from kicking off
 		if (completionHandler) {
@@ -130,17 +139,8 @@
 	uploadRequest.contentType = @"text/plain";
 	uploadRequest.key = [self bucketFileLocationForFilename:filename];
 	uploadRequest.bucket = self.awsBucket;
-	uploadRequest.ACL = AWSS3BucketCannedACLPublicRead;
-	//uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
-	
-	/*
-	uploadRequest.uploadProgress =^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend){
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			float progress = totalBytesSent / totalBytesExpectedToSend;
-			[self->hud setProgress:progress animated:YES];
-		});
-	};
-	*/
+	//uploadRequest.ACL = AWSS3BucketCannedACLPublicRead;
+	uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
 	
 	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
 	[[transferManager upload:uploadRequest] continueWithExecutor:[AWSExecutor mainThreadExecutor] withBlock:^id _Nullable(AWSTask * _Nonnull task) {
@@ -210,21 +210,18 @@
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *docDirectory = paths[0];
 	
-	NSError *error;
-	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	NSArray *contents = [self logFiles];
 	
 	NSDate *retainDate = [self lastRetentionDateForDate:date];
 	
-	for (NSString *file in content) {
+	for (NSString *file in contents) {
 		NSDate *fileDate = [self.filenameFormatter dateFromString:[file stringByDeletingPathExtension]];
 
-		if ([[file pathExtension] isEqualToString:self.filenameExtension]) { // only truncate matching file types
-			if (![fileDate isBetweenDate:[retainDate minTime] andDate:[date maxTime]]) {
-				// file is outside our retention period, delete file
-				NSError *error;
-				NSString *path = [docDirectory stringByAppendingPathComponent:file];
-				[[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-			}
+		if (![fileDate isBetweenDate:[retainDate minTime] andDate:[date maxTime]]) {
+			// file is outside our retention period, delete file
+			NSError *error;
+			NSString *path = [docDirectory stringByAppendingPathComponent:file];
+			[[NSFileManager defaultManager] removeItemAtPath:path error:&error];
 		}
 	}
 }
@@ -253,6 +250,28 @@
 - (NSString *)filenameForDate:(NSDate *)date {
 	NSString *filename = [self.filenameFormatter stringFromDate:date];
 	return [NSString stringWithFormat:@"%@.%@", filename, self.filenameExtension];
+}
+
+- (BOOL)amazonCredentialsSetCorrectly {
+	BOOL credentialsSetOk = YES;
+	
+	if (!self.awsBucket) {
+		credentialsSetOk = NO;
+	}
+	
+	if (!self.awsAccessToken) {
+		credentialsSetOk = NO;
+	}
+	
+	if (!self.awsSecret) {
+		credentialsSetOk = NO;
+	}
+	
+	if (self.awsRegion == 0) {
+		credentialsSetOk = NO;
+	}
+	
+	return credentialsSetOk;
 }
 
 @end

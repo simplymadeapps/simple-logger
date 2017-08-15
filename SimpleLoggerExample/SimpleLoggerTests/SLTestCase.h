@@ -31,4 +31,5 @@
 - (NSArray *)logFiles;
 // helpers
 - (NSString *)filenameForDate:(NSDate *)date;
+- (BOOL)amazonCredentialsSetCorrectly;
 @end
