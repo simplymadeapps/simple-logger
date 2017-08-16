@@ -1,5 +1,5 @@
 # SimpleLogger
-`SimpleLogger` is an easy to use log file generator for iOS and Mac that uploads to Amazon S3.
+`SimpleLogger` is an easy to use log file generator for iOS that uploads to Amazon S3.
 
 [![CircleCI](https://circleci.com/gh/simplymadeapps/simple-logger.svg?style=svg)](https://circleci.com/gh/simplymadeapps/simple-logger)
 [![codecov](https://codecov.io/gh/simplymadeapps/simple-logger/branch/master/graph/badge.svg?token=lqgHQdbIob)](https://codecov.io/gh/simplymadeapps/simple-logger)
@@ -8,6 +8,7 @@
 `SimpleLogger` works on iOS 8+ and requires ARC to build. It depends on the following Apple Frameworks which should already be included with Xcode:
 
 * Foundation.framework
+* AWSS3
 
 ## Adding SimpleLogger to your project
 
@@ -21,7 +22,7 @@
 
 ### Source files
 
-You can directly add the contents of the `SimpleLogger` folder to your project. It contains `SimpleLogger.h/m` as well as a category for date helpers and a header for the defaults.
+You can directly add the contents of the `SimpleLogger` folder to your project. It contains `SimpleLogger.h/m` as well as a category for date helpers and a header for the defaults. You will need to link to the `AWSS3` framework provided by Amazon for this to work. Cocoapods will automatically include it.
 
 ## Usage
 
@@ -65,6 +66,8 @@ You must initialize `SimpleLogger` with the correct Amazon AWS S3 credentials an
 ```objective-c
 [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"my-bucket-name" accessToken:@"MYAMAZONACCESSTOKEN" secret:@"MYAMAZONSECRET"];
 ```
+
+You should NOT manually set the variables even though it is possible. Use the initializer method to validate your values and pass them to AWSS3 to avoid crashing your application.
 
 iOS 9 users need to support App Transport Security (ATS). To prevent uploads from failing, add the following keys to your `Info.plist`.
 
