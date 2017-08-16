@@ -30,6 +30,8 @@
 }
 
 - (void)testAddLogButtonIsPresentedAndAddsLog {
+	[self saveRegularFiles:2];
+
 	[tester tapViewWithAccessibilityLabel:@"Add"];
 	
 	[tester waitForViewWithAccessibilityLabel:@"Add Log"];
