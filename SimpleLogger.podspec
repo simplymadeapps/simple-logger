@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'SimpleLogger'
-  s.version      = '1.0'
+  s.version      = '1.0.2'
   s.summary      = 'SimpleLogger is an easy to use log file generator for iOS that uploads to Amazon S3.'
 
   s.homepage     = 'https://github.com/simplymadeapps/simple-logger'
