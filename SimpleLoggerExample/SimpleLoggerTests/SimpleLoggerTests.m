@@ -7,6 +7,9 @@
 //
 
 #import "SLTestCase.h"
+#import "SimpleLoggerDefaults.h"
+#import "NSDate+SMA.h"
+#import <AWSS3/AWSS3.h>
 
 @interface SLAWSTask : AWSTask
 @property (nonatomic, strong, readwrite) NSError *myerror;

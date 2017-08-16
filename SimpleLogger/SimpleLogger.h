@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SimpleLoggerDefaults.h"
-#import "NSDate+SMA.h"
 #import <AWSS3/AWSS3.h>
 
 typedef void(^SLUploadCompletionHandler)(BOOL success, NSError * _Nullable error);
