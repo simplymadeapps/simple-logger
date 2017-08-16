@@ -7,6 +7,9 @@
 //
 
 #import "SimpleLogger.h"
+#import "SimpleLoggerDefaults.h"
+#import "NSDate+SMA.h"
+#import <AWSS3/AWSS3.h>
 
 @implementation SimpleLogger
 
