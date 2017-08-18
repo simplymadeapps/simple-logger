@@ -55,6 +55,18 @@
 	XCTAssertEqualObjects(logger.filenameExtension, kLoggerFilenameExtension);
 }
 
+- (void)testSetLoggingEnabledWorksCorrectly {
+	[SimpleLogger setLoggingEnabled:NO];
+	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	XCTAssertFalse(logger.loggingEnabled);
+	
+	[SimpleLogger setLoggingEnabled:YES];
+	
+	XCTAssertTrue(logger.loggingEnabled);
+}
+
 - (void)testAmazonInitStoresValuesCorrectly {
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
@@ -92,6 +104,22 @@
 	
 	NSString *log = [SimpleLogger logOutputForFileDate:date];
 	NSString *compare = [NSString stringWithFormat:@"[%@] my test string\n[%@] other test string", [logger.logFormatter stringFromDate:date], [logger.logFormatter stringFromDate:date]];
+	XCTAssertNotNil(log);
+	XCTAssertEqualObjects(log, compare);
+}
+
+- (void)testLogEventSkippedWhenDisabled {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	NSDate *date = [NSDate date];
+	
+	[SimpleLogger logEvent:@"my test string"];
+	
+	[SimpleLogger setLoggingEnabled:NO];
+	
+	[SimpleLogger logEvent:@"other test string"];
+	
+	NSString *log = [SimpleLogger logOutputForFileDate:date];
+	NSString *compare = [NSString stringWithFormat:@"[%@] my test string", [logger.logFormatter stringFromDate:date]];
 	XCTAssertNotNil(log);
 	XCTAssertEqualObjects(log, compare);
 }
