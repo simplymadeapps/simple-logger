@@ -26,6 +26,7 @@
 - (id)init {
 	self = [super init];
 	
+	self.loggingEnabled = YES;
 	self.retentionDays = kLoggerRetentionDaysDefault;
 	self.logFormatter = [[NSDateFormatter alloc] init];
 	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
@@ -35,6 +36,11 @@
 	self.folderLocation = kLoggerFilenameFolderLocation;
 	
 	return self;
+}
+
++ (void)setLoggingEnabled:(BOOL)enabled {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	logger.loggingEnabled = enabled;
 }
 
 + (void)initWithAWSRegion:(AWSRegionType)region bucket:(NSString *)bucket accessToken:(NSString *)accessToken secret:(NSString *)secret {
@@ -51,11 +57,14 @@
 + (void)logEvent:(NSString *)event {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
-	NSDate *date = [NSDate date];
-	NSString *eventString = [logger eventString:event forDate:date];
-	[logger writeLogEntry:eventString toFilename:[logger filenameForDate:date]];
-	
-	[logger truncateFilesBeyondRetentionForDate:date];
+	if (logger.loggingEnabled) {
+		// only allow logging if enabled
+		NSDate *date = [NSDate date];
+		NSString *eventString = [logger eventString:event forDate:date];
+		[logger writeLogEntry:eventString toFilename:[logger filenameForDate:date]];
+		
+		[logger truncateFilesBeyondRetentionForDate:date];
+	}
 }
 
 + (void)uploadAllFilesWithCompletion:(SLUploadCompletionHandler)completionHandler {

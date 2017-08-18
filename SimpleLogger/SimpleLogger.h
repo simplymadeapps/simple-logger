@@ -14,6 +14,8 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 
 @interface SimpleLogger : NSObject
 
+/// Logging allowed to write to file
+@property (nonatomic, assign) BOOL loggingEnabled;
 /// Number of days worth of logs to keep
 @property (nonatomic, assign) NSInteger retentionDays;
 /// Log statement date formatter
@@ -45,6 +47,12 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 
 /// Shared instance of SimpleLogger
 + (instancetype _Nonnull)sharedLogger;
+
+/**
+Set if logger should allow logging of events
+@param enabled If logging should be allowed
+*/
++ (void)setLoggingEnabled:(BOOL)enabled;
 
 /**
 Initialize shared logger with Amazon region, bucket, and credentials

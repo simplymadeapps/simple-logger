@@ -98,6 +98,7 @@
 - (void)resetLoggerUploadInfo {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
+	logger.loggingEnabled = YES;
 	logger.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 	logger.retentionDays = kLoggerRetentionDaysDefault;
 	logger.uploadInProgress = NO;
