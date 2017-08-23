@@ -172,6 +172,70 @@
 	XCTAssertEqual(content.count, 2);
 }
 
+- (void)testDeleteFileWorks {
+	[SimpleLogger logEvent:@"Create log file for today"];
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	
+	NSError *error;
+	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	// should have 1 file saved
+	XCTAssertEqual(content.count, 1);
+	
+	[logger removeFile:[logger filenameForDate:[NSDate date]]];
+	
+	content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+
+	XCTAssertEqual(content.count, 0);
+}
+
+- (void)testUploadRemovesPreviousDaysFiles {
+	[SimpleLogger logEvent:@"Create file for today"];
+	[self saveDummyFiles:2];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docDirectory = paths[0];
+	
+	NSError *error;
+	NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+	
+	// should have 3 files saved
+	XCTAssertEqual(content.count, 3);
+	
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	id mock = OCMPartialMock(logger);
+	[[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
+		SLAWSTask *task = [[SLAWSTask alloc] init];
+		handler(task);
+		return YES;
+	}]];
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
+	
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		XCTAssertTrue(success);
+		XCTAssertNil(error);
+		
+		NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+		
+		// should have 1 file saved
+		XCTAssertEqual(content.count, 1);
+		
+		[expect fulfill];
+	}];
+	
+	[self waitForExpectationsWithTimeout:5 handler:nil];
+	
+	[mock verify];
+	[mock stopMocking];
+	mock = nil;
+}
+
 - (void)testUploadFilesFailsWithoutAWSCredentialsWithCompletion {
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload Errors"];
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
@@ -449,6 +513,22 @@
 	XCTAssertEqual(content.count, 1);
 	
 	[SimpleLogger removeAllLogFiles];
+}
+
+- (void)testFilenameIsCurrentDayReturnsYES {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	NSDate *date = [NSDate date];
+	NSString *filename = [logger filenameForDate:date];
+	
+	XCTAssertTrue([logger filenameIsCurrentDay:filename]);
+}
+
+- (void)testFilenameIsCurrentDayReturnsNO {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	NSDate *date = [[NSDate date] dateBySubtractingDays:1];
+	NSString *filename = [logger filenameForDate:date];
+	
+	XCTAssertFalse([logger filenameIsCurrentDay:filename]);
 }
 
 #pragma mark - Helpers

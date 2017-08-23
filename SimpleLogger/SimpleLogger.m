@@ -103,6 +103,11 @@
 				if (task.error) {
 					NSLog(@"upload error: %@", task.error.localizedDescription);
 					logger.uploadError = task.error;
+				} else {
+					// remove file after successful upload
+					if (![logger filenameIsCurrentDay:file]) {
+						[logger removeFile:file];
+					}
 				}
 				
 				if (logger.currentUploadCount == logger.uploadTotal) {
@@ -151,8 +156,6 @@
 	uploadRequest.contentType = @"text/plain";
 	uploadRequest.key = [self bucketFileLocationForFilename:filename];
 	uploadRequest.bucket = self.awsBucket;
-	//uploadRequest.ACL = AWSS3BucketCannedACLPublicRead;
-	//uploadRequest.ACL = AWSS3BucketCannedACLPrivate;
 	
 	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
 	[[transferManager upload:uploadRequest] continueWithExecutor:[AWSExecutor mainThreadExecutor] withBlock:^id _Nullable(AWSTask * _Nonnull task) {
@@ -172,6 +175,14 @@
 		NSString *path = [docDirectory stringByAppendingPathComponent:file];
 		[manager removeItemAtPath:path error:&error];
 	}
+}
+
+- (void)removeFile:(NSString *)filename {
+	NSString *filePath = [self fullFilePathForFilename:filename];
+	
+	NSFileManager *manager = [NSFileManager defaultManager];
+	NSError *error;
+	[manager removeItemAtPath:filePath error:&error];
 }
 
 - (NSArray *)logFiles {
@@ -197,6 +208,15 @@
 - (NSString *)eventString:(NSString *)string forDate:(NSDate *)date {
 	NSString *dateString = [self.logFormatter stringFromDate:date];
 	return [NSString stringWithFormat:@"[%@] %@", dateString, string];
+}
+
+- (BOOL)filenameIsCurrentDay:(NSString *)filename {
+	NSString *todayFilename = [self filenameForDate:[NSDate date]];
+	if ([todayFilename isEqualToString:filename]) {
+		return YES;
+	} else {
+		return NO;
+	}
 }
 
 #pragma mark - Private

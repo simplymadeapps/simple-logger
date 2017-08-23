@@ -21,8 +21,10 @@
 
 @interface SimpleLogger (UnitTests)
 // instance
+- (void)removeFile:(NSString *)filename;
 - (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block;
 - (NSString *)eventString:(NSString *)string forDate:(NSDate *)date;
+- (BOOL)filenameIsCurrentDay:(NSString *)filename;
 // private
 - (void)truncateFilesBeyondRetentionForDate:(NSDate *)date;
 - (NSDate *)lastRetentionDateForDate:(NSDate *)date;
