@@ -71,10 +71,11 @@
 - (void)testLogDetailViewUploadIsCalled {
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
-	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
+	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
 
-	id mock = OCMPartialMock(transferManager);
-	[[[mock expect] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg any]];
+	id mock = OCMPartialMock(transferUtility);
+	//[[[mock expect] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg any]];
+	[[[mock expect] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:nil] continueWithExecutor:[OCMArg any] withBlock:[OCMArg any]];
 
 	[tester tapViewWithAccessibilityLabel:@"Add"];
 	
