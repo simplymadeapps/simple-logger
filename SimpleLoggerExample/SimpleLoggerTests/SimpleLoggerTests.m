@@ -381,6 +381,18 @@
 }
 
 - (void)testUploadFilesWithCompletionError {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	AWSTask *task = [[AWSTask alloc] init];
+	id taskMock = OCMPartialMock(task);
+	[[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
+	
+	id mock = OCMPartialMock(logger);
+	[[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
+		handler(taskMock);
+		return YES;
+	}]];
+	
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
 	[self saveDummyFiles:1];
@@ -393,6 +405,34 @@
 		
 		[expect fulfill];
 	}];
+	
+	[mock verify];
+	[mock stopMocking];
+	mock = nil;
+	
+	[taskMock stopMocking];
+	taskMock = nil;
+	
+	[self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)testUploadFileToAmazonReturnsBlock {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+		
+	AWSTask *task = [[AWSTask alloc] init];
+	id taskMock = OCMPartialMock(task);
+	[[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
+	[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
+	
+	[logger uploadFilePathToAmazon:@"test.log" withBlock:^(AWSTask * _Nonnull task) {
+		[expect fulfill];
+	}];
+	
+	[taskMock verify];
+	[taskMock stopMocking];
+	taskMock = nil;
 	
 	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
