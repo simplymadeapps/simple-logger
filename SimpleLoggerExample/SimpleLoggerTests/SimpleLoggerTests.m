@@ -416,6 +416,27 @@
 	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
+- (void)testUploadFileToAmazonReturnsBlock {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+		
+	AWSTask *task = [[AWSTask alloc] init];
+	id taskMock = OCMPartialMock(task);
+	[[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
+	[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
+	
+	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
+	
+	[logger uploadFilePathToAmazon:@"test.log" withBlock:^(AWSTask * _Nonnull task) {
+		[expect fulfill];
+	}];
+	
+	[taskMock verify];
+	[taskMock stopMocking];
+	taskMock = nil;
+	
+	[self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
 #pragma mark - Private Methods
 - (void)testLastRetentionDateReturnsCorrectly {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];

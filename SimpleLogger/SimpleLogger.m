@@ -151,20 +151,6 @@
 
 #pragma mark - Instance Methods
 - (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block {
-	/*
-	AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-	uploadRequest.body = [NSURL fileURLWithPath:[self fullFilePathForFilename:filename]];
-	uploadRequest.contentType = @"text/plain";
-	uploadRequest.key = [self bucketFileLocationForFilename:filename];
-	uploadRequest.bucket = self.awsBucket;
-	
-	AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
-	[[transferManager upload:uploadRequest] continueWithExecutor:[AWSExecutor mainThreadExecutor] withBlock:^id _Nullable(AWSTask * _Nonnull task) {
-		block(task);
-		return nil;
-	}];
-	*/
-	
 	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
 	[[transferUtility uploadFile:[NSURL fileURLWithPath:[self fullFilePathForFilename:filename]] bucket:self.awsBucket key:[self bucketFileLocationForFilename:filename] contentType:@"text/plain" expression:nil completionHandler:nil] continueWithExecutor:[AWSExecutor defaultExecutor] withBlock:^id _Nullable(AWSTask * _Nonnull task) {
 		block(task);
