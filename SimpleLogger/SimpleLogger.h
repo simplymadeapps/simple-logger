@@ -67,7 +67,7 @@ Initialize shared logger with Amazon region, bucket, and credentials
 Logs event to daily file with current system date time
 @param event Event string to be logged
 */
-+ (void)logEvent:(NSString * _Nonnull)event;
++ (void)addLogEvent:(NSString * _Nonnull)event;
 /**
 Uploads all current log files to S3
 */
