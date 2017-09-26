@@ -31,7 +31,7 @@ You can directly add the contents of the `SimpleLogger` folder to your project. 
 If you only want to log the files out locally you can just dive right in with the log event method:
 
 ```objective-c
-[SimpleLogger logEvent:@"Log some event to today's file."];
+[SimpleLogger addLogEvent:@"Log some event to today's file."];
 ```
 
 This will create a file with the current date in the documents directory using the default date/time formatting.
