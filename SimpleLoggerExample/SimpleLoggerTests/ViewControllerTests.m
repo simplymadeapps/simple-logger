@@ -65,7 +65,7 @@
 	
 	[tester waitForViewWithAccessibilityLabel:@"Log"];
 	
-	[tester tapViewWithAccessibilityLabel:@"Back"];
+	[tester tapViewWithAccessibilityLabel:@"Simple Logger"];
 }
 
 - (void)testLogDetailViewUploadIsCalled {
@@ -95,7 +95,7 @@
 	[tester waitForViewWithAccessibilityLabel:@"Upload"];
 	[tester tapViewWithAccessibilityLabel:@"Upload"];
 	
-	[tester tapViewWithAccessibilityLabel:@"Back"];
+	[tester tapViewWithAccessibilityLabel:@"Simple Logger"];
 	
 	[mock verify];
 	[mock stopMocking];
