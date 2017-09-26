@@ -87,7 +87,7 @@
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	NSDate *date = [NSDate date];
 	
-	[SimpleLogger logEvent:@"my test string"];
+	[SimpleLogger addLogEvent:@"my test string"];
 	
 	NSString *log = [SimpleLogger logOutputForFileDate:date];
 	NSString *compare = [NSString stringWithFormat:@"[%@] my test string", [logger.logFormatter stringFromDate:date]];
@@ -99,8 +99,8 @@
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	NSDate *date = [NSDate date];
 	
-	[SimpleLogger logEvent:@"my test string"];
-	[SimpleLogger logEvent:@"other test string"];
+	[SimpleLogger addLogEvent:@"my test string"];
+	[SimpleLogger addLogEvent:@"other test string"];
 	
 	NSString *log = [SimpleLogger logOutputForFileDate:date];
 	NSString *compare = [NSString stringWithFormat:@"[%@] my test string\n[%@] other test string", [logger.logFormatter stringFromDate:date], [logger.logFormatter stringFromDate:date]];
@@ -112,11 +112,11 @@
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	NSDate *date = [NSDate date];
 	
-	[SimpleLogger logEvent:@"my test string"];
+	[SimpleLogger addLogEvent:@"my test string"];
 	
 	[SimpleLogger setLoggingEnabled:NO];
 	
-	[SimpleLogger logEvent:@"other test string"];
+	[SimpleLogger addLogEvent:@"other test string"];
 	
 	NSString *log = [SimpleLogger logOutputForFileDate:date];
 	NSString *compare = [NSString stringWithFormat:@"[%@] my test string", [logger.logFormatter stringFromDate:date]];
@@ -173,7 +173,7 @@
 }
 
 - (void)testDeleteFileWorks {
-	[SimpleLogger logEvent:@"Create log file for today"];
+	[SimpleLogger addLogEvent:@"Create log file for today"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -193,7 +193,7 @@
 }
 
 - (void)testUploadRemovesPreviousDaysFiles {
-	[SimpleLogger logEvent:@"Create file for today"];
+	[SimpleLogger addLogEvent:@"Create file for today"];
 	[self saveDummyFiles:2];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -542,7 +542,7 @@
 	logger.retentionDays = 5;
 	logger.filenameFormatter.dateFormat = @"MM-dd-yyyy";
 	
-	[SimpleLogger logEvent:@"Log event with new filename"];
+	[SimpleLogger addLogEvent:@"Log event with new filename"];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *docDirectory = paths[0];

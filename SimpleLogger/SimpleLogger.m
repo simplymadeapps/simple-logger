@@ -54,7 +54,7 @@
 	[logger initializeAmazonUploadProvider];
 }
 
-+ (void)logEvent:(NSString *)event {
++ (void)addLogEvent:(NSString *)event {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	if (logger.loggingEnabled) {
