@@ -1,0 +1,20 @@
+version: 2
+
+jobs:
+  build-and-test:
+    macos:
+      xcode: "9.0"
+    steps:
+      - checkout
+      - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean
+      - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test
+      - run: bash <(curl -s https://codecov.io/bash)
+
+      - store_test_results:
+          path: test_output/report.xml
+
+workflows:
+  version: 2
+  run-test-suite:
+    jobs:
+      - build-and-test
