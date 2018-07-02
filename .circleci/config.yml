@@ -3,7 +3,7 @@ version: 2
 jobs:
   build-and-test:
     macos:
-      xcode: "9.3"
+      xcode: "9.4"
     steps:
       - checkout
       - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean
