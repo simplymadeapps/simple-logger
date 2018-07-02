@@ -8,6 +8,7 @@
 
 #import "SLTestCase.h"
 #import "SimpleLogger.h"
+#import <AWSS3/AWSS3.h>
 
 @interface ViewControllerTests : SLTestCase
 
@@ -73,9 +74,10 @@
 	
 	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
 
-	id mock = OCMPartialMock(transferUtility);
-	//[[[mock expect] upload:[OCMArg any]] continueWithExecutor:[OCMArg any] withBlock:[OCMArg any]];
-	[[[mock expect] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:nil] continueWithExecutor:[OCMArg any] withBlock:[OCMArg any]];
+	AWSTask *task = [[AWSTask alloc] init];
+	id taskMock = OCMPartialMock(task);
+	id transferMock = OCMPartialMock(transferUtility);
+	[[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, [NSNull null], nil]];
 
 	[tester tapViewWithAccessibilityLabel:@"Add"];
 	
@@ -97,9 +99,13 @@
 	
 	[tester tapViewWithAccessibilityLabel:@"Simple Logger"];
 	
-	[mock verify];
-	[mock stopMocking];
-	mock = nil;
+	[taskMock verify];
+	[taskMock stopMocking];
+	taskMock = nil;
+	
+	[transferMock verify];
+	[transferMock stopMocking];
+	transferMock = nil;
 }
 
 @end

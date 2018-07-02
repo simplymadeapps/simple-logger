@@ -420,9 +420,13 @@
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 		
 	AWSTask *task = [[AWSTask alloc] init];
+	NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
 	id taskMock = OCMPartialMock(task);
-	[[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
-	[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
+	[[[taskMock stub] andReturn:error] error];
+	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
+	id transferMock = OCMPartialMock(transferUtility);
+	//[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
+	[[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
 	
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
 	
@@ -433,6 +437,10 @@
 	[taskMock verify];
 	[taskMock stopMocking];
 	taskMock = nil;
+	
+	[transferMock verify];
+	[transferMock stopMocking];
+	transferMock = nil;
 	
 	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
