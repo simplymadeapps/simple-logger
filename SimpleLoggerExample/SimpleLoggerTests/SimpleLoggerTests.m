@@ -417,16 +417,18 @@
 }
 
 - (void)testUploadFileToAmazonReturnsBlock {
+	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"testbucket" accessToken:@"testtoken" secret:@"testsecret"];
+	
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
-		
+	logger.transferUtility = [AWSS3TransferUtility S3TransferUtilityForKey:@"simple-logger-file-upload"];
+	
 	AWSTask *task = [[AWSTask alloc] init];
 	NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
 	id taskMock = OCMPartialMock(task);
 	[[[taskMock stub] andReturn:error] error];
-	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-	id transferMock = OCMPartialMock(transferUtility);
+	id transferMock = OCMPartialMock(logger.transferUtility);
 	//[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
-	[[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
+	[[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:[OCMArg any] completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
 	
 	XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
 	
