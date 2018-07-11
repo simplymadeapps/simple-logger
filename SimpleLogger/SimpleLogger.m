@@ -151,8 +151,13 @@
 
 #pragma mark - Instance Methods
 - (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block {
-	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-	[transferUtility uploadFile:[NSURL fileURLWithPath:[self fullFilePathForFilename:filename]] bucket:self.awsBucket key:[self bucketFileLocationForFilename:filename] contentType:@"text/plain" expression:nil completionHandler:^(AWSS3TransferUtilityUploadTask * _Nonnull task, NSError * _Nullable error) {
+	self.transferUtility = [AWSS3TransferUtility S3TransferUtilityForKey:@"simple-logger-file-upload"];
+	
+	AWSS3TransferUtilityUploadExpression *expression = [AWSS3TransferUtilityUploadExpression new];
+	// set ACL on image
+	//[expression setValue:@"public-read" forRequestHeader:@"x-amz-acl"];
+	
+	[self.transferUtility uploadFile:[NSURL fileURLWithPath:[self fullFilePathForFilename:filename]] bucket:self.awsBucket key:[self bucketFileLocationForFilename:filename] contentType:@"text/plain" expression:expression completionHandler:^(AWSS3TransferUtilityUploadTask * _Nonnull task, NSError * _Nullable error) {
 		block((AWSTask *)task);
 	}];
 }
@@ -258,7 +263,7 @@
 - (void)initializeAmazonUploadProvider {
 	AWSStaticCredentialsProvider *provider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:self.awsAccessToken secretKey:self.awsSecret];
 	AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:provider];
-	AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
+	[AWSS3TransferUtility registerS3TransferUtilityWithConfiguration:configuration forKey:@"simple-logger-file-upload"];
 }
 
 - (NSString *)bucketFileLocationForFilename:(NSString *)filename {
