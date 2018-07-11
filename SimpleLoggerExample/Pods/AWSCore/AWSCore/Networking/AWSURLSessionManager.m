@@ -414,7 +414,7 @@ typedef NS_ENUM(NSInteger, AWSURLSessionTaskType) {
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         
-        if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 ) {
+        if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
             // status is good, we can keep value of shouldWriteToFile
         } else {
             // got error status code, avoid write data to disk
@@ -539,13 +539,13 @@ typedef NS_ENUM(NSInteger, AWSURLSessionTaskType) {
             
             if ([request.URL.absoluteString containsString:@"cognito-idp."]) {
                 NSError *error = nil;
-                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"Password\":\".*?\""
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(Password)\":\".*?\""
                                                                                        options:NSRegularExpressionCaseInsensitive
                                                                                          error:&error];
                 [regex replaceMatchesInString:bodyString
                                       options:0
                                         range:NSMakeRange(0, bodyString.length)
-                                 withTemplate:@"Password\":\"[redacted]\""];
+                                 withTemplate:@"$1\":\"[redacted]\""];
             }
             
             if (bodyString.length <= 100 * 1024) {

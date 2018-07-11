@@ -26,6 +26,7 @@ static NSString *const AWSInfoRegion = @"Region";
 static NSString *const AWSInfoUserAgent = @"UserAgent";
 static NSString *const AWSInfoCognitoIdentity = @"CognitoIdentity";
 static NSString *const AWSInfoCognitoIdentityPoolId = @"PoolId";
+static NSString *const AWSInfoCognitoUserPool = @"CognitoUserPool";
 
 static NSString *const AWSInfoIdentityManager = @"IdentityManager";
 
@@ -42,7 +43,7 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
 @property (nonatomic, strong) NSDictionary <NSString *, id> *infoDictionary;
 
 - (instancetype)initWithInfoDictionary:(NSDictionary <NSString *, id> *)infoDictionary
-                           checkRegion:(BOOL)checkRegion;
+                           serviceName:(NSString *) serviceName;
 
 @end
 
@@ -57,15 +58,16 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
             NSData *data = [NSData dataWithContentsOfFile:pathToAWSConfigJson];
             if (!data) {
                 AWSDDLogError(@"Couldn't read the awsconfiguration.json file. Skipping load of awsconfiguration.json.");
-            }
-            NSError *error = nil;
-            NSDictionary <NSString *, id> *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                                            options:kNilOptions
-                                                                                              error:&error];
-            if (!jsonDictionary || [jsonDictionary count] <= 0 || error) {
-                AWSDDLogError(@"Couldn't deserialize data from the JSON file or the contents are empty. Please check the awsconfiguration.json file.");
             } else {
-                _rootInfoDictionary = jsonDictionary;
+                NSError *error = nil;
+                NSDictionary <NSString *, id> *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                options:kNilOptions
+                                                                                                  error:&error];
+                if (!jsonDictionary || [jsonDictionary count] <= 0 || error) {
+                    AWSDDLogError(@"Couldn't deserialize data from the JSON file or the contents are empty. Please check the awsconfiguration.json file.");
+                } else {
+                    _rootInfoDictionary = jsonDictionary;
+                }
             }
             
         } else {
@@ -113,7 +115,7 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
                          forKey:(NSString *)key {
     NSDictionary <NSString *, id> *infoDictionary = [[self.rootInfoDictionary objectForKey:serviceName] objectForKey:key];
     return [[AWSServiceInfo alloc] initWithInfoDictionary:infoDictionary
-                                              checkRegion:![serviceName isEqualToString:AWSInfoIdentityManager]];
+                                              serviceName:serviceName];
 }
 
 - (AWSServiceInfo *)defaultServiceInfo:(NSString *)serviceName {
@@ -126,8 +128,9 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
 @implementation AWSServiceInfo
 
 - (instancetype)initWithInfoDictionary:(NSDictionary <NSString *, id> *)infoDictionary
-                           checkRegion:(BOOL)checkRegion {
+                           serviceName:(NSString *) serviceName {
     if (self = [super init]) {
+        BOOL checkRegion = ![serviceName isEqualToString:AWSInfoIdentityManager];
         _infoDictionary = infoDictionary;
         if (!_infoDictionary) {
             _infoDictionary = @{};
@@ -140,7 +143,9 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
             _region = [AWSInfo defaultAWSInfo].defaultRegion;
         }
         
-        if (!_cognitoCredentialsProvider) {
+        //If there is no credentials provider configured and this isn't Cognito User Pools (which
+        //doesn't need one)
+        if (!_cognitoCredentialsProvider && ![serviceName isEqualToString:AWSInfoCognitoUserPool]) {
             if (![AWSServiceManager defaultServiceManager].defaultServiceConfiguration) {
                 AWSDDLogDebug(@"Couldn't read credentials provider configuration from `awsconfiguration.json` / `Info.plist`. Please check your configuration file if you are loading the configuration through it.");
             }
