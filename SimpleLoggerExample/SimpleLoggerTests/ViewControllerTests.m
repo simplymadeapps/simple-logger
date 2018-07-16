@@ -72,13 +72,12 @@
 - (void)testLogDetailViewUploadIsCalled {
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
-	SimpleLogger *logger = [SimpleLogger sharedLogger];
-	logger.transferUtility = [AWSS3TransferUtility S3TransferUtilityForKey:@"simple-logger-file-upload"];
+	AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
 	
 	AWSTask *task = [[AWSTask alloc] init];
 	id taskMock = OCMPartialMock(task);
-	id transferMock = OCMPartialMock(logger.transferUtility);
-	[[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:[OCMArg any] completionHandler:[OCMArg invokeBlockWithArgs:taskMock, [NSNull null], nil]];
+	id transferMock = OCMPartialMock(transferUtility);
+	[[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, [NSNull null], nil]];
 
 	[tester tapViewWithAccessibilityLabel:@"Add"];
 	
@@ -88,6 +87,7 @@
 	
 	[tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
 	
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	NSDate *date = [NSDate date];
 	NSString *filename = [logger filenameForDate:date];
 	

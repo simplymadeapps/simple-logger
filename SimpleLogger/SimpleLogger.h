@@ -27,8 +27,6 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 /// Filename folder assignment location
 @property (nonatomic, strong, nonnull) NSString *folderLocation;
 
-/// Amazon Tranfer Utility
-@property (nonatomic, strong) AWSS3TransferUtility *transferUtility;
 /// Amazon S3 region
 @property (nonatomic, assign) AWSRegionType awsRegion;
 /// Amazon S3 bucket
