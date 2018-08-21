@@ -130,7 +130,7 @@
 	NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
 	
 	XCTAssertNotNil(eventString);
-	XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00] test event");
+	XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
 }
 
 - (void)testRemoveAllFilesWorksCorrectly {	

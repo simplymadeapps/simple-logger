@@ -29,7 +29,7 @@
 	self.loggingEnabled = YES;
 	self.retentionDays = kLoggerRetentionDaysDefault;
 	self.logFormatter = [[NSDateFormatter alloc] init];
-	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
 	self.filenameFormatter = [[NSDateFormatter alloc] init];
 	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 	self.filenameExtension = kLoggerFilenameExtension;
