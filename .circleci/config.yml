@@ -3,11 +3,15 @@ version: 2
 jobs:
   build-and-test:
     macos:
-      xcode: "9.0"
+      xcode: "9.4.1"
     steps:
       - checkout
-      - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean
-      - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test
+      - run:
+          name: Set Timezone
+          command: |
+            sudo systemsetup -settimezone "America/Chicago"
+      - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.4' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build-for-testing
+      - run: set -o pipefail && xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.4' -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test-without-building
       - run: bash <(curl -s https://codecov.io/bash)
 
       - store_test_results:
