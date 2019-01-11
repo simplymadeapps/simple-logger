@@ -129,8 +129,7 @@
 		
 		if (logger.currentUploadCount == logger.uploadTotal) {
 			// final upload complete
-			BOOL success = logger.uploadError == nil;
-			completionHandler(success, logger.uploadError);
+			completionHandler(logger.uploadError == nil, logger.uploadError);
 		}
 	}];
 }
