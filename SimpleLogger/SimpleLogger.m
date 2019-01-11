@@ -99,13 +99,13 @@
 		logger.uploadInProgress = YES;
 		logger.uploadTotal = files.count;
 		
-		[SimpleLogger uploadFiles:files withLogger:logger completionHandler:completionHandler];
+		[SimpleLogger uploadFiles:files completionHandler:completionHandler];
 	} else {
 		completionHandler(NO, logger.uploadError);
 	}
 }
 
-+ (void)uploadFiles:(NSArray *)files withLogger:(SimpleLogger *)logger completionHandler:(SLUploadCompletionHandler)completionHandler {
++ (void)uploadFiles:(NSArray *)files completionHandler:(SLUploadCompletionHandler)completionHandler {
 	for (NSString *file in files) {
 		[SimpleLogger uploadFile:file completionHandler:completionHandler];
 	}
@@ -136,7 +136,6 @@
 + (void)resetLoggerForUpload {
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
-	logger.uploadInProgress = NO;
 	logger.currentUploadCount = 0;
 	logger.uploadError = nil;
 }
