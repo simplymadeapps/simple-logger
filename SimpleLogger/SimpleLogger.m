@@ -115,10 +115,9 @@
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	
 	[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
-		logger.currentUploadCount = logger.currentUploadCount += 1;
+		logger.currentUploadCount++;
 		
 		if (task.error) {
-			NSLog(@"upload error: %@", task.error.localizedDescription);
 			logger.uploadError = task.error;
 		}
 		
