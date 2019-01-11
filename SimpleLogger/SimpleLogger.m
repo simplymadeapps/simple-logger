@@ -81,7 +81,6 @@
 	
 	if (![logger amazonCredentialsSetCorrectly]) {
 		// prevent upload if credentials not set
-		logger.uploadInProgress = NO; // reset upload in progress
 		completionHandler(NO, [NSError errorWithDomain:@"com.simplymadeapps.ios.simplelogger.aws.credentials.missing" code:999 userInfo:nil]);
 		return;
 	}
@@ -92,18 +91,14 @@
 		return;
 	}
 	
-	logger.uploadInProgress = YES;
-	logger.uploadError = nil;
-	logger.currentUploadCount = 0;
-	
 	NSArray *files = [logger logFiles];
 	
 	if (files) {
+		logger.uploadInProgress = YES;
 		logger.uploadTotal = files.count;
 		
 		[SimpleLogger uploadFiles:files withLogger:logger completionHandler:completionHandler];
 	} else {
-		logger.uploadInProgress = NO;
 		completionHandler(NO, logger.uploadError);
 	}
 }
@@ -133,6 +128,8 @@
 		if (logger.currentUploadCount == logger.uploadTotal) {
 			// final upload complete
 			logger.uploadInProgress = NO;
+			logger.currentUploadCount = 0;
+			logger.uploadError = nil;
 			BOOL success = logger.uploadError == nil;
 			completionHandler(success, logger.uploadError);
 		}
