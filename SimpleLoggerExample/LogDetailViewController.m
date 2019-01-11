@@ -33,7 +33,9 @@
 }
 
 - (void)uploadFirstFileInStack:(id)sender {
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		
+	}];
 }
 
 @end

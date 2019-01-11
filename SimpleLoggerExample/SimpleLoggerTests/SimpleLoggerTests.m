@@ -252,7 +252,9 @@
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
 	logger.uploadInProgress = YES;
 	
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		
+	}];
 	
 	XCTAssertFalse(logger.uploadInProgress);
 }
@@ -280,7 +282,9 @@
 	logger.uploadInProgress = YES;
 	logger.currentUploadCount = 1;
 	
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		
+	}];
 	
 	[tester waitForAnimationsToFinish];
 	
@@ -305,7 +309,9 @@
 - (void)testUploadFilesWithNoFilesNoCompletion {
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		
+	}];
 	
 	XCTAssertFalse([[SimpleLogger sharedLogger] uploadInProgress]);
 }
@@ -318,7 +324,9 @@
 	id mock = OCMPartialMock(logger);
 	[[[mock stub] andReturn:@[]] logFiles];
 
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		
+	}];
 	
 	XCTAssertTrue(logger.uploadInProgress); // stuck in progress forever
 	
@@ -371,7 +379,9 @@
 		return YES;
 	}]];
 	
-	[SimpleLogger uploadAllFilesWithCompletion:nil];
+	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+		
+	}];
 	
 	XCTAssertFalse(logger.uploadInProgress);
 	

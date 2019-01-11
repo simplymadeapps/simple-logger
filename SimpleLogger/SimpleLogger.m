@@ -73,17 +73,13 @@
 	if (![logger amazonCredentialsSetCorrectly]) {
 		// prevent upload if credentials not set
 		logger.uploadInProgress = NO; // reset upload in progress
-		if (completionHandler) {
-			completionHandler(NO, [NSError errorWithDomain:@"com.simplymadeapps.ios.simplelogger.aws.credentials.missing" code:999 userInfo:nil]);
-		}
+		completionHandler(NO, [NSError errorWithDomain:@"com.simplymadeapps.ios.simplelogger.aws.credentials.missing" code:999 userInfo:nil]);
 		return;
 	}
 	
 	if (logger.uploadInProgress) {
 		// prevent multiple uploads from kicking off
-		if (completionHandler) {
-			completionHandler(NO, nil);
-		}
+		completionHandler(NO, nil);
 		return;
 	}
 	
@@ -99,9 +95,7 @@
 		[SimpleLogger uploadFiles:files withLogger:logger completionHandler:completionHandler];
 	} else {
 		logger.uploadInProgress = NO;
-		if (completionHandler) {
-			completionHandler(NO, logger.uploadError);
-		}
+		completionHandler(NO, logger.uploadError);
 	}
 }
 
@@ -123,16 +117,12 @@
 			if (logger.currentUploadCount == logger.uploadTotal) {
 				// final upload complete
 				logger.uploadInProgress = NO;
-				
-				if (completionHandler) {
-					BOOL uploadSuccess = YES;
-					if (logger.uploadError) {
-						uploadSuccess = NO;
-					}
-					if (completionHandler) {
-						completionHandler(uploadSuccess, logger.uploadError);
-					}
+				BOOL uploadSuccess = YES;
+				if (logger.uploadError) {
+					uploadSuccess = NO;
 				}
+				
+				completionHandler(uploadSuccess, logger.uploadError);
 			}
 		}];
 	}
