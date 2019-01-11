@@ -133,12 +133,8 @@
 		if (logger.currentUploadCount == logger.uploadTotal) {
 			// final upload complete
 			logger.uploadInProgress = NO;
-			BOOL uploadSuccess = YES;
-			if (logger.uploadError) {
-				uploadSuccess = NO;
-			}
-			
-			completionHandler(uploadSuccess, logger.uploadError);
+			BOOL success = logger.uploadError == nil;
+			completionHandler(success, logger.uploadError);
 		}
 	}];
 }
