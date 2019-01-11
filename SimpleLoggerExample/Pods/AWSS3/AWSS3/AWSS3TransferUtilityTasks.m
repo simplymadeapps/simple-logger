@@ -17,7 +17,7 @@
 #import "AWSS3TransferUtilityTasks.h"
 #import "AWSS3TransferUtilityDatabaseHelper.h"
 #import "AWSS3PreSignedURL.h"
-#import "AWSFMDB.h"
+#import <AWSCore/AWSFMDB.h>
 
 
 @interface AWSS3TransferUtilityExpression()
@@ -77,9 +77,9 @@
 @property NSString * uploadID;
 @property BOOL cancelled;
 @property BOOL temporaryFileCreated;
-@property NSMutableDictionary <NSNumber *, AWSS3TransferUtilityUploadSubTask *> *waitingPartsDictionary;
-@property (strong, nonatomic) NSMutableDictionary <NSNumber *, AWSS3TransferUtilityUploadSubTask *> *completedPartsDictionary;
-@property (strong, nonatomic) NSMutableDictionary <NSNumber *, AWSS3TransferUtilityUploadSubTask *> *inProgressPartsDictionary;
+@property (strong, atomic) NSMutableDictionary <NSNumber *, AWSS3TransferUtilityUploadSubTask *> *waitingPartsDictionary;
+@property (strong, atomic) NSMutableDictionary <NSNumber *, AWSS3TransferUtilityUploadSubTask *> *completedPartsDictionary;
+@property (strong, atomic) NSMutableDictionary <NSNumber *, AWSS3TransferUtilityUploadSubTask *> *inProgressPartsDictionary;
 @property int retryCount;
 @property int partNumber;
 @property NSString *file;
@@ -103,6 +103,7 @@
 @property int64_t totalBytesSent;
 @property NSString *responseData;
 @property NSString *file;
+@property NSString *transferType;
 @property NSString *transferID;
 @property AWSS3TransferUtilityTransferStatusType status;
 @property NSString *uploadID;
@@ -120,20 +121,16 @@
 
 @interface AWSS3TransferUtilityDatabaseHelper()
 
-+ (void) updateTransferRequestStatusInDB: (NSString *) transferID
-                          taskIdentifier: (NSUInteger) taskIdentifier
-                                  status: (AWSS3TransferUtilityTransferStatusType) status
-                           databaseQueue: (AWSFMDatabaseQueue *) databaseQueue;
-
-+ (void) updateTransferRequestInDB: (NSString *) transferID
-                    taskIdentifier: (NSUInteger) taskIdentifier
-                              eTag: (NSString *) eTag
-                            status: (AWSS3TransferUtilityTransferStatusType) status
-                     databaseQueue: (AWSFMDatabaseQueue *) databaseQueue;
-
 + (void) deleteTransferRequestFromDB:(NSString *) transferID
                        databaseQueue: (AWSFMDatabaseQueue *) databaseQueue;
 
++ (void) updateTransferRequestInDB: (NSString *) transferID
+                        partNumber: (NSNumber *) partNumber
+                    taskIdentifier: (NSUInteger) taskIdentifier
+                              eTag: (NSString *) eTag
+                            status: (AWSS3TransferUtilityTransferStatusType) status
+                       retry_count: (NSUInteger) retryCount
+                     databaseQueue: (AWSFMDatabaseQueue *) databaseQueue;
 @end
 
 #pragma mark - AWSS3TransferUtilityTasks
@@ -143,6 +140,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         _progress = [NSProgress new];
+        _progress.completedUnitCount = 0;
     }
     
     return self;
@@ -156,16 +154,37 @@
 }
 
 - (void)resume {
+    if (self.status != AWSS3TransferUtilityTransferStatusPaused) {
+        //Resume called on a transfer that is not paused. No op
+        return;
+    }
+    
     [self.sessionTask resume];
     self.status = AWSS3TransferUtilityTransferStatusInProgress;
-    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestStatusInDB:self.transferID taskIdentifier:self.taskIdentifier status:AWSS3TransferUtilityTransferStatusInProgress databaseQueue:self.databaseQueue];
-    
+    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestInDB:self.transferID
+                                                       partNumber:@0
+                                                   taskIdentifier:self.taskIdentifier
+                                                             eTag:@""
+                                                           status:self.status
+                                                      retry_count:self.retryCount
+                                                    databaseQueue:self.databaseQueue];
 }
 
 - (void)suspend {
+    if (self.status != AWSS3TransferUtilityTransferStatusInProgress ) {
+        //Pause called on a transfer that is not in progress. No op.
+        return;
+    }
+    
     [self.sessionTask suspend];
     self.status = AWSS3TransferUtilityTransferStatusPaused;
-    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestStatusInDB:self.transferID taskIdentifier:self.sessionTask.taskIdentifier status:AWSS3TransferUtilityTransferStatusPaused databaseQueue:self.databaseQueue];
+    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestInDB:self.transferID
+                                                       partNumber:@0
+                                                   taskIdentifier:self.taskIdentifier
+                                                             eTag:@""
+                                                           status:self.status
+                                                      retry_count:self.retryCount
+                                                    databaseQueue:self.databaseQueue];
 }
 
 - (NSURLRequest *)request {
@@ -178,11 +197,6 @@
     }
     return nil;
 }
-
-- (void) setProgressBlock: (AWSS3TransferUtilityProgressBlock) progressBlock {
-    //self.expression.progressBlock = progressBlock;
-}
-
 
 @end
 
@@ -252,27 +266,62 @@
 }
 
 - (void)resume {
+    if (self.status != AWSS3TransferUtilityTransferStatusPaused ) {
+        //Resume called on a transfer that hasn't been paused. No op.
+        return;
+    }
+    
     for (NSNumber *key in [self.inProgressPartsDictionary allKeys]) {
         AWSS3TransferUtilityUploadSubTask *subTask = [self.inProgressPartsDictionary objectForKey:key];
         subTask.status = AWSS3TransferUtilityTransferStatusInProgress;
-        [AWSS3TransferUtilityDatabaseHelper updateTransferRequestStatusInDB:subTask.transferID taskIdentifier:subTask.taskIdentifier status:AWSS3TransferUtilityTransferStatusInProgress databaseQueue:self.databaseQueue];
+        [AWSS3TransferUtilityDatabaseHelper updateTransferRequestInDB:subTask.transferID
+                                                           partNumber:subTask.partNumber
+                                                       taskIdentifier:subTask.taskIdentifier
+                                                                 eTag:subTask.eTag
+                                                               status:subTask.status
+                                                          retry_count:self.retryCount
+                                                        databaseQueue:self.databaseQueue];
         [subTask.sessionTask resume];
     }
     self.status = AWSS3TransferUtilityTransferStatusInProgress;
     //Update the Master Record
-    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestStatusInDB:_transferID taskIdentifier:0 status:AWSS3TransferUtilityTransferStatusInProgress databaseQueue:self.databaseQueue];
+    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestInDB:self.transferID
+                                                       partNumber:@0
+                                                   taskIdentifier:0
+                                                             eTag:@""
+                                                           status:self.status
+                                                      retry_count:self.retryCount
+                                                    databaseQueue:self.databaseQueue];
 }
 
 - (void)suspend {
+    if (self.status != AWSS3TransferUtilityTransferStatusInProgress) {
+        //Pause called on a transfer that is not in progresss. No op.
+        return;
+    }
+    
     for (NSNumber *key in [self.inProgressPartsDictionary allKeys]) {
         AWSS3TransferUtilityUploadSubTask *subTask = [self.inProgressPartsDictionary objectForKey:key];
         [subTask.sessionTask suspend];
         subTask.status = AWSS3TransferUtilityTransferStatusPaused;
-        [AWSS3TransferUtilityDatabaseHelper updateTransferRequestStatusInDB:subTask.transferID taskIdentifier:subTask.taskIdentifier status:AWSS3TransferUtilityTransferStatusPaused databaseQueue:self.databaseQueue];
+        
+        [AWSS3TransferUtilityDatabaseHelper updateTransferRequestInDB:subTask.transferID
+                                                           partNumber:subTask.partNumber
+                                                       taskIdentifier:subTask.taskIdentifier
+                                                                 eTag:subTask.eTag
+                                                               status:subTask.status
+                                                          retry_count:self.retryCount
+                                                        databaseQueue:self.databaseQueue];
     }
     self.status = AWSS3TransferUtilityTransferStatusPaused;
     //Update the Master Record
-    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestStatusInDB:_transferID taskIdentifier:0 status:AWSS3TransferUtilityTransferStatusPaused databaseQueue:self.databaseQueue];
+    [AWSS3TransferUtilityDatabaseHelper updateTransferRequestInDB:self.transferID
+                                                       partNumber:@0
+                                                   taskIdentifier:0
+                                                             eTag:@""
+                                                           status:self.status
+                                                      retry_count:self.retryCount
+                                                    databaseQueue:self.databaseQueue];
 }
 
 -(void) setCompletionHandler:(AWSS3TransferUtilityMultiPartUploadCompletionHandlerBlock)completionHandler {

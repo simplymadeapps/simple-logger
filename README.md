@@ -1,8 +1,8 @@
 # SimpleLogger
 `SimpleLogger` is an easy to use log file generator for iOS that uploads to Amazon S3.
 
-[![CircleCI](https://circleci.com/gh/simplymadeapps/simple-logger.svg?style=svg)](https://circleci.com/gh/simplymadeapps/simple-logger)
 [![codecov](https://codecov.io/gh/simplymadeapps/simple-logger/branch/master/graph/badge.svg?token=lqgHQdbIob)](https://codecov.io/gh/simplymadeapps/simple-logger)
+[![codebeat badge](https://codebeat.co/badges/f00f7099-2c82-4867-9e15-e28c3996fecb)](https://codebeat.co/projects/github-com-simplymadeapps-simple-logger-master)
 
 ## Requirements
 `SimpleLogger` works on iOS 8+ and requires ARC to build. It depends on the following Apple Frameworks which should already be included with Xcode:

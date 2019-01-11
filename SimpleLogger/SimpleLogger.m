@@ -96,39 +96,45 @@
 	if (files) {
 		logger.uploadTotal = files.count;
 		
-		for (NSString *file in files) {
-			[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
-				logger.currentUploadCount = logger.currentUploadCount += 1;
-				
-				if (task.error) {
-					NSLog(@"upload error: %@", task.error.localizedDescription);
-					logger.uploadError = task.error;
-				} else {
-					// remove file after successful upload
-					if (![logger filenameIsCurrentDay:file]) {
-						[logger removeFile:file];
-					}
-				}
-				
-				if (logger.currentUploadCount == logger.uploadTotal) {
-					// final upload complete
-					logger.uploadInProgress = NO;
-					
-					if (completionHandler) {
-						BOOL uploadSuccess = YES;
-						if (logger.uploadError) {
-							uploadSuccess = NO;
-						}
-						completionHandler(uploadSuccess, logger.uploadError);
-					}
-				}
-			}];
-		}
+		[SimpleLogger uploadFiles:files withLogger:logger completionHandler:completionHandler];
 	} else {
 		logger.uploadInProgress = NO;
 		if (completionHandler) {
 			completionHandler(NO, logger.uploadError);
 		}
+	}
+}
+
++ (void)uploadFiles:(NSArray *)files withLogger:(SimpleLogger *)logger completionHandler:(SLUploadCompletionHandler)completionHandler {
+	for (NSString *file in files) {
+		[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
+			logger.currentUploadCount = logger.currentUploadCount += 1;
+			
+			if (task.error) {
+				NSLog(@"upload error: %@", task.error.localizedDescription);
+				logger.uploadError = task.error;
+			} else {
+				// remove file after successful upload
+				if (![logger filenameIsCurrentDay:file]) {
+					[logger removeFile:file];
+				}
+			}
+			
+			if (logger.currentUploadCount == logger.uploadTotal) {
+				// final upload complete
+				logger.uploadInProgress = NO;
+				
+				if (completionHandler) {
+					BOOL uploadSuccess = YES;
+					if (logger.uploadError) {
+						uploadSuccess = NO;
+					}
+					if (completionHandler) {
+						completionHandler(uploadSuccess, logger.uploadError);
+					}
+				}
+			}
+		}];
 	}
 }
 

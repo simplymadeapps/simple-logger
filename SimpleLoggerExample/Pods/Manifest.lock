@@ -1,23 +1,30 @@
 PODS:
-  - AWSCore (2.6.23)
-  - AWSS3 (2.6.23):
-    - AWSCore (= 2.6.23)
+  - AWSCore (2.8.2)
+  - AWSS3 (2.8.2):
+    - AWSCore (= 2.8.2)
   - KIF (3.7.4):
     - KIF/Core (= 3.7.4)
   - KIF/Core (3.7.4)
-  - OCMock (3.4.2)
+  - OCMock (3.4.3)
 
 DEPENDENCIES:
   - AWSS3
   - KIF
   - OCMock
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AWSCore
+    - AWSS3
+    - KIF
+    - OCMock
+
 SPEC CHECKSUMS:
-  AWSCore: d56f69d7312e652e51c70f3b25e1687a5c2d06ca
-  AWSS3: 198942f234628f1ad1c373725d65c33ebfe87af6
+  AWSCore: b6448752e992345082d7bad29d86e4839b72b4ba
+  AWSS3: e364e6c60d972da4110f2c379def6b716e6f1262
   KIF: f3d01c109ee9d1cfe6b0f2bb2aa278e807e971e2
-  OCMock: ebe9ee1dca7fbed0ff9193ac0b3e2d8862ea56f6
+  OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
 
-PODFILE CHECKSUM: 57ca2371ee1c30a49fea0314230844f479ef57d9
+PODFILE CHECKSUM: 6d2c7593f49f333b6a2e791eae3c7c5ebddf9ec4
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

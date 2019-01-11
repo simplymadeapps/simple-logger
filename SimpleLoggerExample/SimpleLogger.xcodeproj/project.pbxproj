@@ -169,7 +169,6 @@
 				BAE372E51F27D37A00300F7E /* Supporting Files */,
 			);
 			name = SimpleLoggerExample;
-			path = SimpleLogger;
 			sourceTree = "<group>";
 		};
 		BAE372E51F27D37A00300F7E /* Supporting Files */ = {
@@ -192,7 +191,6 @@
 				BA9EBACB1F27E4D8002DFF44 /* Frameworks */,
 				BA9EBACC1F27E4D8002DFF44 /* Resources */,
 				2344FBEBEEA3D904F2709BD2 /* [CP] Embed Pods Frameworks */,
-				AFC0E8B8C7567153C33AB92E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -213,7 +211,6 @@
 				BAE372DF1F27D37A00300F7E /* Frameworks */,
 				BAE372E01F27D37A00300F7E /* Resources */,
 				D631A20DCFF31B925CCBF5C5 /* [CP] Embed Pods Frameworks */,
-				9064EA01E51DAADDA2B1FBD6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -326,36 +323,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9064EA01E51DAADDA2B1FBD6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLogger/Pods-SimpleLogger-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AFC0E8B8C7567153C33AB92E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D631A20DCFF31B925CCBF5C5 /* [CP] Embed Pods Frameworks */ = {

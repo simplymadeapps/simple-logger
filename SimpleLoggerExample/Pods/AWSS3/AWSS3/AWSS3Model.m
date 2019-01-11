@@ -1,5 +1,5 @@
 //
-// Copyright 2010-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2010-2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
@@ -336,6 +336,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
+             @"allowQuotedRecordDelimiter" : @"AllowQuotedRecordDelimiter",
              @"comments" : @"Comments",
              @"fieldDelimiter" : @"FieldDelimiter",
              @"fileHeaderInfo" : @"FileHeaderInfo",
@@ -1003,6 +1004,12 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
         if ([value caseInsensitiveCompare:@"ca-central-1"] == NSOrderedSame) {
             return @(AWSS3BucketLocationConstraintCACentral1);
         }
+        if ([value caseInsensitiveCompare:@"us-gov-east-1"] == NSOrderedSame) {
+            return @(AWSS3BucketLocationConstraintUSGovEast1);
+        }
+        if ([value caseInsensitiveCompare:@"eu-north-1"] == NSOrderedSame) {
+            return @(AWSS3BucketLocationConstraintEUNorth1);
+        }
         return @(AWSS3BucketLocationConstraintUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -1044,6 +1051,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return @"eu-central-1";
             case AWSS3BucketLocationConstraintCACentral1:
                 return @"ca-central-1";
+            case AWSS3BucketLocationConstraintUSGovEast1:
+                return @"us-gov-east-1";
+            case AWSS3BucketLocationConstraintEUNorth1:
+                return @"eu-north-1";
             default:
                 return nil;
         }
@@ -1482,6 +1493,37 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSValueTransformer *)ownerJSONTransformer {
     return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3Owner class]];
+}
+
+@end
+
+@implementation AWSS3DeleteMarkerReplication
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"status" : @"Status",
+             };
+}
+
++ (NSValueTransformer *)statusJSONTransformer {
+    return [AWSMTLValueTransformer reversibleTransformerWithForwardBlock:^NSNumber *(NSString *value) {
+        if ([value caseInsensitiveCompare:@"Enabled"] == NSOrderedSame) {
+            return @(AWSS3DeleteMarkerReplicationStatusEnabled);
+        }
+        if ([value caseInsensitiveCompare:@"Disabled"] == NSOrderedSame) {
+            return @(AWSS3DeleteMarkerReplicationStatusDisabled);
+        }
+        return @(AWSS3DeleteMarkerReplicationStatusUnknown);
+    } reverseBlock:^NSString *(NSNumber *value) {
+        switch ([value integerValue]) {
+            case AWSS3DeleteMarkerReplicationStatusEnabled:
+                return @"Enabled";
+            case AWSS3DeleteMarkerReplicationStatusDisabled:
+                return @"Disabled";
+            default:
+                return nil;
+        }
+    }];
 }
 
 @end
@@ -2086,6 +2128,12 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
         if ([value caseInsensitiveCompare:@"ca-central-1"] == NSOrderedSame) {
             return @(AWSS3BucketLocationConstraintCACentral1);
         }
+        if ([value caseInsensitiveCompare:@"us-gov-east-1"] == NSOrderedSame) {
+            return @(AWSS3BucketLocationConstraintUSGovEast1);
+        }
+        if ([value caseInsensitiveCompare:@"eu-north-1"] == NSOrderedSame) {
+            return @(AWSS3BucketLocationConstraintEUNorth1);
+        }
         return @(AWSS3BucketLocationConstraintUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -2127,6 +2175,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return @"eu-central-1";
             case AWSS3BucketLocationConstraintCACentral1:
                 return @"ca-central-1";
+            case AWSS3BucketLocationConstraintUSGovEast1:
+                return @"us-gov-east-1";
+            case AWSS3BucketLocationConstraintEUNorth1:
+                return @"eu-north-1";
             default:
                 return nil;
         }
@@ -3154,6 +3206,7 @@ return [date aws_stringValue:AWSDateRFC822DateFormat1];
              @"CSV" : @"CSV",
              @"compressionType" : @"CompressionType",
              @"JSON" : @"JSON",
+             @"parquet" : @"Parquet",
              };
 }
 
@@ -3169,6 +3222,9 @@ return [date aws_stringValue:AWSDateRFC822DateFormat1];
         if ([value caseInsensitiveCompare:@"GZIP"] == NSOrderedSame) {
             return @(AWSS3CompressionTypeGzip);
         }
+        if ([value caseInsensitiveCompare:@"BZIP2"] == NSOrderedSame) {
+            return @(AWSS3CompressionTypeBzip2);
+        }
         return @(AWSS3CompressionTypeUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -3176,6 +3232,8 @@ return [date aws_stringValue:AWSDateRFC822DateFormat1];
                 return @"NONE";
             case AWSS3CompressionTypeGzip:
                 return @"GZIP";
+            case AWSS3CompressionTypeBzip2:
+                return @"BZIP2";
             default:
                 return nil;
         }
@@ -3184,6 +3242,10 @@ return [date aws_stringValue:AWSDateRFC822DateFormat1];
 
 + (NSValueTransformer *)JSONJSONTransformer {
     return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3JSONInput class]];
+}
+
++ (NSValueTransformer *)parquetJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3ParquetInput class]];
 }
 
 @end
@@ -4520,6 +4582,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 @end
 
+@implementation AWSS3ParquetInput
+
+@end
+
 @implementation AWSS3Part
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
@@ -4546,6 +4612,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
              @"bytesProcessed" : @"BytesProcessed",
+             @"bytesReturned" : @"BytesReturned",
              @"bytesScanned" : @"BytesScanned",
              };
 }
@@ -5424,16 +5491,27 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
+             @"deleteMarkerReplication" : @"DeleteMarkerReplication",
              @"destination" : @"Destination",
+             @"filter" : @"Filter",
              @"identifier" : @"ID",
              @"prefix" : @"Prefix",
+             @"priority" : @"Priority",
              @"sourceSelectionCriteria" : @"SourceSelectionCriteria",
              @"status" : @"Status",
              };
 }
 
++ (NSValueTransformer *)deleteMarkerReplicationJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3DeleteMarkerReplication class]];
+}
+
 + (NSValueTransformer *)destinationJSONTransformer {
     return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3Destination class]];
+}
+
++ (NSValueTransformer *)filterJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3ReplicationRuleFilter class]];
 }
 
 + (NSValueTransformer *)sourceSelectionCriteriaJSONTransformer {
@@ -5459,6 +5537,41 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return nil;
         }
     }];
+}
+
+@end
+
+@implementation AWSS3ReplicationRuleAndOperator
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"prefix" : @"Prefix",
+             @"tags" : @"Tags",
+             };
+}
+
++ (NSValueTransformer *)tagsJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONArrayTransformerWithModelClass:[AWSS3Tag class]];
+}
+
+@end
+
+@implementation AWSS3ReplicationRuleFilter
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"AND" : @"And",
+             @"prefix" : @"Prefix",
+             @"tag" : @"Tag",
+             };
+}
+
++ (NSValueTransformer *)ANDJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3ReplicationRuleAndOperator class]];
+}
+
++ (NSValueTransformer *)tagJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSS3Tag class]];
 }
 
 @end
@@ -6092,6 +6205,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
              @"bytesProcessed" : @"BytesProcessed",
+             @"bytesReturned" : @"BytesReturned",
              @"bytesScanned" : @"BytesScanned",
              };
 }
