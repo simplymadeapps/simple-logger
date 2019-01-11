@@ -94,6 +94,8 @@
 	NSArray *files = [logger logFiles];
 	
 	if (files) {
+		[SimpleLogger resetLoggerForUpload];
+		
 		logger.uploadInProgress = YES;
 		logger.uploadTotal = files.count;
 		
@@ -127,13 +129,18 @@
 		
 		if (logger.currentUploadCount == logger.uploadTotal) {
 			// final upload complete
-			logger.uploadInProgress = NO;
-			logger.currentUploadCount = 0;
-			logger.uploadError = nil;
 			BOOL success = logger.uploadError == nil;
 			completionHandler(success, logger.uploadError);
 		}
 	}];
+}
+
++ (void)resetLoggerForUpload {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	logger.uploadInProgress = NO;
+	logger.currentUploadCount = 0;
+	logger.uploadError = nil;
 }
 
 + (NSString *)logOutputForFileDate:(NSDate *)date {
