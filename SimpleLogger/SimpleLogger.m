@@ -28,14 +28,23 @@
 	
 	self.loggingEnabled = YES;
 	self.retentionDays = kLoggerRetentionDaysDefault;
-	self.logFormatter = [[NSDateFormatter alloc] init];
-	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
-	self.filenameFormatter = [[NSDateFormatter alloc] init];
-	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 	self.filenameExtension = kLoggerFilenameExtension;
 	self.folderLocation = kLoggerFilenameFolderLocation;
 	
+	[self initializeLogFormatter];
+	[self initializeDateFormatter];
+	
 	return self;
+}
+
+- (void)initializeLogFormatter {
+	self.logFormatter = [[NSDateFormatter alloc] init];
+	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
+}
+
+- (void)initializeDateFormatter {
+	self.filenameFormatter = [[NSDateFormatter alloc] init];
+	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 }
 
 + (void)setLoggingEnabled:(BOOL)enabled {
@@ -101,31 +110,37 @@
 
 + (void)uploadFiles:(NSArray *)files withLogger:(SimpleLogger *)logger completionHandler:(SLUploadCompletionHandler)completionHandler {
 	for (NSString *file in files) {
-		[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
-			logger.currentUploadCount = logger.currentUploadCount += 1;
-			
-			if (task.error) {
-				NSLog(@"upload error: %@", task.error.localizedDescription);
-				logger.uploadError = task.error;
-			} else {
-				// remove file after successful upload
-				if (![logger filenameIsCurrentDay:file]) {
-					[logger removeFile:file];
-				}
-			}
-			
-			if (logger.currentUploadCount == logger.uploadTotal) {
-				// final upload complete
-				logger.uploadInProgress = NO;
-				BOOL uploadSuccess = YES;
-				if (logger.uploadError) {
-					uploadSuccess = NO;
-				}
-				
-				completionHandler(uploadSuccess, logger.uploadError);
-			}
-		}];
+		[SimpleLogger uploadFile:file completionHandler:completionHandler];
 	}
+}
+
++ (void)uploadFile:(NSString *)file completionHandler:(SLUploadCompletionHandler)completionHandler {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
+		logger.currentUploadCount = logger.currentUploadCount += 1;
+		
+		if (task.error) {
+			NSLog(@"upload error: %@", task.error.localizedDescription);
+			logger.uploadError = task.error;
+		}
+		
+		if (!task.error && ![logger filenameIsCurrentDay:file]) {
+			// remove file on success upload
+			[logger removeFile:file];
+		}
+		
+		if (logger.currentUploadCount == logger.uploadTotal) {
+			// final upload complete
+			logger.uploadInProgress = NO;
+			BOOL uploadSuccess = YES;
+			if (logger.uploadError) {
+				uploadSuccess = NO;
+			}
+			
+			completionHandler(uploadSuccess, logger.uploadError);
+		}
+	}];
 }
 
 + (NSString *)logOutputForFileDate:(NSDate *)date {
