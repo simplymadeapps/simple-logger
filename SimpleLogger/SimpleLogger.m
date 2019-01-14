@@ -28,14 +28,23 @@
 	
 	self.loggingEnabled = YES;
 	self.retentionDays = kLoggerRetentionDaysDefault;
-	self.logFormatter = [[NSDateFormatter alloc] init];
-	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
-	self.filenameFormatter = [[NSDateFormatter alloc] init];
-	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 	self.filenameExtension = kLoggerFilenameExtension;
 	self.folderLocation = kLoggerFilenameFolderLocation;
 	
+	[self initializeLogFormatter];
+	[self initializeDateFormatter];
+	
 	return self;
+}
+
+- (void)initializeLogFormatter {
+	self.logFormatter = [[NSDateFormatter alloc] init];
+	self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
+}
+
+- (void)initializeDateFormatter {
+	self.filenameFormatter = [[NSDateFormatter alloc] init];
+	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
 }
 
 + (void)setLoggingEnabled:(BOOL)enabled {
@@ -72,64 +81,63 @@
 	
 	if (![logger amazonCredentialsSetCorrectly]) {
 		// prevent upload if credentials not set
-		logger.uploadInProgress = NO; // reset upload in progress
-		if (completionHandler) {
-			completionHandler(NO, [NSError errorWithDomain:@"com.simplymadeapps.ios.simplelogger.aws.credentials.missing" code:999 userInfo:nil]);
-		}
+		completionHandler(NO, [NSError errorWithDomain:@"com.simplymadeapps.ios.simplelogger.aws.credentials.missing" code:999 userInfo:nil]);
 		return;
 	}
 	
 	if (logger.uploadInProgress) {
 		// prevent multiple uploads from kicking off
-		if (completionHandler) {
-			completionHandler(NO, nil);
-		}
+		completionHandler(NO, nil);
 		return;
 	}
-	
-	logger.uploadInProgress = YES;
-	logger.uploadError = nil;
-	logger.currentUploadCount = 0;
 	
 	NSArray *files = [logger logFiles];
 	
 	if (files) {
+		[SimpleLogger resetLoggerForUpload];
+		
+		logger.uploadInProgress = YES;
 		logger.uploadTotal = files.count;
 		
-		for (NSString *file in files) {
-			[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
-				logger.currentUploadCount = logger.currentUploadCount += 1;
-				
-				if (task.error) {
-					NSLog(@"upload error: %@", task.error.localizedDescription);
-					logger.uploadError = task.error;
-				} else {
-					// remove file after successful upload
-					if (![logger filenameIsCurrentDay:file]) {
-						[logger removeFile:file];
-					}
-				}
-				
-				if (logger.currentUploadCount == logger.uploadTotal) {
-					// final upload complete
-					logger.uploadInProgress = NO;
-					
-					if (completionHandler) {
-						BOOL uploadSuccess = YES;
-						if (logger.uploadError) {
-							uploadSuccess = NO;
-						}
-						completionHandler(uploadSuccess, logger.uploadError);
-					}
-				}
-			}];
-		}
+		[SimpleLogger uploadFiles:files completionHandler:completionHandler];
 	} else {
-		logger.uploadInProgress = NO;
-		if (completionHandler) {
-			completionHandler(NO, logger.uploadError);
-		}
+		completionHandler(NO, logger.uploadError);
 	}
+}
+
++ (void)uploadFiles:(NSArray *)files completionHandler:(SLUploadCompletionHandler)completionHandler {
+	for (NSString *file in files) {
+		[SimpleLogger uploadFile:file completionHandler:completionHandler];
+	}
+}
+
++ (void)uploadFile:(NSString *)file completionHandler:(SLUploadCompletionHandler)completionHandler {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	[logger uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
+		logger.currentUploadCount++;
+		
+		if (task.error) {
+			logger.uploadError = task.error;
+		}
+		
+		if (!task.error && ![logger filenameIsCurrentDay:file]) {
+			// remove file on success upload
+			[logger removeFile:file];
+		}
+		
+		if (logger.currentUploadCount == logger.uploadTotal) {
+			// final upload complete
+			completionHandler(logger.uploadError == nil, logger.uploadError);
+		}
+	}];
+}
+
++ (void)resetLoggerForUpload {
+	SimpleLogger *logger = [SimpleLogger sharedLogger];
+	
+	logger.currentUploadCount = 0;
+	logger.uploadError = nil;
 }
 
 + (NSString *)logOutputForFileDate:(NSDate *)date {

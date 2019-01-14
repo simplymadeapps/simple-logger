@@ -71,7 +71,7 @@ Logs event to daily file with current system date time
 /**
 Uploads all current log files to S3
 */
-+ (void)uploadAllFilesWithCompletion:(SLUploadCompletionHandler _Nullable)completionHandler;
++ (void)uploadAllFilesWithCompletion:(SLUploadCompletionHandler _Nonnull)completionHandler;
 /**
 File output for specified date
 @param date Date for log output
