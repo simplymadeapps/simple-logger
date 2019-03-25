@@ -44,7 +44,7 @@ pipeline {
     }
 
     success {
-      mail body: "<h2>Jenkins Build Success</h2>Build Number: ${env.BUILD_NUMBER}<br>Branch: ${env.GIT_BRANCH}<br>Build URL: ${env.JENKINS_URL}/blue/organizations/jenkins/Simple%20Logger%20iOS/detail/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/pipeline",
+      mail body: "<h2>Jenkins Build Success</h2>Build Number: ${env.BUILD_NUMBER}<br>Branch: ${env.GIT_BRANCH}<br>Build URL: ${env.JENKINS_URL}/blue/organizations/jenkins/Simple%20Logger/detail/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/pipeline",
         charset: 'UTF-8',
            from: 'notice@simpleinout.com',
        mimeType: 'text/html',
@@ -53,7 +53,7 @@ pipeline {
     }
 
     failure {
-      mail body: "<h2>Jenkins Build Failure</h2>Build Number: ${env.BUILD_NUMBER}<br>Branch: ${env.GIT_BRANCH}<br>Build URL: ${env.JENKINS_URL}/blue/organizations/jenkins/Simple%20Logger%20iOS/detail/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/pipeline",
+      mail body: "<h2>Jenkins Build Failure</h2>Build Number: ${env.BUILD_NUMBER}<br>Branch: ${env.GIT_BRANCH}<br>Build URL: ${env.JENKINS_URL}/blue/organizations/jenkins/Simple%20Logger/detail/${env.GIT_BRANCH}/${env.BUILD_NUMBER}/pipeline",
         charset: 'UTF-8',
            from: 'notice@simpleinout.com',
        mimeType: 'text/html',
