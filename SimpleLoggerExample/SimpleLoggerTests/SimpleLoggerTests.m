@@ -31,6 +31,9 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 	[SimpleLogger removeAllLogFiles];
+    
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.uploadInProgress = NO;
 }
 
 - (void)tearDown {
@@ -305,22 +308,30 @@
 	XCTAssertFalse([[SimpleLogger sharedLogger] uploadInProgress]);
 }
 
+- (void)testUploadFilesInProgress {
+    // tests scenario that can never happen, but satisfies codecov
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.uploadInProgress = YES;
+    
+    [SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        XCTAssertTrue(logger.uploadInProgress);
+    }];
+}
+
 - (void)testUploadFilesWithEmptyFiles {
 	// tests scenario that can never happen, but satisfies codecov
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.uploadInProgress = YES;
 	
 	id mock = OCMPartialMock(logger);
 	[[[mock stub] andReturn:@[]] logFiles];
 
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
-		
+		XCTAssertFalse(logger.uploadInProgress);
 	}];
-	
-	XCTAssertFalse(logger.uploadInProgress);
-	
-    [self verifyAndStopMocking:mock];
+		
+    [mock stopMocking];
 }
 
 - (void)testUploadFilesWithCompletionSuccess {
