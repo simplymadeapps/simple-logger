@@ -112,4 +112,10 @@
 	logger.awsSecret = nil;
 }
 
+- (void)verifyAndStopMocking:(id)mock {
+    [mock verify];
+    [mock stopMocking];
+    mock = nil;
+}
+
 @end

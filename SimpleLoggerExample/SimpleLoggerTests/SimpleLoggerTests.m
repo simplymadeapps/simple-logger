@@ -309,6 +309,7 @@
 	// tests scenario that can never happen, but satisfies codecov
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
 	SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.uploadInProgress = YES;
 	
 	id mock = OCMPartialMock(logger);
 	[[[mock stub] andReturn:@[]] logFiles];
@@ -317,11 +318,9 @@
 		
 	}];
 	
-	XCTAssertTrue(logger.uploadInProgress); // stuck in progress forever
+	XCTAssertFalse(logger.uploadInProgress);
 	
-	[mock verify];
-	[mock stopMocking];
-	mock = nil;
+    [self verifyAndStopMocking:mock];
 }
 
 - (void)testUploadFilesWithCompletionSuccess {
@@ -342,10 +341,9 @@
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
 		XCTAssertTrue(success);
 		XCTAssertNil(error);
+        XCTAssertFalse(logger.uploadInProgress);
 		
-		[mock verify];
-		[mock stopMocking];
-		mock = nil;
+        [self verifyAndStopMocking:mock];
 		
 		[expect fulfill];
 	}];
@@ -375,10 +373,9 @@
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
 		XCTAssertFalse(success);
 		XCTAssertNotNil(error);
+        XCTAssertFalse(logger.uploadInProgress);
 		
-		[mock verify];
-		[mock stopMocking];
-		mock = nil;
+        [self verifyAndStopMocking:mock];
 		
 		[taskMock stopMocking];
 		taskMock = nil;
