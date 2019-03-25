@@ -20,7 +20,7 @@ pipeline {
             sh 'xcrun simctl delete iOSTestDevice || echo Failed to delete iOS 10 device'
 
             sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
-
+            sh 'xcrun simctl create iOSTestDevice "iPhone X" 12.1'
             sh 'xcrun instruments -w "iOSTestDevice" || sleep 30'
           }
         }
