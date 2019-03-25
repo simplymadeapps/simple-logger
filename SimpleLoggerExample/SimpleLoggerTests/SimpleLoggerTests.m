@@ -31,6 +31,9 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 	[SimpleLogger removeAllLogFiles];
+    
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.uploadInProgress = NO;
 }
 
 - (void)tearDown {
@@ -305,6 +308,17 @@
 	XCTAssertFalse([[SimpleLogger sharedLogger] uploadInProgress]);
 }
 
+- (void)testUploadFilesInProgress {
+    // tests scenario that can never happen, but satisfies codecov
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.uploadInProgress = YES;
+    
+    [SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        XCTAssertTrue(logger.uploadInProgress);
+    }];
+}
+
 - (void)testUploadFilesWithEmptyFiles {
 	// tests scenario that can never happen, but satisfies codecov
 	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
@@ -314,14 +328,10 @@
 	[[[mock stub] andReturn:@[]] logFiles];
 
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
-		
+		XCTAssertFalse(logger.uploadInProgress);
 	}];
-	
-	XCTAssertTrue(logger.uploadInProgress); // stuck in progress forever
-	
-	[mock verify];
-	[mock stopMocking];
-	mock = nil;
+		
+    [mock stopMocking];
 }
 
 - (void)testUploadFilesWithCompletionSuccess {
@@ -342,10 +352,9 @@
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
 		XCTAssertTrue(success);
 		XCTAssertNil(error);
+        XCTAssertFalse(logger.uploadInProgress);
 		
-		[mock verify];
-		[mock stopMocking];
-		mock = nil;
+        [self verifyAndStopMocking:mock];
 		
 		[expect fulfill];
 	}];
@@ -375,10 +384,9 @@
 	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
 		XCTAssertFalse(success);
 		XCTAssertNotNil(error);
+        XCTAssertFalse(logger.uploadInProgress);
 		
-		[mock verify];
-		[mock stopMocking];
-		mock = nil;
+        [self verifyAndStopMocking:mock];
 		
 		[taskMock stopMocking];
 		taskMock = nil;

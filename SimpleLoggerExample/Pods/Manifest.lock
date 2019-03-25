@@ -1,7 +1,7 @@
 PODS:
-  - AWSCore (2.8.2)
-  - AWSS3 (2.8.2):
-    - AWSCore (= 2.8.2)
+  - AWSCore (2.9.3)
+  - AWSS3 (2.9.3):
+    - AWSCore (= 2.9.3)
   - KIF (3.7.4):
     - KIF/Core (= 3.7.4)
   - KIF/Core (3.7.4)
@@ -20,11 +20,11 @@ SPEC REPOS:
     - OCMock
 
 SPEC CHECKSUMS:
-  AWSCore: b6448752e992345082d7bad29d86e4839b72b4ba
-  AWSS3: e364e6c60d972da4110f2c379def6b716e6f1262
+  AWSCore: 5cbb6c6ccfad4b55e494c2e8df87781512f7881e
+  AWSS3: f016dddb6de858f0cc328d4e10a551299a66a3bb
   KIF: f3d01c109ee9d1cfe6b0f2bb2aa278e807e971e2
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
 
 PODFILE CHECKSUM: 6d2c7593f49f333b6a2e791eae3c7c5ebddf9ec4
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

@@ -101,6 +101,7 @@
 		
 		[SimpleLogger uploadFiles:files completionHandler:completionHandler];
 	} else {
+        logger.uploadInProgress = NO;
 		completionHandler(NO, logger.uploadError);
 	}
 }
@@ -128,6 +129,7 @@
 		
 		if (logger.currentUploadCount == logger.uploadTotal) {
 			// final upload complete
+            logger.uploadInProgress = NO;
 			completionHandler(logger.uploadError == nil, logger.uploadError);
 		}
 	}];

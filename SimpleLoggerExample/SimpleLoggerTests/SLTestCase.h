@@ -16,7 +16,7 @@
 - (void)saveDummyFiles:(NSInteger)count;
 - (void)saveRegularFiles:(NSInteger)count;
 - (void)deleteRegularFiles;
-
+- (void)verifyAndStopMocking:(id)mock;
 @end
 
 @interface SimpleLogger (UnitTests)
