@@ -20,14 +20,14 @@ pipeline {
             sh 'xcrun simctl delete iOSTestDevice || echo Failed to delete iOS 10 device'
 
             sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
-            sh 'xcrun simctl create iOSTestDevice "iPhone X" 12.1'
+            sh 'xcrun simctl create iOSTestDevice "iPhone X" latest'
             sh 'xcrun instruments -w "iOSTestDevice" || sleep 30'
           }
         }
 
         stage ('Run Tests') {
           steps {
-            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOSTestDevice,OS=12.1" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
+            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOSTestDevice,OS=latest" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
             sh 'slather'
             sh 'curl -s https://codecov.io/bash | bash -s - -f test-reports/cobertura.xml -t ${CODECOV_TOKEN} -X coveragepy -X gcov -X xcode'
           }
