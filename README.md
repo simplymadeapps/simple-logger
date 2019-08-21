@@ -1,7 +1,6 @@
 # SimpleLogger
 `SimpleLogger` is an easy to use log file generator for iOS that uploads to Amazon S3.
 
-[![codecov](https://codecov.io/gh/simplymadeapps/simple-logger/branch/master/graph/badge.svg?token=lqgHQdbIob)](https://codecov.io/gh/simplymadeapps/simple-logger)
 [![codebeat badge](https://codebeat.co/badges/f00f7099-2c82-4867-9e15-e28c3996fecb)](https://codebeat.co/projects/github-com-simplymadeapps-simple-logger-master)
 
 ## Requirements
