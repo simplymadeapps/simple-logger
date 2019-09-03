@@ -40,6 +40,8 @@
 - (void)initializeLogFormatter {
     self.logFormatter = [[NSDateFormatter alloc] init];
     self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
+    // set the log date formatter locale so it is readable to English speakers
+    [self.logFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
 }
 
 - (void)initializeDateFormatter {

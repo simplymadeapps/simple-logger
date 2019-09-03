@@ -46,10 +46,13 @@ You can customize many of the logging formats and settings:
 
 // log event formatter date format
 [[[SimpleLogger sharedLogger] logFormatter] setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+// the log event formatter defaults to en-US locale
+// create your own or overwrite to locale of choice
 
 // file name date format
 // be sure to set this one before writing your first log event to avoid duplicate files for same day
-// the filename formatter is hardcoded to the en-US locale for filename consistency, set to own locale if needed
+// the filename formatter defaults to en-US locale
+// create your own or overwrite to locale of choice
 [[SimpleLogger sharedLogger] setFilenameFormatter:yourDateFormatter];
 
 // filename extension
