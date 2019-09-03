@@ -570,6 +570,21 @@
 	XCTAssertEqualObjects(filename, @"2017-07-15.log");
 }
 
+- (void)testFilenameForDateReturnsEnglishFilenameWhenLocaleDifferent {
+    id localeMock = OCMClassMock([NSLocale class]);
+    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ar"];
+    [[[localeMock stub] andReturn:locale] currentLocale];
+    
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    NSDate *date = [self testDate];
+    NSString *filename = [logger filenameForDate:date];
+    
+    XCTAssertNotNil(filename);
+    XCTAssertEqualObjects(filename, @"2017-07-15.log");
+    
+    [self verifyAndStopMocking:localeMock];
+}
+
 - (void)testCredentialsOkReturnsYES {
 	[SimpleLogger initWithAWSRegion:AWSRegionEUWest1 bucket:@"bucket" accessToken:@"token" secret:@"secret"];
 	

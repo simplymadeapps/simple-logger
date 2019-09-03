@@ -45,6 +45,8 @@
 - (void)initializeDateFormatter {
 	self.filenameFormatter = [[NSDateFormatter alloc] init];
 	self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
+    // set the file name locale so it is readable to English speakers
+    [self.filenameFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
 }
 
 + (void)setLoggingEnabled:(BOOL)enabled {
