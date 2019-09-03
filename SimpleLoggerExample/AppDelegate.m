@@ -17,13 +17,13 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	// Override point for customization after application launch.
-	
-	[SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test-bucket" accessToken:@"test-token" secret:@"test-secret"];
-	
-	[[SimpleLogger sharedLogger] setFolderLocation:@"mytestfolder/userlogs"];
-	
-	return YES;
+    // Override point for customization after application launch.
+    
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test-bucket" accessToken:@"test-token" secret:@"test-secret"];
+    
+    [[SimpleLogger sharedLogger] setFolderLocation:@"mytestfolder/userlogs"];
+    
+    return YES;
 }
 
 @end
