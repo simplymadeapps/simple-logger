@@ -18,24 +18,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-	
-	self.automaticallyAdjustsScrollViewInsets = NO;
-	
-	NSError *error;
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *docDirectory = paths[0];
-	NSString *filePath = [docDirectory stringByAppendingPathComponent:self.filename];
-	NSString *contents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-	self.logDetailTextView.text = contents;
-	
-	UIBarButtonItem *upload = [[UIBarButtonItem alloc] initWithTitle:@"Upload" style:UIBarButtonItemStylePlain target:self action:@selector(uploadFirstFileInStack:)];
-	self.navigationItem.rightBarButtonItem = upload;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    NSString *filePath = [docDirectory stringByAppendingPathComponent:self.filename];
+    NSString *contents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+    self.logDetailTextView.text = contents;
+    
+    UIBarButtonItem *upload = [[UIBarButtonItem alloc] initWithTitle:@"Upload" style:UIBarButtonItemStylePlain target:self action:@selector(uploadFirstFileInStack:)];
+    self.navigationItem.rightBarButtonItem = upload;
 }
 
 - (void)uploadFirstFileInStack:(id)sender {
-	[SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
-		
-	}];
+    [SimpleLogger uploadAllFilesWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+    }];
 }
 
 @end
