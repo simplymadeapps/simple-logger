@@ -49,6 +49,7 @@ You can customize many of the logging formats and settings:
 
 // file name date format
 // be sure to set this one before writing your first log event to avoid duplicate files for same day
+// the filename formatter is hardcoded to the en-US locale for filename consistency, set to own locale if needed
 [[SimpleLogger sharedLogger] setFilenameFormatter:yourDateFormatter];
 
 // filename extension
