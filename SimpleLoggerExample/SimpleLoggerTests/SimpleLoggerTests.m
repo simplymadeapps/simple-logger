@@ -531,14 +531,6 @@
     XCTAssertEqualObjects(filePath, @"SimpleLogger/test.log");
 }
 
-- (void)testFullFilePathReturnsCorrectly {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    NSString *filePath = [logger fullFilePathForFilename:@"test.log"];
-    
-    XCTAssertNotNil(filePath);
-}
-
 - (void)testFileDateFormatChangeDeletesFiles {
     [self saveDummyFiles:8];
     

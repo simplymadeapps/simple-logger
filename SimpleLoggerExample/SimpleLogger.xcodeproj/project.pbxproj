@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA4DFC422322B790009FEE36 /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4DFC412322B790009FEE36 /* FileManager.m */; };
+		BA4DFC442322B8F3009FEE36 /* FileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4DFC432322B8F3009FEE36 /* FileManagerTests.m */; };
 		BA9D37DE1F34C9FF0048C3D5 /* LogDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */; };
 		BA9D37E11F34FADD0048C3D5 /* NSDate+SMA.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */; };
 		BA9D37E31F34FFE30048C3D5 /* NSDate+SMATests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */; };
@@ -39,6 +41,9 @@
 		33A7DECCEBB9C9FBBBC122EB /* Pods_SimpleLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54778A4063E1C459CC62063F /* Pods-SimpleLoggerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLoggerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests.release.xcconfig"; sourceTree = "<group>"; };
 		A552223A147773A8FEE443C5 /* Pods_SimpleLoggerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleLoggerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA4DFC402322B790009FEE36 /* FileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileManager.h; path = ../SimpleLogger/FileManager.h; sourceTree = "<group>"; };
+		BA4DFC412322B790009FEE36 /* FileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FileManager.m; path = ../SimpleLogger/FileManager.m; sourceTree = "<group>"; };
+		BA4DFC432322B8F3009FEE36 /* FileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileManagerTests.m; sourceTree = "<group>"; };
 		BA9D37DC1F34C9FF0048C3D5 /* LogDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogDetailViewController.m; sourceTree = SOURCE_ROOT; };
 		BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+SMA.h"; path = "../SimpleLogger/NSDate+SMA.h"; sourceTree = "<group>"; };
@@ -112,6 +117,8 @@
 			children = (
 				BA9EBAC51F27E1FC002DFF44 /* SimpleLogger.h */,
 				BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */,
+				BA4DFC402322B790009FEE36 /* FileManager.h */,
+				BA4DFC412322B790009FEE36 /* FileManager.m */,
 				BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */,
 				BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */,
 				BA9EBADA1F27EFFF002DFF44 /* SimpleLoggerDefaults.h */,
@@ -126,6 +133,7 @@
 				BA9D37EA1F38A8930048C3D5 /* SLTestCase.h */,
 				BA9D37E81F38A8220048C3D5 /* SLTestCase.m */,
 				BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */,
+				BA4DFC432322B8F3009FEE36 /* FileManagerTests.m */,
 				BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */,
 				BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */,
 			);
@@ -374,6 +382,7 @@
 				BA9D37E31F34FFE30048C3D5 /* NSDate+SMATests.m in Sources */,
 				BA9D37E91F38A8220048C3D5 /* SLTestCase.m in Sources */,
 				BA9EBAD11F27E4D8002DFF44 /* SimpleLoggerTests.m in Sources */,
+				BA4DFC442322B8F3009FEE36 /* FileManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +395,7 @@
 				BAE372E71F27D37A00300F7E /* main.m in Sources */,
 				BA9D37DE1F34C9FF0048C3D5 /* LogDetailViewController.m in Sources */,
 				BA9D37E11F34FADD0048C3D5 /* NSDate+SMA.m in Sources */,
+				BA4DFC422322B790009FEE36 /* FileManager.m in Sources */,
 				BA9EBAC71F27E1FC002DFF44 /* SimpleLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

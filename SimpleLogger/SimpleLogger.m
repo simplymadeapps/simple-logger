@@ -9,6 +9,7 @@
 #import "SimpleLogger.h"
 #import "SimpleLoggerDefaults.h"
 #import "NSDate+SMA.h"
+#import "FileManager.h"
 #import <AWSS3/AWSS3.h>
 
 @implementation SimpleLogger
@@ -74,7 +75,7 @@
         // only allow logging if enabled
         NSDate *date = [NSDate date];
         NSString *eventString = [logger eventString:event forDate:date];
-        [logger writeLogEntry:eventString toFilename:[logger filenameForDate:date]];
+        [FileManager writeLogEntry:eventString toFilename:[logger filenameForDate:date]];
         
         [logger truncateFilesBeyondRetentionForDate:date];
     }
@@ -166,7 +167,7 @@
 #pragma mark - Instance Methods
 - (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block {
     AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-    [transferUtility uploadFile:[NSURL fileURLWithPath:[self fullFilePathForFilename:filename]] bucket:self.awsBucket key:[self bucketFileLocationForFilename:filename] contentType:@"text/plain" expression:nil completionHandler:^(AWSS3TransferUtilityUploadTask * _Nonnull task, NSError * _Nullable error) {
+    [transferUtility uploadFile:[NSURL fileURLWithPath:[FileManager fullFilePathForFilename:filename]] bucket:self.awsBucket key:[self bucketFileLocationForFilename:filename] contentType:@"text/plain" expression:nil completionHandler:^(AWSS3TransferUtilityUploadTask * _Nonnull task, NSError * _Nullable error) {
         block((AWSTask *)task);
     }];
 }
@@ -185,7 +186,7 @@
 }
 
 - (void)removeFile:(NSString *)filename {
-    NSString *filePath = [self fullFilePathForFilename:filename];
+    NSString *filePath = [FileManager fullFilePathForFilename:filename];
     
     NSFileManager *manager = [NSFileManager defaultManager];
     NSError *error;
@@ -227,24 +228,6 @@
 }
 
 #pragma mark - Private
-- (void)writeLogEntry:(NSString *)log toFilename:(NSString *)filename {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docDirectory = paths[0];
-    NSString *path = [docDirectory stringByAppendingPathComponent:filename];
-    
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    if (fileExists) {
-        NSString *newLineLog = [NSString stringWithFormat:@"\n%@", log];
-        NSFileHandle *handle = [NSFileHandle fileHandleForUpdatingAtPath:path];
-        [handle seekToEndOfFile];
-        [handle writeData:[newLineLog dataUsingEncoding:NSUTF8StringEncoding]];
-        [handle closeFile];
-    } else {
-        NSError *error;
-        [log writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    }
-}
-
 - (void)truncateFilesBeyondRetentionForDate:(NSDate *)date {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *docDirectory = paths[0];
@@ -277,12 +260,6 @@
 
 - (NSString *)bucketFileLocationForFilename:(NSString *)filename {
     return [NSString stringWithFormat:@"%@/%@", self.folderLocation, filename];
-}
-
-- (NSString *)fullFilePathForFilename:(NSString *)filename {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docDirectory = paths[0];
-    return [docDirectory stringByAppendingPathComponent:filename];
 }
 
 #pragma mark - Helpers
