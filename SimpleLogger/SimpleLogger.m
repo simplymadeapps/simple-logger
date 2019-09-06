@@ -33,20 +33,17 @@
     self.filenameExtension = kLoggerFilenameExtension;
     self.folderLocation = kLoggerFilenameFolderLocation;
     
-    [self initializeLogFormatter];
-    [self initializeDateFormatter];
+    [self initializeLogFormatters];
     
     return self;
 }
 
-- (void)initializeLogFormatter {
+- (void)initializeLogFormatters {
     self.logFormatter = [[NSDateFormatter alloc] init];
     self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
     // set the log date formatter locale so it is readable to English speakers
     [self.logFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
-}
-
-- (void)initializeDateFormatter {
+    
     self.filenameFormatter = [[NSDateFormatter alloc] init];
     self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
     // set the file name locale so it is readable to English speakers
@@ -73,7 +70,7 @@
         NSString *eventString = [logger eventString:event forDate:date];
         [FileManager writeLogEntry:eventString toFilename:[FileManager filenameForDate:date]];
         
-        [logger truncateFilesBeyondRetentionForDate:date];
+        [FileManager truncateFilesBeyondRetentionForDate:date];
     }
 }
 
@@ -92,7 +89,7 @@
         return;
     }
     
-    NSArray *files = [logger logFiles];
+    NSArray *files = [FileManager logFiles];
     
     if (files) {
         [SimpleLogger resetLoggerForUpload];
@@ -109,31 +106,8 @@
 
 + (void)uploadFiles:(NSArray *)files completionHandler:(SLUploadCompletionHandler)completionHandler {
     for (NSString *file in files) {
-        [SimpleLogger uploadFile:file completionHandler:completionHandler];
+        [AmazonUploader uploadFile:file completionHandler:completionHandler];
     }
-}
-
-+ (void)uploadFile:(NSString *)file completionHandler:(SLUploadCompletionHandler)completionHandler {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    [AmazonUploader uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
-        logger.currentUploadCount++;
-        
-        if (task.error) {
-            logger.uploadError = task.error;
-        }
-        
-        if (!task.error && ![FileManager filenameIsCurrentDay:file]) {
-            // remove file on success upload
-            [FileManager removeFile:file];
-        }
-        
-        if (logger.currentUploadCount == logger.uploadTotal) {
-            // final upload complete
-            logger.uploadInProgress = NO;
-            completionHandler(logger.uploadError == nil, logger.uploadError);
-        }
-    }];
 }
 
 + (void)resetLoggerForUpload {
@@ -154,72 +128,13 @@
 }
 
 + (void)removeAllLogFiles {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    [logger removeAllLogFiles];
+    [FileManager removeAllLogFiles];
 }
 
 #pragma mark - Instance Methods
-- (void)removeAllLogFiles {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docDirectory = paths[0];
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSArray *contents = [self logFiles];
-    
-    for (NSString *file in contents) {
-        NSError *error;
-        NSString *path = [docDirectory stringByAppendingPathComponent:file];
-        [manager removeItemAtPath:path error:&error];
-    }
-}
-
-- (NSArray *)logFiles {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docDirectory = paths[0];
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSArray *contents = [manager contentsOfDirectoryAtPath:docDirectory error:nil];
-    
-    NSMutableArray *files = [[NSMutableArray alloc] init];
-    for (NSString *file in contents) {
-        if ([[file pathExtension] isEqualToString:self.filenameExtension]) {
-            [files addObject:file];
-        }
-    }
-    
-    if (files.count > 0) {
-        return files;
-    } else {
-        return nil;
-    }
-}
-
 - (NSString *)eventString:(NSString *)string forDate:(NSDate *)date {
     NSString *dateString = [self.logFormatter stringFromDate:date];
     return [NSString stringWithFormat:@"[%@] %@", dateString, string];
-}
-
-#pragma mark - Private
-- (void)truncateFilesBeyondRetentionForDate:(NSDate *)date {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docDirectory = paths[0];
-    
-    NSArray *contents = [self logFiles];
-    
-    NSDate *retainDate = [self lastRetentionDateForDate:date];
-    
-    for (NSString *file in contents) {
-        NSDate *fileDate = [self.filenameFormatter dateFromString:[file stringByDeletingPathExtension]];
-        
-        if (![fileDate isBetweenDate:[retainDate minTime] andDate:[date maxTime]]) {
-            // file is outside our retention period, delete file
-            NSError *error;
-            NSString *path = [docDirectory stringByAppendingPathComponent:file];
-            [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-        }
-    }
-}
-
-- (NSDate *)lastRetentionDateForDate:(NSDate *)date {
-    return [date dateBySubtractingDays:self.retentionDays - 1]; // drop one to preserve current day
 }
 
 @end

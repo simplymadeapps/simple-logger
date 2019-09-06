@@ -18,6 +18,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     [SimpleLogger removeAllLogFiles];
+    [self deleteRegularFiles];
     [self resetLoggerUploadInfo];
     
     UIApplication.sharedApplication.keyWindow.layer.speed = 100; // ludicrous speed
@@ -109,6 +110,7 @@
     logger.awsBucket = nil;
     logger.awsAccessToken = nil;
     logger.awsSecret = nil;
+    logger.filenameExtension = kLoggerFilenameExtension;
 }
 
 - (void)verifyAndStopMocking:(id)mock {

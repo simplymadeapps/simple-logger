@@ -10,8 +10,6 @@
 #import <AWSS3/AWSS3.h>
 #import "AmazonUploader.h"
 
-typedef void(^SLUploadCompletionHandler)(BOOL success, NSError * _Nullable error);
-
 @interface SimpleLogger : NSObject
 
 /// Logging allowed to write to file

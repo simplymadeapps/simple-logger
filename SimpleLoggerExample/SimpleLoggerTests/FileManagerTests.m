@@ -18,10 +18,16 @@
 
 - (void)setUp {
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    [super setUp];
+    
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.uploadInProgress = NO;
+    logger.loggingEnabled = YES;
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
 }
 
 - (void)testFilenameIsCurrentDayReturnsYES {
@@ -83,6 +89,77 @@
     content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
     
     XCTAssertEqual(content.count, 0);
+}
+
+- (void)testLastRetentionDateReturnsCorrectly {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    NSDate *now = [self testDate];
+    NSDate *lastRetainDate = [FileManager lastRetentionDateForDate:now];
+    
+    XCTAssertNotNil(lastRetainDate);
+    NSString *dateString = [logger.filenameFormatter stringFromDate:lastRetainDate];
+    XCTAssertNotNil(dateString);
+    XCTAssertEqualObjects(dateString, @"2017-07-09");
+}
+
+- (void)testFileTruncationWorksCorrectly {
+    [self saveDummyFiles:8];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    
+    NSError *error;
+    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+    
+    // should have 8 files saved
+    XCTAssertEqual(content.count, 8);
+    
+    [FileManager truncateFilesBeyondRetentionForDate:[self testDate]];
+    
+    content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+    
+    XCTAssertEqual(content.count, 6); // doesn't make file for current day, so dropping 2
+}
+
+- (void)testFileTruncationWhenFilesNil {
+    [self saveRegularFiles:1];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    id mock = OCMPartialMock(fm);
+    [[[mock stub] andReturn:nil] contentsOfDirectoryAtPath:[OCMArg any] error:[OCMArg anyObjectRef]];
+    
+    [FileManager truncateFilesBeyondRetentionForDate:[self testDate]];
+    
+    [self verifyAndStopMocking:mock];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    
+    NSError *error;
+    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+    
+    XCTAssertEqual(content.count, 1);
+}
+
+- (void)testFileTruncationWhenDifferentExtension {
+    [self saveDummyFiles:8];
+    [self saveRegularFiles:2];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    
+    NSError *error;
+    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+    
+    // should have 10 files saved
+    XCTAssertEqual(content.count, 10);
+    
+    [FileManager truncateFilesBeyondRetentionForDate:[self testDate]];
+    
+    content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
+    
+    XCTAssertEqual(content.count, 8);
 }
 
 @end

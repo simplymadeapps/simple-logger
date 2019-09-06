@@ -19,11 +19,5 @@
 @end
 
 @interface SimpleLogger (UnitTests)
-// instance
 - (NSString *)eventString:(NSString *)string forDate:(NSDate *)date;
-// private
-- (void)truncateFilesBeyondRetentionForDate:(NSDate *)date;
-- (NSDate *)lastRetentionDateForDate:(NSDate *)date;
-- (NSString *)bucketFileLocationForFilename:(NSString *)filename;
-- (NSArray *)logFiles;
 @end

@@ -50,6 +50,29 @@
     return [NSString stringWithFormat:@"%@/%@", logger.folderLocation, filename];
 }
 
++ (void)uploadFile:(NSString *)file completionHandler:(SLUploadCompletionHandler)completionHandler {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    [AmazonUploader uploadFilePathToAmazon:file withBlock:^(AWSTask * _Nonnull task) {
+        logger.currentUploadCount++;
+        
+        if (task.error) {
+            logger.uploadError = task.error;
+        }
+        
+        if (!task.error && ![FileManager filenameIsCurrentDay:file]) {
+            // remove file on success upload
+            [FileManager removeFile:file];
+        }
+        
+        if (logger.currentUploadCount == logger.uploadTotal) {
+            // final upload complete
+            logger.uploadInProgress = NO;
+            completionHandler(logger.uploadError == nil, logger.uploadError);
+        }
+    }];
+}
+
 + (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     

@@ -8,6 +8,7 @@
 
 #import "FileManager.h"
 #import "SimpleLogger.h"
+#import "NSDate+SMA.h"
 
 @implementation FileManager
 
@@ -57,6 +58,69 @@
     NSFileManager *manager = [NSFileManager defaultManager];
     NSError *error;
     [manager removeItemAtPath:filePath error:&error];
+}
+
++ (void)truncateFilesBeyondRetentionForDate:(NSDate *)date {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    
+    NSArray *contents = [FileManager logFiles];
+    
+    NSDate *retainDate = [FileManager lastRetentionDateForDate:date];
+    
+    for (NSString *file in contents) {
+        NSDate *fileDate = [logger.filenameFormatter dateFromString:[file stringByDeletingPathExtension]];
+        
+        if (![fileDate isBetweenDate:[retainDate minTime] andDate:[date maxTime]]) {
+            // file is outside our retention period, delete file
+            NSError *error;
+            NSString *path = [docDirectory stringByAppendingPathComponent:file];
+            [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+        }
+    }
+}
+
++ (NSDate *)lastRetentionDateForDate:(NSDate *)date {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    return [date dateBySubtractingDays:logger.retentionDays - 1]; // drop one to preserve current day
+}
+
++ (void)removeAllLogFiles {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *contents = [FileManager logFiles];
+    
+    for (NSString *file in contents) {
+        NSError *error;
+        NSString *path = [docDirectory stringByAppendingPathComponent:file];
+        [manager removeItemAtPath:path error:&error];
+    }
+}
+
++ (NSArray *)logFiles {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = paths[0];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *contents = [manager contentsOfDirectoryAtPath:docDirectory error:nil];
+    
+    NSMutableArray *files = [[NSMutableArray alloc] init];
+    for (NSString *file in contents) {
+        if ([[file pathExtension] isEqualToString:logger.filenameExtension]) {
+            [files addObject:file];
+        }
+    }
+    
+    if (files.count > 0) {
+        return files;
+    } else {
+        return nil;
+    }
 }
 
 @end

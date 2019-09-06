@@ -15,5 +15,9 @@
 + (NSString *)fullFilePathForFilename:(NSString *)filename;
 + (void)writeLogEntry:(NSString *)log toFilename:(NSString *)filename;
 + (void)removeFile:(NSString *)filename;
++ (void)truncateFilesBeyondRetentionForDate:(NSDate *)date;
++ (NSDate *)lastRetentionDateForDate:(NSDate *)date;
++ (void)removeAllLogFiles;
++ (NSArray *)logFiles;
 
 @end

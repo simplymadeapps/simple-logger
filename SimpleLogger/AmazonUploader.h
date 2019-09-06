@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AWSS3/AWSS3.h>
 
+typedef void(^SLUploadCompletionHandler)(BOOL success, NSError *error);
 typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask *task);
 
 @interface AmazonUploader : NSObject
@@ -16,6 +17,7 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask *task);
 + (BOOL)amazonCredentialsSetCorrectly;
 + (void)initializeAmazonUploadProvider;
 + (NSString *)bucketFileLocationForFilename:(NSString *)filename;
++ (void)uploadFile:(NSString *)file completionHandler:(SLUploadCompletionHandler)completionHandler;
 + (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block;
 
 @end
