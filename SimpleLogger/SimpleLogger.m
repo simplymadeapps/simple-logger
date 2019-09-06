@@ -33,17 +33,20 @@
     self.filenameExtension = kLoggerFilenameExtension;
     self.folderLocation = kLoggerFilenameFolderLocation;
     
-    [self initializeLogFormatters];
+    [self initializeLogFormatter];
+    [self initializeFilenameFormatter];
     
     return self;
 }
 
-- (void)initializeLogFormatters {
+- (void)initializeLogFormatter {
     self.logFormatter = [[NSDateFormatter alloc] init];
     self.logFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss z";
     // set the log date formatter locale so it is readable to English speakers
     [self.logFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
-    
+}
+
+- (void)initializeFilenameFormatter {
     self.filenameFormatter = [[NSDateFormatter alloc] init];
     self.filenameFormatter.dateFormat = kLoggerFilenameDateFormat;
     // set the file name locale so it is readable to English speakers
