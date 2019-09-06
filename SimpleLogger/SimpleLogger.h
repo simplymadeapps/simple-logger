@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AWSS3/AWSS3.h>
-
-typedef void(^SLUploadCompletionHandler)(BOOL success, NSError * _Nullable error);
-typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
+#import "AmazonUploader.h"
 
 @interface SimpleLogger : NSObject
 
@@ -47,12 +45,6 @@ typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 
 /// Shared instance of SimpleLogger
 + (instancetype _Nonnull)sharedLogger;
-
-/**
-Set if logger should allow logging of events
-@param enabled If logging should be allowed
-*/
-+ (void)setLoggingEnabled:(BOOL)enabled;
 
 /**
 Initialize shared logger with Amazon region, bucket, and credentials

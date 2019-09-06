@@ -11,7 +11,6 @@
 #import <OCMock/OCMock.h>
 
 @interface SLTestCase : KIFTestCase
-
 - (NSDate *)testDate;
 - (void)saveDummyFiles:(NSInteger)count;
 - (void)saveRegularFiles:(NSInteger)count;
@@ -20,18 +19,5 @@
 @end
 
 @interface SimpleLogger (UnitTests)
-// instance
-- (void)removeFile:(NSString *)filename;
-- (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block;
 - (NSString *)eventString:(NSString *)string forDate:(NSDate *)date;
-- (BOOL)filenameIsCurrentDay:(NSString *)filename;
-// private
-- (void)truncateFilesBeyondRetentionForDate:(NSDate *)date;
-- (NSDate *)lastRetentionDateForDate:(NSDate *)date;
-- (NSString *)bucketFileLocationForFilename:(NSString *)filename;
-- (NSString *)fullFilePathForFilename:(NSString *)filename;
-- (NSArray *)logFiles;
-// helpers
-- (NSString *)filenameForDate:(NSDate *)date;
-- (BOOL)amazonCredentialsSetCorrectly;
 @end

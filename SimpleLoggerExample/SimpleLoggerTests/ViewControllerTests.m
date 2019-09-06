@@ -8,6 +8,7 @@
 
 #import "SLTestCase.h"
 #import "SimpleLogger.h"
+#import "FileManager.h"
 #import <AWSS3/AWSS3.h>
 
 @interface ViewControllerTests : SLTestCase
@@ -19,14 +20,10 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    [SimpleLogger removeAllLogFiles];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [SimpleLogger removeAllLogFiles];
-    [self deleteRegularFiles];
-    
     [super tearDown];
 }
 
@@ -41,9 +38,8 @@
     
     [tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
     
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
+    NSString *filename = [FileManager filenameForDate:date];
     
     [tester waitForViewWithAccessibilityLabel:filename];
 }
@@ -57,9 +53,8 @@
     
     [tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
     
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
+    NSString *filename = [FileManager filenameForDate:date];
     
     [tester waitForViewWithAccessibilityLabel:filename];
     [tester tapViewWithAccessibilityLabel:filename];
@@ -87,9 +82,8 @@
     
     [tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
     
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
+    NSString *filename = [FileManager filenameForDate:date];
     
     [tester waitForViewWithAccessibilityLabel:filename];
     [tester tapViewWithAccessibilityLabel:filename];
