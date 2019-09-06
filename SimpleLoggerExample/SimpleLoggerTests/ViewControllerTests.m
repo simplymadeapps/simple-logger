@@ -8,6 +8,7 @@
 
 #import "SLTestCase.h"
 #import "SimpleLogger.h"
+#import "FileManager.h"
 #import <AWSS3/AWSS3.h>
 
 @interface ViewControllerTests : SLTestCase
@@ -41,9 +42,8 @@
     
     [tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
     
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
+    NSString *filename = [FileManager filenameForDate:date];
     
     [tester waitForViewWithAccessibilityLabel:filename];
 }
@@ -57,9 +57,8 @@
     
     [tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
     
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
+    NSString *filename = [FileManager filenameForDate:date];
     
     [tester waitForViewWithAccessibilityLabel:filename];
     [tester tapViewWithAccessibilityLabel:filename];
@@ -87,9 +86,8 @@
     
     [tester tapViewWithAccessibilityLabel:@"Add Log" traits:UIAccessibilityTraitButton];
     
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
+    NSString *filename = [FileManager filenameForDate:date];
     
     [tester waitForViewWithAccessibilityLabel:filename];
     [tester tapViewWithAccessibilityLabel:filename];

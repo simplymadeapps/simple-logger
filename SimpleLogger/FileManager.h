@@ -10,7 +10,10 @@
 
 @interface FileManager : NSObject
 
-+ (void)writeLogEntry:(NSString *)log toFilename:(NSString *)filename;
++ (BOOL)filenameIsCurrentDay:(NSString *)filename;
++ (NSString *)filenameForDate:(NSDate *)date;
 + (NSString *)fullFilePathForFilename:(NSString *)filename;
++ (void)writeLogEntry:(NSString *)log toFilename:(NSString *)filename;
++ (void)removeFile:(NSString *)filename;
 
 @end

@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <AWSS3/AWSS3.h>
+#import "AmazonUploader.h"
 
 typedef void(^SLUploadCompletionHandler)(BOOL success, NSError * _Nullable error);
-typedef void(^SLAmazonTaskUploadCompletionHandler)(AWSTask * _Nonnull task);
 
 @interface SimpleLogger : NSObject
 

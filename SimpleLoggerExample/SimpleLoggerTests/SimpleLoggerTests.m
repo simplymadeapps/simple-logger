@@ -8,6 +8,7 @@
 
 #import "SLTestCase.h"
 #import "SimpleLoggerDefaults.h"
+#import "FileManager.h"
 #import "NSDate+SMA.h"
 #import <AWSS3/AWSS3.h>
 
@@ -190,26 +191,6 @@
     XCTAssertEqual(content.count, 2);
 }
 
-- (void)testDeleteFileWorks {
-    [SimpleLogger addLogEvent:@"Create log file for today"];
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docDirectory = paths[0];
-    
-    NSError *error;
-    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
-    
-    // should have 1 file saved
-    XCTAssertEqual(content.count, 1);
-    
-    [logger removeFile:[logger filenameForDate:[NSDate date]]];
-    
-    content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:&error];
-    
-    XCTAssertEqual(content.count, 0);
-}
-
 - (void)testUploadRemovesPreviousDaysFiles {
     [SimpleLogger addLogEvent:@"Create file for today"];
     [self saveDummyFiles:2];
@@ -224,9 +205,8 @@
     XCTAssertEqual(content.count, 3);
     
     [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
     
-    __block id mock = OCMPartialMock(logger);
+    __block id mock = OCMClassMock([AmazonUploader class]);
     [[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
         SLAWSTask *task = [[SLAWSTask alloc] init];
         handler(task);
@@ -244,9 +224,7 @@
         // should have 1 file saved
         XCTAssertEqual(content.count, 1);
         
-        [mock verify];
-        [mock stopMocking];
-        mock = nil;
+        [self verifyAndStopMocking:mock];
         
         [expect fulfill];
     }];
@@ -355,7 +333,7 @@
     [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
-    __block id mock = OCMPartialMock(logger);
+    __block id mock = OCMClassMock([AmazonUploader class]);
     [[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
         SLAWSTask *task = [[SLAWSTask alloc] init];
         handler(task);
@@ -384,7 +362,7 @@
     __block id taskMock = OCMPartialMock(task);
     [[[taskMock stub] andReturn:[NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil]] error];
     
-    __block id mock = OCMPartialMock(logger);
+    __block id mock = OCMClassMock([AmazonUploader class]);
     [[mock stub] uploadFilePathToAmazon:[OCMArg any] withBlock:[OCMArg checkWithBlock:^BOOL(SLAmazonTaskUploadCompletionHandler handler) {
         handler(taskMock);
         return YES;
@@ -408,35 +386,6 @@
         
         [expect fulfill];
     }];
-    
-    [self waitForExpectationsWithTimeout:5 handler:nil];
-}
-
-- (void)testUploadFileToAmazonReturnsBlock {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    AWSTask *task = [[AWSTask alloc] init];
-    NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
-    id taskMock = OCMPartialMock(task);
-    [[[taskMock stub] andReturn:error] error];
-    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-    id transferMock = OCMPartialMock(transferUtility);
-    //[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
-    [[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
-    
-    XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
-    
-    [logger uploadFilePathToAmazon:@"test.log" withBlock:^(AWSTask * _Nonnull task) {
-        [expect fulfill];
-    }];
-    
-    [taskMock verify];
-    [taskMock stopMocking];
-    taskMock = nil;
-    
-    [transferMock verify];
-    [transferMock stopMocking];
-    transferMock = nil;
     
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
@@ -521,16 +470,6 @@
     XCTAssertEqual(content.count, 8);
 }
 
-- (void)testAmazonBucketKeySetsCorrectly {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.folderLocation = kLoggerFilenameFolderLocation;
-    
-    NSString *filePath = [logger bucketFileLocationForFilename:@"test.log"];
-    
-    XCTAssertNotNil(filePath);
-    XCTAssertEqualObjects(filePath, @"SimpleLogger/test.log");
-}
-
 - (void)testFileDateFormatChangeDeletesFiles {
     [self saveDummyFiles:8];
     
@@ -549,69 +488,6 @@
     XCTAssertEqual(content.count, 1);
     
     [SimpleLogger removeAllLogFiles];
-}
-
-- (void)testFilenameIsCurrentDayReturnsYES {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    NSDate *date = [NSDate date];
-    NSString *filename = [logger filenameForDate:date];
-    
-    XCTAssertTrue([logger filenameIsCurrentDay:filename]);
-}
-
-- (void)testFilenameIsCurrentDayReturnsNO {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    NSDate *date = [[NSDate date] dateBySubtractingDays:1];
-    NSString *filename = [logger filenameForDate:date];
-    
-    XCTAssertFalse([logger filenameIsCurrentDay:filename]);
-}
-
-#pragma mark - Helpers
-- (void)testFilenameForDateReturnsCorrectly {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    NSDate *date = [self testDate];
-    NSString *filename = [logger filenameForDate:date];
-    
-    XCTAssertNotNil(filename);
-    XCTAssertEqualObjects(filename, @"2017-07-15.log");
-}
-
-- (void)testFilenameForDateReturnsEnglishFilenameWhenLocaleDifferent {
-    id localeMock = OCMClassMock([NSLocale class]);
-    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ar"];
-    [[[localeMock stub] andReturn:locale] currentLocale];
-    
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    NSDate *date = [self testDate];
-    NSString *filename = [logger filenameForDate:date];
-    
-    XCTAssertNotNil(filename);
-    XCTAssertEqualObjects(filename, @"2017-07-15.log");
-    
-    [self verifyAndStopMocking:localeMock];
-}
-
-- (void)testCredentialsOkReturnsYES {
-    [SimpleLogger initWithAWSRegion:AWSRegionEUWest1 bucket:@"bucket" accessToken:@"token" secret:@"secret"];
-    
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    XCTAssertTrue([logger amazonCredentialsSetCorrectly]);
-}
-
-- (void)testCredentialsOkReturnsFalse {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    XCTAssertFalse([logger amazonCredentialsSetCorrectly]);
-}
-
-- (void)testCredentialsOkReturnsFalseWithPartials {
-    [SimpleLogger initWithAWSRegion:0 bucket:@"" accessToken:@"" secret:@"secret"];
-    
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    XCTAssertFalse([logger amazonCredentialsSetCorrectly]);
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "SLTestCase.h"
+#import "FileManager.h"
 #import "SimpleLoggerDefaults.h"
 #import "NSDate+SMA.h"
 #import <AWSS3/AWSS3.h>
@@ -46,8 +47,6 @@
 
 - (void)saveDummyFiles:(NSInteger)count {
     // save empty test files
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
     NSDate *date = [self testDate];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -56,7 +55,7 @@
     while (count > 0) {
         NSError *error;
         NSString *testLog = @"test log";
-        NSString *filename = [logger filenameForDate:[date dateBySubtractingDays:count]];
+        NSString *filename = [FileManager filenameForDate:[date dateBySubtractingDays:count]];
         NSString *path = [docDirectory stringByAppendingPathComponent:filename];
         [testLog writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
         

@@ -7,8 +7,25 @@
 //
 
 #import "FileManager.h"
+#import "SimpleLogger.h"
 
 @implementation FileManager
+
++ (BOOL)filenameIsCurrentDay:(NSString *)filename {
+    NSString *todayFilename = [FileManager filenameForDate:[NSDate date]];
+    if ([todayFilename isEqualToString:filename]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
++ (NSString *)filenameForDate:(NSDate *)date {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    NSString *filename = [logger.filenameFormatter stringFromDate:date];
+    return [NSString stringWithFormat:@"%@.%@", filename, logger.filenameExtension];
+}
 
 + (NSString *)fullFilePathForFilename:(NSString *)filename {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -32,6 +49,14 @@
         NSError *error;
         [log writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
     }
+}
+
++ (void)removeFile:(NSString *)filename {
+    NSString *filePath = [FileManager fullFilePathForFilename:filename];
+    
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSError *error;
+    [manager removeItemAtPath:filePath error:&error];
 }
 
 @end

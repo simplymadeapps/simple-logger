@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		BA4DFC422322B790009FEE36 /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4DFC412322B790009FEE36 /* FileManager.m */; };
 		BA4DFC442322B8F3009FEE36 /* FileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4DFC432322B8F3009FEE36 /* FileManagerTests.m */; };
+		BA4DFC4A2322C1D6009FEE36 /* AmazonUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4DFC492322C1D6009FEE36 /* AmazonUploader.m */; };
+		BA4DFC4C2322C588009FEE36 /* AmazonUploaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4DFC4B2322C588009FEE36 /* AmazonUploaderTests.m */; };
 		BA9D37DE1F34C9FF0048C3D5 /* LogDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */; };
 		BA9D37E11F34FADD0048C3D5 /* NSDate+SMA.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */; };
 		BA9D37E31F34FFE30048C3D5 /* NSDate+SMATests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */; };
@@ -44,6 +46,9 @@
 		BA4DFC402322B790009FEE36 /* FileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileManager.h; path = ../SimpleLogger/FileManager.h; sourceTree = "<group>"; };
 		BA4DFC412322B790009FEE36 /* FileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FileManager.m; path = ../SimpleLogger/FileManager.m; sourceTree = "<group>"; };
 		BA4DFC432322B8F3009FEE36 /* FileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileManagerTests.m; sourceTree = "<group>"; };
+		BA4DFC482322C1D6009FEE36 /* AmazonUploader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AmazonUploader.h; path = ../SimpleLogger/AmazonUploader.h; sourceTree = "<group>"; };
+		BA4DFC492322C1D6009FEE36 /* AmazonUploader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AmazonUploader.m; path = ../SimpleLogger/AmazonUploader.m; sourceTree = "<group>"; };
+		BA4DFC4B2322C588009FEE36 /* AmazonUploaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AmazonUploaderTests.m; sourceTree = "<group>"; };
 		BA9D37DC1F34C9FF0048C3D5 /* LogDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogDetailViewController.m; sourceTree = SOURCE_ROOT; };
 		BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+SMA.h"; path = "../SimpleLogger/NSDate+SMA.h"; sourceTree = "<group>"; };
@@ -119,6 +124,8 @@
 				BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */,
 				BA4DFC402322B790009FEE36 /* FileManager.h */,
 				BA4DFC412322B790009FEE36 /* FileManager.m */,
+				BA4DFC482322C1D6009FEE36 /* AmazonUploader.h */,
+				BA4DFC492322C1D6009FEE36 /* AmazonUploader.m */,
 				BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */,
 				BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */,
 				BA9EBADA1F27EFFF002DFF44 /* SimpleLoggerDefaults.h */,
@@ -134,6 +141,7 @@
 				BA9D37E81F38A8220048C3D5 /* SLTestCase.m */,
 				BA9EBAD01F27E4D8002DFF44 /* SimpleLoggerTests.m */,
 				BA4DFC432322B8F3009FEE36 /* FileManagerTests.m */,
+				BA4DFC4B2322C588009FEE36 /* AmazonUploaderTests.m */,
 				BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */,
 				BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */,
 			);
@@ -379,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA9D37E51F389F150048C3D5 /* ViewControllerTests.m in Sources */,
+				BA4DFC4C2322C588009FEE36 /* AmazonUploaderTests.m in Sources */,
 				BA9D37E31F34FFE30048C3D5 /* NSDate+SMATests.m in Sources */,
 				BA9D37E91F38A8220048C3D5 /* SLTestCase.m in Sources */,
 				BA9EBAD11F27E4D8002DFF44 /* SimpleLoggerTests.m in Sources */,
@@ -395,6 +404,7 @@
 				BAE372E71F27D37A00300F7E /* main.m in Sources */,
 				BA9D37DE1F34C9FF0048C3D5 /* LogDetailViewController.m in Sources */,
 				BA9D37E11F34FADD0048C3D5 /* NSDate+SMA.m in Sources */,
+				BA4DFC4A2322C1D6009FEE36 /* AmazonUploader.m in Sources */,
 				BA4DFC422322B790009FEE36 /* FileManager.m in Sources */,
 				BA9EBAC71F27E1FC002DFF44 /* SimpleLogger.m in Sources */,
 			);
