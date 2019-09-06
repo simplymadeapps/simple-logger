@@ -49,12 +49,6 @@ typedef void(^SLUploadCompletionHandler)(BOOL success, NSError * _Nullable error
 + (instancetype _Nonnull)sharedLogger;
 
 /**
-Set if logger should allow logging of events
-@param enabled If logging should be allowed
-*/
-+ (void)setLoggingEnabled:(BOOL)enabled;
-
-/**
 Initialize shared logger with Amazon region, bucket, and credentials
 @param region Amazon S3 region
 @param bucket Amazon S3 bucket

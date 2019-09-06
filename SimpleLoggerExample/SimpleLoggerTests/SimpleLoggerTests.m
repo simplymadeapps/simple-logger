@@ -35,6 +35,7 @@
     
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.uploadInProgress = NO;
+    logger.loggingEnabled = YES;
 }
 
 - (void)tearDown {
@@ -57,18 +58,6 @@
     XCTAssertNotNil(logger.filenameFormatter);
     XCTAssertEqual(logger.retentionDays, kLoggerRetentionDaysDefault);
     XCTAssertEqualObjects(logger.filenameExtension, kLoggerFilenameExtension);
-}
-
-- (void)testSetLoggingEnabledWorksCorrectly {
-    [SimpleLogger setLoggingEnabled:NO];
-    
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    XCTAssertFalse(logger.loggingEnabled);
-    
-    [SimpleLogger setLoggingEnabled:YES];
-    
-    XCTAssertTrue(logger.loggingEnabled);
 }
 
 - (void)testAmazonInitStoresValuesCorrectly {
@@ -118,7 +107,7 @@
     
     [SimpleLogger addLogEvent:@"my test string"];
     
-    [SimpleLogger setLoggingEnabled:NO];
+    logger.loggingEnabled = NO;
     
     [SimpleLogger addLogEvent:@"other test string"];
     

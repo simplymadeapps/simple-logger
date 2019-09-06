@@ -53,11 +53,6 @@
     [self.filenameFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
 }
 
-+ (void)setLoggingEnabled:(BOOL)enabled {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.loggingEnabled = enabled;
-}
-
 + (void)initWithAWSRegion:(AWSRegionType)region bucket:(NSString *)bucket accessToken:(NSString *)accessToken secret:(NSString *)secret {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.awsRegion = region;
