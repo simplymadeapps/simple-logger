@@ -16,9 +16,7 @@ pipeline {
         stage ('Pod Install') {
           steps {
             // install Pods
-            sh 'cd SimpleLoggerExample'
-            sh 'pod install'
-            sh 'cd ..'
+            sh 'cd SimpleLoggerExample && pod install'
           }
         }
       }
