@@ -11,7 +11,8 @@ pipeline {
   }
 
   stages {
-    stages {
+    stage ('Pod Install') {
+      stages {
         stage ('Pod Install') {
           steps {
             // install Pods
