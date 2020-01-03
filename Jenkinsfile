@@ -11,22 +11,32 @@ pipeline {
   }
 
   stages {
+    stages {
+        stage ('Pod Install') {
+          steps {
+            // install Pods
+            sh 'pod install'
+          }
+        }
+      }
+    }
+
     stage ('Testing - Latest') {
       stages {
         stage ('Simulator Setup') {
           steps {
             sh 'xcrun simctl shutdown all'
-            sh 'xcrun simctl delete iOSTestDevice || echo Failed to delete iOS 10 device'
+            sh 'xcrun simctl delete iOSTestDevice || echo Failed to delete iOS device'
 
             sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
-            sh 'xcrun simctl create iOSTestDevice "iPhone X" com.apple.CoreSimulator.SimRuntime.iOS-12-4'
+            sh 'xcrun simctl create iOSTestDevice "iPhone 11" com.apple.CoreSimulator.SimRuntime.iOS-13-2'
             sh 'xcrun instruments -w "iOSTestDevice" || sleep 30'
           }
         }
 
         stage ('Run Tests') {
           steps {
-            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOSTestDevice,OS=12.4" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
+            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOSTestDevice,OS=13.2.2" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
           }
         }
       }
@@ -46,7 +56,7 @@ pipeline {
            from: 'notice@simpleinout.com',
        mimeType: 'text/html',
         subject: "Jenkins Build Success: ${env.JOB_NAME}",
-             to: "bill@simplymadeapps.com";
+             to: "contact@simplymadeapps.com";
     }
 
     failure {
