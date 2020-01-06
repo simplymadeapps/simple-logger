@@ -53,7 +53,7 @@ pipeline {
            from: 'notice@simpleinout.com',
        mimeType: 'text/html',
         subject: "Jenkins Build Success: ${env.JOB_NAME}",
-             to: "contact@simplymadeapps.com";
+             to: "bill@simplymadeapps.com";
     }
 
     failure {
@@ -62,7 +62,7 @@ pipeline {
            from: 'notice@simpleinout.com',
        mimeType: 'text/html',
         subject: "Jenkins Build Failure: ${env.JOB_NAME}",
-             to: "bill@simplymadeapps.com";
+             to: "contact@simplymadeapps.com";
     }
   }
 }
