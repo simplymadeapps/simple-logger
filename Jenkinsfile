@@ -11,22 +11,101 @@ pipeline {
   }
 
   stages {
-    stage ('Testing - Latest') {
+    stage ('Pod Install') {
+      steps {
+        // install Pods
+        sh 'cd SimpleLoggerExample && pod install'
+      }
+    }
+
+    stage ('Testing - iOS 10') {
+      when {
+        branch "master"
+      }
       stages {
         stage ('Simulator Setup') {
           steps {
             sh 'xcrun simctl shutdown all'
-            sh 'xcrun simctl delete iOSTestDevice || echo Failed to delete iOS 10 device'
+            sh 'xcrun simctl delete iOS10TestDevice || echo Failed to delete iOS 10 device'
 
             sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
-            sh 'xcrun simctl create iOSTestDevice "iPhone X" com.apple.CoreSimulator.SimRuntime.iOS-12-4'
-            sh 'xcrun instruments -w "iOSTestDevice" || sleep 30'
+            sh 'xcrun simctl create iOS10TestDevice "iPhone 6" com.apple.CoreSimulator.SimRuntime.iOS-10-3'
+            sh 'xcrun instruments -w "iOS10TestDevice" || sleep 30'
           }
         }
 
         stage ('Run Tests') {
           steps {
-            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOSTestDevice,OS=12.4" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
+            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOS10TestDevice,OS=10.3.1" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
+          }
+        }
+      }
+    }
+
+    stage ('Testing - iOS 11') {
+      when {
+        branch "master"
+      }
+      stages {
+        stage ('Simulator Setup') {
+          steps {
+            sh 'xcrun simctl shutdown all'
+            sh 'xcrun simctl delete iOS11TestDevice || echo Failed to delete iOS 11 device'
+
+            sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
+            sh 'xcrun simctl create iOS11TestDevice "iPhone 7" com.apple.CoreSimulator.SimRuntime.iOS-11-4'
+            sh 'xcrun instruments -w "iOS11TestDevice" || sleep 30'
+          }
+        }
+
+        stage ('Run Tests') {
+          steps {
+            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOS11TestDevice,OS=11.4" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
+          }
+        }
+      }
+    }
+
+    stage ('Testing - iOS 12') {
+      when {
+        branch "master"
+      }
+      stages {
+        stage ('Simulator Setup') {
+          steps {
+            sh 'xcrun simctl shutdown all'
+            sh 'xcrun simctl delete iOS12TestDevice || echo Failed to delete iOS 12 device'
+
+            sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
+            sh 'xcrun simctl create iOS12TestDevice "iPhone 6" com.apple.CoreSimulator.SimRuntime.iOS-12-2'
+            sh 'xcrun instruments -w "iOS12TestDevice" || sleep 30'
+          }
+        }
+
+        stage ('Run Tests') {
+          steps {
+            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOS12TestDevice,OS=12.2" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
+          }
+        }
+      }
+    }
+
+    stage ('Testing - iOS 13') {
+      stages {
+        stage ('Simulator Setup') {
+          steps {
+            sh 'xcrun simctl shutdown all'
+            sh 'xcrun simctl delete iOS13TestDevice || echo Failed to delete iOS device'
+
+            sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
+            sh 'xcrun simctl create iOS13TestDevice "iPhone 11" com.apple.CoreSimulator.SimRuntime.iOS-13-2'
+            sh 'xcrun instruments -w "iOS13TestDevice" || sleep 30'
+          }
+        }
+
+        stage ('Run Tests') {
+          steps {
+            sh 'xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iOS13TestDevice,OS=13.2.2" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" clean build test'
           }
         }
       }
@@ -37,7 +116,10 @@ pipeline {
     cleanup {
       sh 'xcrun simctl shutdown all'
       sh 'rm -rf ~/Library/Developer/Xcode/DerivedData'
-      sh 'xcrun simctl delete iOSTestDevice || echo Failed to delete iOSTestDevice' 
+      sh 'xcrun simctl delete iOS10TestDevice || echo Failed to delete iOS10TestDevice'
+      sh 'xcrun simctl delete iOS11TestDevice || echo Failed to delete iOS11TestDevice'
+      sh 'xcrun simctl delete iOS12TestDevice || echo Failed to delete iOS12TestDevice'
+      sh 'xcrun simctl delete iOS13TestDevice || echo Failed to delete iOS13TestDevice'
     }
 
     success {
@@ -55,7 +137,7 @@ pipeline {
            from: 'notice@simpleinout.com',
        mimeType: 'text/html',
         subject: "Jenkins Build Failure: ${env.JOB_NAME}",
-             to: "bill@simplymadeapps.com";
+             to: "contact@simplymadeapps.com";
     }
   }
 }

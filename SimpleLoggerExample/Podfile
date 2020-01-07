@@ -4,15 +4,15 @@ platform :ios, :deployment_target => 8.0
 use_frameworks!
 
 def shared_pods
-    pod 'AWSS3'
+  pod 'AWSS3', '~> 2.10'
 end
 
 target 'SimpleLogger' do
-    shared_pods
+  shared_pods
 end
 
 target 'SimpleLoggerTests' do
-    shared_pods
-    pod 'KIF', :configurations => ['Debug']
-    pod 'OCMock', :configurations => ['Debug']
+  shared_pods
+  pod 'KIF', :configurations => ['Debug']
+  pod 'OCMock', :configurations => ['Debug']
 end
