@@ -110,27 +110,35 @@
 }
 
 - (void)testEventStringGetsFormattedCorrectly_DefaultLocale {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
-    
-    XCTAssertNotNil(eventString);
-    XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
+    if (@available(iOS 11.0, *)) {
+        // runtimes older than iOS 11 use UTC timezones which makes this test fail
+        // https://forums.developer.apple.com/thread/80172
+        SimpleLogger *logger = [SimpleLogger sharedLogger];
+        
+        NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
+        
+        XCTAssertNotNil(eventString);
+        XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
+    }
 }
 
 - (void)testEventStringGetsFormattedCorrectly_NonENLocale {
-    id localeMock = OCMClassMock([NSLocale class]);
-    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ar"];
-    [[[localeMock stub] andReturn:locale] currentLocale];
-    
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
-    
-    XCTAssertNotNil(eventString);
-    XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
-    
-    [self verifyAndStopMocking:localeMock];
+    if (@available(iOS 11.0, *)) {
+        // runtimes older than iOS 11 use UTC timezones which makes this test fail
+        // https://forums.developer.apple.com/thread/80172
+        id localeMock = OCMClassMock([NSLocale class]);
+        NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ar"];
+        [[[localeMock stub] andReturn:locale] currentLocale];
+        
+        SimpleLogger *logger = [SimpleLogger sharedLogger];
+        
+        NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
+        
+        XCTAssertNotNil(eventString);
+        XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
+        
+        [self verifyAndStopMocking:localeMock];
+    }
 }
 
 - (void)testRemoveAllFilesWorksCorrectly {	
