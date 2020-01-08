@@ -112,10 +112,12 @@
 - (void)testEventStringGetsFormattedCorrectly_DefaultLocale {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
+    NSString *dateString = [logger.logFormatter stringFromDate:[self testDate]];
     NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
+    NSString *testString = [NSString stringWithFormat:@"[%@] test event", dateString];
     
     XCTAssertNotNil(eventString);
-    XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
+    XCTAssertEqualObjects(eventString, testString);
 }
 
 - (void)testEventStringGetsFormattedCorrectly_NonENLocale {
@@ -125,10 +127,12 @@
     
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
+    NSString *dateString = [logger.logFormatter stringFromDate:[self testDate]];
     NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
+    NSString *testString = [NSString stringWithFormat:@"[%@] test event", dateString];
     
     XCTAssertNotNil(eventString);
-    XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
+    XCTAssertEqualObjects(eventString, testString);
     
     [self verifyAndStopMocking:localeMock];
 }
