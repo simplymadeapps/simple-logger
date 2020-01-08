@@ -110,35 +110,31 @@
 }
 
 - (void)testEventStringGetsFormattedCorrectly_DefaultLocale {
-    if (@available(iOS 11.0, *)) {
-        // runtimes older than iOS 11 use UTC timezones which makes this test fail
-        // https://forums.developer.apple.com/thread/80172
-        SimpleLogger *logger = [SimpleLogger sharedLogger];
-        
-        NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
-        
-        XCTAssertNotNil(eventString);
-        XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
-    }
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    NSString *dateString = [logger.logFormatter stringFromDate:[self testDate]];
+    NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
+    NSString *testString = [NSString stringWithFormat:@"[%@] test event", dateString];
+    
+    XCTAssertNotNil(eventString);
+    XCTAssertEqualObjects(eventString, testString);
 }
 
 - (void)testEventStringGetsFormattedCorrectly_NonENLocale {
-    if (@available(iOS 11.0, *)) {
-        // runtimes older than iOS 11 use UTC timezones which makes this test fail
-        // https://forums.developer.apple.com/thread/80172
-        id localeMock = OCMClassMock([NSLocale class]);
-        NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ar"];
-        [[[localeMock stub] andReturn:locale] currentLocale];
-        
-        SimpleLogger *logger = [SimpleLogger sharedLogger];
-        
-        NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
-        
-        XCTAssertNotNil(eventString);
-        XCTAssertEqualObjects(eventString, @"[2017-07-15 10:10:00 CDT] test event");
-        
-        [self verifyAndStopMocking:localeMock];
-    }
+    id localeMock = OCMClassMock([NSLocale class]);
+    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ar"];
+    [[[localeMock stub] andReturn:locale] currentLocale];
+    
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    NSString *dateString = [logger.logFormatter stringFromDate:[self testDate]];
+    NSString *eventString = [logger eventString:@"test event" forDate:[self testDate]];
+    NSString *testString = [NSString stringWithFormat:@"[%@] test event", dateString];
+    
+    XCTAssertNotNil(eventString);
+    XCTAssertEqualObjects(eventString, testString);
+    
+    [self verifyAndStopMocking:localeMock];
 }
 
 - (void)testRemoveAllFilesWorksCorrectly {	
