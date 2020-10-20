@@ -41,7 +41,7 @@
     
     AWSStaticCredentialsProvider *provider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:logger.awsAccessToken secretKey:logger.awsSecret];
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:provider];
-    AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
+    [AWSS3TransferUtility registerS3TransferUtilityWithConfiguration:configuration forKey:@"SimpleLoggerTransferUtility"];
 }
 
 + (NSString *)bucketFileLocationForFilename:(NSString *)filename {
@@ -76,7 +76,7 @@
 + (void)uploadFilePathToAmazon:(NSString *)filename withBlock:(SLAmazonTaskUploadCompletionHandler)block {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
-    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
+    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
     [transferUtility uploadFile:[NSURL fileURLWithPath:[FileManager fullFilePathForFilename:filename]] bucket:logger.awsBucket key:[AmazonUploader bucketFileLocationForFilename:filename] contentType:@"text/plain" expression:nil completionHandler:^(AWSS3TransferUtilityUploadTask * _Nonnull task, NSError * _Nullable error) {
         block((AWSTask *)task);
     }];

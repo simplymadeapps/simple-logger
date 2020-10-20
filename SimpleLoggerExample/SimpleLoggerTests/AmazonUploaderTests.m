@@ -10,6 +10,9 @@
 #import "SimpleLoggerDefaults.h"
 #import "AmazonUploader.h"
 
+@interface TestTransferUtility : AWSS3TransferUtility
+@end
+
 @interface AmazonUploaderTests : SLTestCase
 
 @end
@@ -26,6 +29,7 @@
     [super tearDown];
 }
 
+#pragma mark - amazonCredentialsSetCorrectly
 - (void)testCredentialsOkReturnsYES {
     [SimpleLogger initWithAWSRegion:AWSRegionEUWest1 bucket:@"bucket" accessToken:@"token" secret:@"secret"];
     
@@ -48,6 +52,29 @@
     XCTAssertFalse([AmazonUploader amazonCredentialsSetCorrectly]);
 }
 
+#pragma mark - initializeAmazonUploadProvider
+- (void)testInitializeAmazonUploadProvider {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.awsAccessToken = @"access";
+    logger.awsSecret = @"secret";
+    
+    id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
+    [[[providerMock expect] andReturn:providerMock] alloc];
+    (void)[[[providerMock expect] andReturn:providerMock] initWithAccessKey:@"access" secretKey:@"secret"];
+    
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
+        XCTAssertEqual(config.regionType, AWSRegionUSEast1);
+        return YES;
+    }] forKey:@"SimpleLoggerTransferUtility"];
+    
+    [AmazonUploader initializeAmazonUploadProvider];
+    
+    [self verifyAndStopMocking:providerMock];
+    [self verifyAndStopMocking:transferMock];
+}
+
+#pragma mark - bucketFileLocationForFilename:
 - (void)testAmazonBucketKeySetsCorrectly {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.folderLocation = kLoggerFilenameFolderLocation;
@@ -58,15 +85,20 @@
     XCTAssertEqualObjects(filePath, @"SimpleLogger/test.log");
 }
 
+#pragma mark - uploadFilePathToAmazon:withBlock:
 - (void)testUploadFileToAmazonReturnsBlock {
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"bucket" accessToken:@"access" secret:@"secret"];
+    
     AWSTask *task = [[AWSTask alloc] init];
     NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
     id taskMock = OCMPartialMock(task);
     [[[taskMock stub] andReturn:error] error];
-    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-    id transferMock = OCMPartialMock(transferUtility);
-    //[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
-    [[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
+    AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
+    XCTAssertNotNil(utility);
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[[transferMock stub] andReturn:utility] S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
+    id utilityMock = OCMPartialMock(utility);
+    [[[utilityMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
     
     XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
     
