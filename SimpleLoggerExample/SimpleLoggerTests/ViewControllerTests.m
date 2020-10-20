@@ -67,7 +67,7 @@
 - (void)testLogDetailViewUploadIsCalled {
     [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
     
-    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
+    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
     
     AWSTask *task = [[AWSTask alloc] init];
     id taskMock = OCMPartialMock(task);
