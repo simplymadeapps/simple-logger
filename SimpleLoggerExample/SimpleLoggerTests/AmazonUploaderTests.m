@@ -10,9 +10,6 @@
 #import "SimpleLoggerDefaults.h"
 #import "AmazonUploader.h"
 
-@interface TestTransferUtility : AWSS3TransferUtility
-@end
-
 @interface AmazonUploaderTests : SLTestCase
 
 @end
