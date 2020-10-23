@@ -1,6 +1,6 @@
 language: objective-c
 cache: cocoapods
-podfile: SimpleLoggerExample/
+podfile: SimpleLoggerExample
 osx_image: xcode11.6
 xcode_project: SimpleLoggerExample/SimpleLogger.xcodeproj
 xcode_workspace: SimpleLoggerExample/SimpleLogger.xcworkspace
