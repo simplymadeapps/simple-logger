@@ -6,6 +6,8 @@ osx_image: xcode11.6
 xcode_workspace: SimpleLoggerExample/SimpleLogger.xcworkspace
 xcode_scheme: SimpleLogger
 
+install: gem install slather
+
 stages:
   - name: ios11Testing
     if: branch = master
