@@ -15,8 +15,8 @@ stages:
 jobs:
   include:
     stage: setup
-    name: "Pod Install"
     script: cd SimpleLoggerExample pod install
+    script: cd ..
     stage: ios11Testing
     script: xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iPhone X,OS=11.4" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test
     stage: ios12Testing
