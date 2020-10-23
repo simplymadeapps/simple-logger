@@ -1,0 +1,6 @@
+language: objective-c
+osx_image: xcode11.6
+xcode_project: SimpleLogger.xcodeproj
+xcode_workspace: SimpleLogger.xcworkspace
+xcode_scheme: SimpleLogger
+xcode_sdk: iphonesimulator13.6
