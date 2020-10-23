@@ -1,15 +1,12 @@
 language: objective-c
 os: osx
 cache: cocoapods
+podfile: SimpleLoggerExample/
 osx_image: xcode11.6
 xcode_workspace: SimpleLoggerExample/SimpleLogger.xcworkspace
 xcode_scheme: SimpleLogger
 
-before_install:
-  - gem install cocoapods
-  - pod repo update
 stages:
-  - setup
   - name: ios11Testing
     if: branch = master
   - name: ios12Testing
@@ -18,18 +15,17 @@ stages:
 
 jobs:
   include:
-    - stage: setup
-      script: 
-        - cd SimpleLoggerExample && pod install && cd ..
-
     - stage: ios11Testing
       script: 
+        - cd SimpleLoggerExample && pod install && cd ..
         - xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iPhone X,OS=11.4" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test
     
     - stage: ios12Testing
       script: 
+        - cd SimpleLoggerExample && pod install && cd ..
         - xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iPhone 11,OS=12.4" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test
     
     - stage: ios13Testing
       script: 
+        - cd SimpleLoggerExample && pod install && cd ..
         - xcodebuild CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY= PROVISIONING_PROFILE= GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -destination "platform=iOS Simulator,name=iPhone 11,OS=13.6" -workspace "SimpleLoggerExample/SimpleLogger.xcworkspace" -scheme "SimpleLogger" test
