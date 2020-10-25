@@ -13,7 +13,7 @@ DEPENDENCIES:
   - OCMock
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AWSCore
     - AWSS3
     - KIF
@@ -25,6 +25,6 @@ SPEC CHECKSUMS:
   KIF: 52e1af1a78cf6fe4ec6777b14776f3dd2eccc32e
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
 
-PODFILE CHECKSUM: 678403d85aa9fe5f7c3e61d35c99de31573c78f4
+PODFILE CHECKSUM: 22a60b70b2096e1035b77bb29ae18947e9d0ad54
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.3
