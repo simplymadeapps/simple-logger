@@ -38,11 +38,12 @@
     [super tearDown];
 }
 
-#pragma mark - Public Methods
+#pragma mark - sharedLogger
 - (void)testSharedLoggerNotNil {
     XCTAssertNotNil([SimpleLogger sharedLogger]);
 }
 
+#pragma mark - init
 - (void)testLoggerInitsWithCorrectDefaults {
     SimpleLogger *logger = [[SimpleLogger alloc] init];
     
@@ -52,22 +53,20 @@
     XCTAssertEqualObjects(logger.filenameExtension, kLoggerFilenameExtension);
 }
 
+#pragma mark - initWithAWSRegion:bucket:accessToken:secret:
 - (void)testAmazonInitStoresValuesCorrectly {
     [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
     
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
-    XCTAssertNotNil(logger);
-    XCTAssertNotNil(logger.awsBucket);
-    XCTAssertNotNil(logger.awsAccessToken);
-    XCTAssertNotNil(logger.awsSecret);
-    
     XCTAssertEqual(logger.awsRegion, AWSRegionUSEast1);
     XCTAssertEqualObjects(logger.awsBucket, @"test_bucket");
     XCTAssertEqualObjects(logger.awsAccessToken, @"test_token");
     XCTAssertEqualObjects(logger.awsSecret, @"test_secret");
+    XCTAssertTrue([logger.awsConfigurationKey containsString:@"SimpleLogger.AWS.ConfigKey."]);
 }
 
+#pragma mark - addLogEvent:
 - (void)testLogEvent {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     NSDate *date = [NSDate date];
@@ -109,6 +108,7 @@
     XCTAssertEqualObjects(log, compare);
 }
 
+#pragma mark - eventString:forDate:
 - (void)testEventStringGetsFormattedCorrectly_DefaultLocale {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
@@ -137,6 +137,7 @@
     [self verifyAndStopMocking:localeMock];
 }
 
+#pragma mark - removeAllLogFiles
 - (void)testRemoveAllFilesWorksCorrectly {	
     [self saveDummyFiles:5];
     
@@ -176,6 +177,7 @@
     XCTAssertEqual(content.count, 2);
 }
 
+#pragma mark - uploadAllFilesWithCompletion:
 - (void)testUploadRemovesPreviousDaysFiles {
     [SimpleLogger addLogEvent:@"Create file for today"];
     [self saveDummyFiles:2];

@@ -63,7 +63,7 @@
     [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
         XCTAssertEqual(config.regionType, AWSRegionUSEast1);
         return YES;
-    }] forKey:@"SimpleLoggerTransferUtility"];
+    }] forKey:logger.awsConfigurationKey];
     
     [AmazonUploader initializeAmazonUploadProvider];
     
@@ -90,7 +90,7 @@
     NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
     id taskMock = OCMPartialMock(task);
     [[[taskMock stub] andReturn:error] error];
-    AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
+    AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:[SimpleLogger sharedLogger].awsConfigurationKey];
     XCTAssertNotNil(utility);
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[[transferMock stub] andReturn:utility] S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
