@@ -55,6 +55,9 @@
 
 #pragma mark - initWithAWSRegion:bucket:accessToken:secret:
 - (void)testAmazonInitStoresValuesCorrectly {
+    id uploadMock = OCMClassMock([AmazonUploader class]);
+    [[uploadMock expect] initializeAmazonUploadProvider];
+    
     [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"test_bucket" accessToken:@"test_token" secret:@"test_secret"];
     
     SimpleLogger *logger = [SimpleLogger sharedLogger];
@@ -63,7 +66,7 @@
     XCTAssertEqualObjects(logger.awsBucket, @"test_bucket");
     XCTAssertEqualObjects(logger.awsAccessToken, @"test_token");
     XCTAssertEqualObjects(logger.awsSecret, @"test_secret");
-    XCTAssertTrue([logger.awsConfigurationKey containsString:@"SimpleLogger.AWS.ConfigKey."]);
+    [self verifyAndStopMocking:uploadMock];
 }
 
 #pragma mark - addLogEvent:

@@ -59,7 +59,6 @@
     logger.awsBucket = bucket;
     logger.awsAccessToken = accessToken;
     logger.awsSecret = secret;
-    logger.awsConfigurationKey = [NSString stringWithFormat:@"SimpleLogger.AWS.ConfigKey.%@",[NSUUID UUID].UUIDString];
     
     // initialize Amazon Upload Provider so it is ready for upload when needed
     [AmazonUploader initializeAmazonUploadProvider];

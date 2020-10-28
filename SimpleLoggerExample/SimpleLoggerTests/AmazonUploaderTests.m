@@ -50,7 +50,7 @@
 }
 
 #pragma mark - initializeAmazonUploadProvider
-- (void)testInitializeAmazonUploadProvider {
+- (void)testInitializeAmazonUploadProvider_New {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.awsAccessToken = @"access";
     logger.awsSecret = @"secret";
@@ -63,7 +63,38 @@
     [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
         XCTAssertEqual(config.regionType, AWSRegionUSEast1);
         return YES;
-    }] forKey:logger.awsConfigurationKey];
+    }] forKey:[OCMArg checkWithBlock:^BOOL(NSString *configKey) {
+        XCTAssertEqualObjects(configKey, logger.awsConfigurationKey);
+        XCTAssertTrue([logger.awsConfigurationKey containsString:@"SimpleLogger.AWS.ConfigKey."]);
+        return YES;
+    }]];
+    
+    [AmazonUploader initializeAmazonUploadProvider];
+    
+    [self verifyAndStopMocking:providerMock];
+    [self verifyAndStopMocking:transferMock];
+}
+
+- (void)testInitializeAmazonUploadProvider_RemovesOld {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.awsAccessToken = @"access";
+    logger.awsSecret = @"secret";
+    logger.awsConfigurationKey = @"configkey";
+    
+    id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
+    [[[providerMock expect] andReturn:providerMock] alloc];
+    (void)[[[providerMock expect] andReturn:providerMock] initWithAccessKey:@"access" secretKey:@"secret"];
+    
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[transferMock expect] removeS3TransferUtilityForKey:@"configkey"];
+    [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
+        XCTAssertEqual(config.regionType, AWSRegionUSEast1);
+        return YES;
+    }] forKey:[OCMArg checkWithBlock:^BOOL(NSString *configKey) {
+        XCTAssertEqualObjects(configKey, logger.awsConfigurationKey);
+        XCTAssertNotEqualObjects(configKey, @"configkey");
+        return YES;
+    }]];
     
     [AmazonUploader initializeAmazonUploadProvider];
     
