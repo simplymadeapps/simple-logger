@@ -39,11 +39,7 @@
 + (void)initializeAmazonUploadProvider {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
-    if (logger.awsConfigurationKey) {
-        // we have a previously initialized configuration
-        // delete old configuration to save on memory
-        [AWSS3TransferUtility removeS3TransferUtilityForKey:logger.awsConfigurationKey];
-    }
+    [self removePreviousTransferUtilityIfNeeded];
     
     // generate a new configuration key for uploads
     logger.awsConfigurationKey = [NSString stringWithFormat:@"SimpleLogger.AWS.ConfigKey.%@",[NSUUID UUID].UUIDString];
@@ -51,6 +47,16 @@
     AWSStaticCredentialsProvider *provider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:logger.awsAccessToken secretKey:logger.awsSecret];
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:provider];
     [AWSS3TransferUtility registerS3TransferUtilityWithConfiguration:configuration forKey:logger.awsConfigurationKey];
+}
+
++ (void)removePreviousTransferUtilityIfNeeded {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    
+    if (logger.awsConfigurationKey) {
+        // we have a previously initialized configuration
+        // delete old configuration to save on memory
+        [AWSS3TransferUtility removeS3TransferUtilityForKey:logger.awsConfigurationKey];
+    }
 }
 
 + (NSString *)bucketFileLocationForFilename:(NSString *)filename {

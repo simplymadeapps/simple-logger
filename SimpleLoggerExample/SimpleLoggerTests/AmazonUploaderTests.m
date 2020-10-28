@@ -10,6 +10,10 @@
 #import "SimpleLoggerDefaults.h"
 #import "AmazonUploader.h"
 
+@interface AmazonUploader (UnitTests)
++ (void)removePreviousTransferUtilityIfNeeded;
+@end
+
 @interface AmazonUploaderTests : SLTestCase
 
 @end
@@ -50,10 +54,13 @@
 }
 
 #pragma mark - initializeAmazonUploadProvider
-- (void)testInitializeAmazonUploadProvider_New {
+- (void)testInitializeAmazonUploadProvider {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.awsAccessToken = @"access";
     logger.awsSecret = @"secret";
+    
+    id classMock = OCMClassMock([AmazonUploader class]);
+    [[classMock expect] removePreviousTransferUtilityIfNeeded];
     
     id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
     [[[providerMock expect] andReturn:providerMock] alloc];
@@ -71,34 +78,33 @@
     
     [AmazonUploader initializeAmazonUploadProvider];
     
+    [self verifyAndStopMocking:classMock];
     [self verifyAndStopMocking:providerMock];
     [self verifyAndStopMocking:transferMock];
 }
 
-- (void)testInitializeAmazonUploadProvider_RemovesOld {
+#pragma mark - removePreviousTransferUtilityIfNeeded
+- (void)testRemovePreviousTransferUtilityIfNeeded_WithKey {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.awsAccessToken = @"access";
-    logger.awsSecret = @"secret";
     logger.awsConfigurationKey = @"configkey";
-    
-    id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
-    [[[providerMock expect] andReturn:providerMock] alloc];
-    (void)[[[providerMock expect] andReturn:providerMock] initWithAccessKey:@"access" secretKey:@"secret"];
     
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[transferMock expect] removeS3TransferUtilityForKey:@"configkey"];
-    [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
-        XCTAssertEqual(config.regionType, AWSRegionUSEast1);
-        return YES;
-    }] forKey:[OCMArg checkWithBlock:^BOOL(NSString *configKey) {
-        XCTAssertEqualObjects(configKey, logger.awsConfigurationKey);
-        XCTAssertNotEqualObjects(configKey, @"configkey");
-        return YES;
-    }]];
     
-    [AmazonUploader initializeAmazonUploadProvider];
+    [AmazonUploader removePreviousTransferUtilityIfNeeded];
     
-    [self verifyAndStopMocking:providerMock];
+    [self verifyAndStopMocking:transferMock];
+}
+
+- (void)testRemovePreviousTransferUtilityIfNeeded_NilKey {
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.awsConfigurationKey = nil;
+    
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[transferMock reject] removeS3TransferUtilityForKey:[OCMArg any]];
+    
+    [AmazonUploader removePreviousTransferUtilityIfNeeded];
+    
     [self verifyAndStopMocking:transferMock];
 }
 
