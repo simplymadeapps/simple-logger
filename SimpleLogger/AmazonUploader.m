@@ -45,7 +45,7 @@
     logger.awsConfigurationKey = [self configKey];
     
     AWSStaticCredentialsProvider *provider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:logger.awsAccessToken secretKey:logger.awsSecret];
-    AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:provider];
+    AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:logger.awsRegion credentialsProvider:provider];
     [AWSS3TransferUtility registerS3TransferUtilityWithConfiguration:configuration forKey:logger.awsConfigurationKey];
 }
 

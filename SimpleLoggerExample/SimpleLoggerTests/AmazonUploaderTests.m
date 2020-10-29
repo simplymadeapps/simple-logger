@@ -59,6 +59,7 @@
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.awsAccessToken = @"access";
     logger.awsSecret = @"secret";
+    logger.awsRegion = AWSRegionAPEast1;
     
     id classMock = OCMClassMock([AmazonUploader class]);
     [[classMock expect] removePreviousTransferUtilityIfNeeded];
@@ -70,7 +71,7 @@
     
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
-        XCTAssertEqual(config.regionType, AWSRegionUSEast1);
+        XCTAssertEqual(config.regionType, logger.awsRegion);
         return YES;
     }] forKey:@"configKey"];
     
