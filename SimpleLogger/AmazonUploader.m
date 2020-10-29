@@ -39,7 +39,7 @@
 + (void)initializeAmazonUploadProvider {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     
-    [self removePreviousTransferUtilityIfNeeded];
+    [self removePreviousTransferUtilityForKey:logger.awsConfigurationKey];
     
     // generate a new configuration key for uploads
     logger.awsConfigurationKey = [self configKey];
@@ -53,13 +53,11 @@
     return [NSString stringWithFormat:@"SimpleLogger.AWS.ConfigKey.%@",[NSUUID UUID].UUIDString];
 }
 
-+ (void)removePreviousTransferUtilityIfNeeded {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    
-    if (logger.awsConfigurationKey) {
++ (void)removePreviousTransferUtilityForKey:(NSString *)key {
+    if (key) {
         // we have a previously initialized configuration
         // delete old configuration to save on memory
-        [AWSS3TransferUtility removeS3TransferUtilityForKey:logger.awsConfigurationKey];
+        [AWSS3TransferUtility removeS3TransferUtilityForKey:key];
     }
 }
 

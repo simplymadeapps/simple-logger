@@ -12,7 +12,7 @@
 
 @interface AmazonUploader (UnitTests)
 + (NSString *)configKey;
-+ (void)removePreviousTransferUtilityIfNeeded;
++ (void)removePreviousTransferUtilityForKey:(NSString *)key;
 @end
 
 @interface AmazonUploaderTests : SLTestCase
@@ -49,9 +49,14 @@
 }
 
 - (void)testCredentialsOkReturnsFalseWithPartials {
+    // mock initialize to avoid crashing with bad data
+    id classMock = OCMClassMock([AmazonUploader class]);
+    [[classMock expect] initializeAmazonUploadProvider];
+    
     [SimpleLogger initWithAWSRegion:0 bucket:@"" accessToken:@"" secret:@"secret"];
     
     XCTAssertFalse([AmazonUploader amazonCredentialsSetCorrectly]);
+    [self verifyAndStopMocking:classMock];
 }
 
 #pragma mark - initializeAmazonUploadProvider
@@ -60,9 +65,10 @@
     logger.awsAccessToken = @"access";
     logger.awsSecret = @"secret";
     logger.awsRegion = AWSRegionAPEast1;
+    logger.awsConfigurationKey = @"oldKey";
     
     id classMock = OCMClassMock([AmazonUploader class]);
-    [[classMock expect] removePreviousTransferUtilityIfNeeded];
+    [[classMock expect] removePreviousTransferUtilityForKey:logger.awsConfigurationKey];
     [[[classMock expect] andReturn:@"configKey"] configKey];
     
     id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
@@ -87,27 +93,21 @@
     XCTAssertTrue([[AmazonUploader configKey] containsString:@"SimpleLogger.AWS.ConfigKey."]);
 }
 
-#pragma mark - removePreviousTransferUtilityIfNeeded
+#pragma mark - removePreviousTransferUtilityForKey:
 - (void)testRemovePreviousTransferUtilityIfNeeded_WithKey {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.awsConfigurationKey = @"configkey";
-    
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[transferMock expect] removeS3TransferUtilityForKey:@"configkey"];
     
-    [AmazonUploader removePreviousTransferUtilityIfNeeded];
+    [AmazonUploader removePreviousTransferUtilityForKey:@"configkey"];
     
     [self verifyAndStopMocking:transferMock];
 }
 
 - (void)testRemovePreviousTransferUtilityIfNeeded_NilKey {
-    SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.awsConfigurationKey = nil;
-    
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[transferMock reject] removeS3TransferUtilityForKey:[OCMArg any]];
     
-    [AmazonUploader removePreviousTransferUtilityIfNeeded];
+    [AmazonUploader removePreviousTransferUtilityForKey:nil];
     
     [self verifyAndStopMocking:transferMock];
 }
