@@ -78,6 +78,7 @@
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
         XCTAssertEqual(config.regionType, logger.awsRegion);
+        XCTAssertEqual(config.credentialsProvider, providerMock);
         return YES;
     }] forKey:@"configKey"];
     
