@@ -11,6 +11,7 @@
 #import "AmazonUploader.h"
 
 @interface AmazonUploader (UnitTests)
++ (NSString *)configKey;
 + (void)removePreviousTransferUtilityIfNeeded;
 @end
 
@@ -61,6 +62,7 @@
     
     id classMock = OCMClassMock([AmazonUploader class]);
     [[classMock expect] removePreviousTransferUtilityIfNeeded];
+    [[[classMock expect] andReturn:@"configKey"] configKey];
     
     id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
     [[[providerMock expect] andReturn:providerMock] alloc];
@@ -70,17 +72,18 @@
     [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
         XCTAssertEqual(config.regionType, AWSRegionUSEast1);
         return YES;
-    }] forKey:[OCMArg checkWithBlock:^BOOL(NSString *configKey) {
-        XCTAssertEqualObjects(configKey, logger.awsConfigurationKey);
-        XCTAssertTrue([logger.awsConfigurationKey containsString:@"SimpleLogger.AWS.ConfigKey."]);
-        return YES;
-    }]];
+    }] forKey:@"configKey"];
     
     [AmazonUploader initializeAmazonUploadProvider];
     
     [self verifyAndStopMocking:classMock];
     [self verifyAndStopMocking:providerMock];
     [self verifyAndStopMocking:transferMock];
+}
+
+#pragma mark - configKey
+- (void)testConfigKey {
+    XCTAssertTrue([[AmazonUploader configKey] containsString:@"SimpleLogger.AWS.ConfigKey."]);
 }
 
 #pragma mark - removePreviousTransferUtilityIfNeeded
