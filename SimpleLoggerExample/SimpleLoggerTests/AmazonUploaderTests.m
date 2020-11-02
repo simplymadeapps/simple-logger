@@ -91,7 +91,17 @@
 
 #pragma mark - configKey
 - (void)testConfigKey {
-    XCTAssertTrue([[AmazonUploader configKey] containsString:@"SimpleLogger.AWS.ConfigKey."]);
+    NSUUID *uuid = [NSUUID UUID];
+    
+    id uuidMock = OCMPartialMock(uuid);
+    [[[uuidMock expect] andReturn:@"testuuid"] UUIDString];
+    
+    id classMock = OCMClassMock([NSUUID class]);
+    [[[classMock expect] andReturn:uuid] UUID];
+    
+    XCTAssertTrue([[AmazonUploader configKey] containsString:@"SimpleLogger.AWS.ConfigKey.testuuid"]);
+    [self verifyAndStopMocking:uuidMock];
+    [self verifyAndStopMocking:classMock];
 }
 
 #pragma mark - removePreviousTransferUtilityForKey:
