@@ -9,6 +9,7 @@
 #import "SLTestCase.h"
 #import "SimpleLoggerDefaults.h"
 #import "AmazonUploader.h"
+#import "FileManager.h"
 
 @interface AmazonUploader (UnitTests)
 + (NSString *)configKey;
@@ -133,18 +134,30 @@
 
 #pragma mark - uploadFilePathToAmazon:withBlock:
 - (void)testUploadFileToAmazonReturnsBlock {
+    // initialize our library so it creates a transfer manager to use
     [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"bucket" accessToken:@"access" secret:@"secret"];
     
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
     AWSTask *task = [[AWSTask alloc] init];
     NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
     id taskMock = OCMPartialMock(task);
     [[[taskMock stub] andReturn:error] error];
+    // pull the transfer manager out so we can mock it
     AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:[SimpleLogger sharedLogger].awsConfigurationKey];
     XCTAssertNotNil(utility);
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[[transferMock stub] andReturn:utility] S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
     id utilityMock = OCMPartialMock(utility);
-    [[[utilityMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
+    [[[utilityMock stub] andReturn:taskMock] uploadFile:[OCMArg checkWithBlock:^BOOL(NSURL *url) {
+        XCTAssertTrue([url.path containsString:@"filepath/test.log"]);
+        return YES;
+    }] bucket:logger.awsBucket key:@"testkey" contentType:@"text/plain" expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
+    
+    id fileMock = OCMClassMock([FileManager class]);
+    [[[fileMock expect] andReturn:@"filepath/test.log"] fullFilePathForFilename:@"test.log"];
+    
+    id uploadMock = OCMClassMock([AmazonUploader class]);
+    [[[uploadMock expect] andReturn:@"testkey"] bucketFileLocationForFilename:@"test.log"];
     
     XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
     
@@ -154,6 +167,8 @@
     
     [self verifyAndStopMocking:taskMock];
     [self verifyAndStopMocking:transferMock];
+    [self verifyAndStopMocking:fileMock];
+    [self verifyAndStopMocking:uploadMock];
     
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
