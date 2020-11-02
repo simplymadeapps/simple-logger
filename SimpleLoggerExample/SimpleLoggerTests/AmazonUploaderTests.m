@@ -49,14 +49,13 @@
 }
 
 - (void)testCredentialsOkReturnsFalseWithPartials {
-    // mock initialize to avoid crashing with bad data
-    id classMock = OCMClassMock([AmazonUploader class]);
-    [[classMock expect] initializeAmazonUploadProvider];
-    
-    [SimpleLogger initWithAWSRegion:0 bucket:@"" accessToken:@"" secret:@"secret"];
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.awsRegion = 0;
+    logger.awsBucket = @"";
+    logger.awsAccessToken = @"";
+    logger.awsSecret = @"secret";
     
     XCTAssertFalse([AmazonUploader amazonCredentialsSetCorrectly]);
-    [self verifyAndStopMocking:classMock];
 }
 
 #pragma mark - initializeAmazonUploadProvider
