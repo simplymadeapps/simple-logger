@@ -144,8 +144,6 @@
     [[[taskMock stub] andReturn:error] error];
     // pull the transfer manager out so we can mock it
     AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:[SimpleLogger sharedLogger].awsConfigurationKey];
-    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
-    [[[transferMock stub] andReturn:utility] S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
     id utilityMock = OCMPartialMock(utility);
     [[[utilityMock stub] andReturn:taskMock] uploadFile:[OCMArg checkWithBlock:^BOOL(NSURL *url) {
         XCTAssertTrue([url.path containsString:@"filepath/test.log"]);
@@ -165,7 +163,6 @@
     }];
     
     [self verifyAndStopMocking:taskMock];
-    [self verifyAndStopMocking:transferMock];
     [self verifyAndStopMocking:fileMock];
     [self verifyAndStopMocking:uploadMock];
     
