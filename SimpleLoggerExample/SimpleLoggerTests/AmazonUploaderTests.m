@@ -60,10 +60,8 @@
 
 #pragma mark - initializeAmazonUploadProvider
 - (void)testInitializeAmazonUploadProvider {
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"bucket" accessToken:@"access" secret:@"secret"];
     SimpleLogger *logger = [SimpleLogger sharedLogger];
-    logger.awsAccessToken = @"access";
-    logger.awsSecret = @"secret";
-    logger.awsRegion = AWSRegionAPEast1;
     logger.awsConfigurationKey = @"oldKey";
     
     id classMock = OCMClassMock([AmazonUploader class]);
