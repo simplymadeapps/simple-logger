@@ -144,7 +144,6 @@
     [[[taskMock stub] andReturn:error] error];
     // pull the transfer manager out so we can mock it
     AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:[SimpleLogger sharedLogger].awsConfigurationKey];
-    XCTAssertNotNil(utility);
     id transferMock = OCMClassMock([AWSS3TransferUtility class]);
     [[[transferMock stub] andReturn:utility] S3TransferUtilityForKey:@"SimpleLoggerTransferUtility"];
     id utilityMock = OCMPartialMock(utility);
