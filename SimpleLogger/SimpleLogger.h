@@ -33,6 +33,8 @@
 @property (nonatomic, strong, nullable) NSString *awsAccessToken;
 /// Amazon S3 secret
 @property (nonatomic, strong, nullable) NSString *awsSecret;
+/// Amazon S3 Configuration Key
+@property (nonatomic, strong, nullable) NSString *awsConfigurationKey;
 
 /// currently uploading files
 @property (nonatomic, assign) BOOL uploadInProgress;

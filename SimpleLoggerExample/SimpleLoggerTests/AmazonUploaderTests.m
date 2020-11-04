@@ -9,6 +9,12 @@
 #import "SLTestCase.h"
 #import "SimpleLoggerDefaults.h"
 #import "AmazonUploader.h"
+#import "FileManager.h"
+
+@interface AmazonUploader (UnitTests)
++ (NSString *)configKey;
++ (void)removePreviousTransferUtilityForKey:(NSString *)key;
+@end
 
 @interface AmazonUploaderTests : SLTestCase
 
@@ -26,6 +32,7 @@
     [super tearDown];
 }
 
+#pragma mark - amazonCredentialsSetCorrectly
 - (void)testCredentialsOkReturnsYES {
     [SimpleLogger initWithAWSRegion:AWSRegionEUWest1 bucket:@"bucket" accessToken:@"token" secret:@"secret"];
     
@@ -43,11 +50,78 @@
 }
 
 - (void)testCredentialsOkReturnsFalseWithPartials {
-    [SimpleLogger initWithAWSRegion:0 bucket:@"" accessToken:@"" secret:@"secret"];
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.awsRegion = 0;
+    logger.awsBucket = @"";
+    logger.awsAccessToken = @"";
+    logger.awsSecret = @"secret";
     
     XCTAssertFalse([AmazonUploader amazonCredentialsSetCorrectly]);
 }
 
+#pragma mark - initializeAmazonUploadProvider
+- (void)testInitializeAmazonUploadProvider {
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"bucket" accessToken:@"access" secret:@"secret"];
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
+    logger.awsConfigurationKey = @"oldKey";
+    
+    id classMock = OCMClassMock([AmazonUploader class]);
+    [[classMock expect] removePreviousTransferUtilityForKey:logger.awsConfigurationKey];
+    [[[classMock expect] andReturn:@"configKey"] configKey];
+    
+    id providerMock = OCMClassMock([AWSStaticCredentialsProvider class]);
+    [[[providerMock expect] andReturn:providerMock] alloc];
+    (void)[[[providerMock expect] andReturn:providerMock] initWithAccessKey:@"access" secretKey:@"secret"];
+    
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[transferMock expect] registerS3TransferUtilityWithConfiguration:[OCMArg checkWithBlock:^BOOL(AWSServiceConfiguration *config) {
+        XCTAssertEqual(config.regionType, logger.awsRegion);
+        XCTAssertEqual(config.credentialsProvider, providerMock);
+        return YES;
+    }] forKey:@"configKey"];
+    
+    [AmazonUploader initializeAmazonUploadProvider];
+    
+    [self verifyAndStopMocking:classMock];
+    [self verifyAndStopMocking:providerMock];
+    [self verifyAndStopMocking:transferMock];
+}
+
+#pragma mark - configKey
+- (void)testConfigKey {
+    NSUUID *uuid = [NSUUID UUID];
+    
+    id uuidMock = OCMPartialMock(uuid);
+    [[[uuidMock expect] andReturn:@"testuuid"] UUIDString];
+    
+    id classMock = OCMClassMock([NSUUID class]);
+    [[[classMock expect] andReturn:uuid] UUID];
+    
+    XCTAssertTrue([[AmazonUploader configKey] containsString:@"SimpleLogger.AWS.ConfigKey.testuuid"]);
+    [self verifyAndStopMocking:uuidMock];
+    [self verifyAndStopMocking:classMock];
+}
+
+#pragma mark - removePreviousTransferUtilityForKey:
+- (void)testRemovePreviousTransferUtilityIfNeeded_WithKey {
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[transferMock expect] removeS3TransferUtilityForKey:@"configkey"];
+    
+    [AmazonUploader removePreviousTransferUtilityForKey:@"configkey"];
+    
+    [self verifyAndStopMocking:transferMock];
+}
+
+- (void)testRemovePreviousTransferUtilityIfNeeded_NilKey {
+    id transferMock = OCMClassMock([AWSS3TransferUtility class]);
+    [[transferMock reject] removeS3TransferUtilityForKey:[OCMArg any]];
+    
+    [AmazonUploader removePreviousTransferUtilityForKey:nil];
+    
+    [self verifyAndStopMocking:transferMock];
+}
+
+#pragma mark - bucketFileLocationForFilename:
 - (void)testAmazonBucketKeySetsCorrectly {
     SimpleLogger *logger = [SimpleLogger sharedLogger];
     logger.folderLocation = kLoggerFilenameFolderLocation;
@@ -58,15 +132,29 @@
     XCTAssertEqualObjects(filePath, @"SimpleLogger/test.log");
 }
 
+#pragma mark - uploadFilePathToAmazon:withBlock:
 - (void)testUploadFileToAmazonReturnsBlock {
+    // initialize our library so it creates a transfer manager to use
+    [SimpleLogger initWithAWSRegion:AWSRegionUSEast1 bucket:@"bucket" accessToken:@"access" secret:@"secret"];
+    
+    SimpleLogger *logger = [SimpleLogger sharedLogger];
     AWSTask *task = [[AWSTask alloc] init];
     NSError *error = [NSError errorWithDomain:@"com.test.error" code:123 userInfo:nil];
     id taskMock = OCMPartialMock(task);
     [[[taskMock stub] andReturn:error] error];
-    AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-    id transferMock = OCMPartialMock(transferUtility);
-    //[[[taskMock stub] andReturn:taskMock] continueWithExecutor:[OCMArg any] withBlock:[OCMArg invokeBlockWithArgs:taskMock, nil]];
-    [[[transferMock stub] andReturn:taskMock] uploadFile:[OCMArg any] bucket:[OCMArg any] key:[OCMArg any] contentType:[OCMArg any] expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
+    // pull the transfer manager out so we can mock it
+    AWSS3TransferUtility *utility = [AWSS3TransferUtility S3TransferUtilityForKey:[SimpleLogger sharedLogger].awsConfigurationKey];
+    id utilityMock = OCMPartialMock(utility);
+    [[[utilityMock stub] andReturn:taskMock] uploadFile:[OCMArg checkWithBlock:^BOOL(NSURL *url) {
+        XCTAssertTrue([url.path containsString:@"filepath/test.log"]);
+        return YES;
+    }] bucket:logger.awsBucket key:@"testkey" contentType:@"text/plain" expression:nil completionHandler:[OCMArg invokeBlockWithArgs:taskMock, error, nil]];
+    
+    id fileMock = OCMClassMock([FileManager class]);
+    [[[fileMock expect] andReturn:@"filepath/test.log"] fullFilePathForFilename:@"test.log"];
+    
+    id uploadMock = OCMClassMock([AmazonUploader class]);
+    [[[uploadMock expect] andReturn:@"testkey"] bucketFileLocationForFilename:@"test.log"];
     
     XCTestExpectation *expect = [self expectationWithDescription:@"Upload All Files"];
     
@@ -75,7 +163,8 @@
     }];
     
     [self verifyAndStopMocking:taskMock];
-    [self verifyAndStopMocking:transferMock];
+    [self verifyAndStopMocking:fileMock];
+    [self verifyAndStopMocking:uploadMock];
     
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
