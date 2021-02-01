@@ -49,15 +49,15 @@
 		BA4DFC482322C1D6009FEE36 /* AmazonUploader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AmazonUploader.h; path = ../SimpleLogger/AmazonUploader.h; sourceTree = "<group>"; };
 		BA4DFC492322C1D6009FEE36 /* AmazonUploader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AmazonUploader.m; path = ../SimpleLogger/AmazonUploader.m; sourceTree = "<group>"; };
 		BA4DFC4B2322C588009FEE36 /* AmazonUploaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AmazonUploaderTests.m; sourceTree = "<group>"; };
-		BA9D37DC1F34C9FF0048C3D5 /* LogDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogDetailViewController.h; sourceTree = SOURCE_ROOT; };
-		BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogDetailViewController.m; sourceTree = SOURCE_ROOT; };
+		BA9D37DC1F34C9FF0048C3D5 /* LogDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogDetailViewController.h; path = SimpleLoggerExample/LogDetailViewController.h; sourceTree = SOURCE_ROOT; };
+		BA9D37DD1F34C9FF0048C3D5 /* LogDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogDetailViewController.m; path = SimpleLoggerExample/LogDetailViewController.m; sourceTree = SOURCE_ROOT; };
 		BA9D37DF1F34FADD0048C3D5 /* NSDate+SMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+SMA.h"; path = "../SimpleLogger/NSDate+SMA.h"; sourceTree = "<group>"; };
 		BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+SMA.m"; path = "../SimpleLogger/NSDate+SMA.m"; sourceTree = "<group>"; };
 		BA9D37E21F34FFE30048C3D5 /* NSDate+SMATests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SMATests.m"; sourceTree = "<group>"; };
 		BA9D37E41F389F150048C3D5 /* ViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewControllerTests.m; sourceTree = "<group>"; };
 		BA9D37E81F38A8220048C3D5 /* SLTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTestCase.m; sourceTree = "<group>"; };
 		BA9D37EA1F38A8930048C3D5 /* SLTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLTestCase.h; sourceTree = "<group>"; };
-		BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		BA9EBAC21F27D5FE002DFF44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SimpleLoggerExample/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		BA9EBAC51F27E1FC002DFF44 /* SimpleLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleLogger.h; path = ../SimpleLogger/SimpleLogger.h; sourceTree = "<group>"; };
 		BA9EBAC61F27E1FC002DFF44 /* SimpleLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimpleLogger.m; path = ../SimpleLogger/SimpleLogger.m; sourceTree = "<group>"; };
 		BA9EBACE1F27E4D8002DFF44 /* SimpleLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,14 +65,14 @@
 		BA9EBAD21F27E4D8002DFF44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA9EBADA1F27EFFF002DFF44 /* SimpleLoggerDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimpleLoggerDefaults.h; path = ../SimpleLogger/SimpleLoggerDefaults.h; sourceTree = "<group>"; };
 		BAE372E21F27D37A00300F7E /* SimpleLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BAE372E61F27D37A00300F7E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
-		BAE372E81F27D37A00300F7E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
-		BAE372E91F27D37A00300F7E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
-		BAE372EB1F27D37A00300F7E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = SOURCE_ROOT; };
-		BAE372EC1F27D37A00300F7E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
+		BAE372E61F27D37A00300F7E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SimpleLoggerExample/main.m; sourceTree = SOURCE_ROOT; };
+		BAE372E81F27D37A00300F7E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SimpleLoggerExample/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		BAE372E91F27D37A00300F7E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SimpleLoggerExample/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		BAE372EB1F27D37A00300F7E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = SimpleLoggerExample/ViewController.h; sourceTree = SOURCE_ROOT; };
+		BAE372EC1F27D37A00300F7E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = SimpleLoggerExample/ViewController.m; sourceTree = SOURCE_ROOT; };
 		BAE372EF1F27D37A00300F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BAE372F41F27D37A00300F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		BAE372F61F27D37A00300F7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		BAE372F61F27D37A00300F7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = SimpleLoggerExample/Info.plist; sourceTree = SOURCE_ROOT; };
 		DA34DA1D7D67830C5C84213F /* Pods-SimpleLoggerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLoggerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLoggerTests/Pods-SimpleLoggerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F07570F939643B80FC6FD689 /* Pods-SimpleLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleLogger.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleLogger/Pods-SimpleLogger.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,7 +130,7 @@
 				BA9D37E01F34FADD0048C3D5 /* NSDate+SMA.m */,
 				BA9EBADA1F27EFFF002DFF44 /* SimpleLoggerDefaults.h */,
 			);
-			name = SimpleLogger;
+			path = SimpleLogger;
 			sourceTree = "<group>";
 		};
 		BA9EBACF1F27E4D8002DFF44 /* SimpleLoggerTests */ = {
@@ -184,7 +184,7 @@
 				BAE372F61F27D37A00300F7E /* Info.plist */,
 				BAE372E51F27D37A00300F7E /* Supporting Files */,
 			);
-			name = SimpleLoggerExample;
+			path = SimpleLoggerExample;
 			sourceTree = "<group>";
 		};
 		BAE372E51F27D37A00300F7E /* Supporting Files */ = {
@@ -243,7 +243,7 @@
 		BAE372DA1F27D37A00300F7E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = "Simply Made Apps Inc.";
 				TargetAttributes = {
 					BA9EBACD1F27E4D8002DFF44 = {
@@ -427,6 +427,7 @@
 				BAE372EF1F27D37A00300F7E /* Base */,
 			);
 			name = Main.storyboard;
+			path = SimpleLoggerExample;
 			sourceTree = SOURCE_ROOT;
 		};
 		BAE372F31F27D37A00300F7E /* LaunchScreen.storyboard */ = {
@@ -435,6 +436,7 @@
 				BAE372F41F27D37A00300F7E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = SimpleLoggerExample;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
@@ -590,7 +592,7 @@
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				DEVELOPMENT_TEAM = R536BS52FG;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SimpleLoggerExample/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLogger;
@@ -606,7 +608,7 @@
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				DEVELOPMENT_TEAM = R536BS52FG;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SimpleLoggerExample/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLogger;
