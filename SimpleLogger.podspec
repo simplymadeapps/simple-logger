@@ -10,8 +10,9 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  s.source       = { :git => 'https://github.com/simplymadeapps/simple-logger.git', :tag => s.version }
-  s.source_files  = 'SimpleLogger/*.{h,m}'
+  #s.source       = { :git => 'https://github.com/simplymadeapps/simple-logger.git', :tag => s.version }
+  s.source       = { :git => 'https://github.com/billburgess/simple-logger.git', :branch => 'LIB-42-Public-Spec-Repo' }
+  s.source_files = 'SimpleLogger/*.{h,m}'
   s.requires_arc = true
 
   s.dependency 'AWSS3'
