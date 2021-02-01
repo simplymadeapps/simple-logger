@@ -582,7 +582,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F07570F939643B80FC6FD689 /* Pods-SimpleLogger.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				DEVELOPMENT_TEAM = R536BS52FG;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
@@ -598,13 +597,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 24C4C3CBDC309AF0C998B846 /* Pods-SimpleLogger.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				DEVELOPMENT_TEAM = R536BS52FG;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SimpleLoggerExample/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplymadeapps.ios.SimpleLogger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
