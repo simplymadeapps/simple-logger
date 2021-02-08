@@ -1,14 +1,11 @@
 # .slather.yml
 
 coverage_service: cobertura_xml
-xcodeproj: ./SimpleLoggerExample/SimpleLogger.xcodeproj
-workspace: ./SimpleLoggerExample/SimpleLogger.xcworkspace
+xcodeproj: ./SimpleLogger.xcodeproj
+workspace: ./SimpleLogger.xcworkspace
 scheme: SimpleLogger
 source_directory: ./SimpleLoggerExample/*
 output_directory: ./test-reports
 ignore:
 - "**/Pods/*"
 - "**/SimpleLoggerTests/*"
-
-# local slather coverage output
-# slather coverage --html --scheme SimpleLogger /Users/Brasky/Git/simple-logger/SimpleLoggerExample/SimpleLogger.xcodeproj
